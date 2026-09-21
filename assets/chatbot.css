@@ -1,0 +1,440 @@
+/* ============================================================
+   Codyweb Training Chatbot — Frontend Widget
+   Design: Dark athletic theme with gold accent
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+    --cw-bg:           #111111;
+    --cw-header-bg:    #0a0a0a;
+    --cw-gold:         #c9a84c;
+    --cw-gold-dark:    #a8883a;
+    --cw-gold-hover:   #d4b55e;
+    --cw-text:         #ffffff;
+    --cw-text-muted:   #888888;
+    --cw-ans-bg:       #1e1e1e;
+    --cw-ans-border:   rgba(255,255,255,0.1);
+    --cw-divider:      rgba(255,255,255,0.06);
+    --cw-panel-w:      390px;
+    --cw-panel-h:      580px;
+    --cw-font-title:   'Barlow Condensed', sans-serif;
+    --cw-font:         'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+    --cw-radius:       3px;
+    --cw-shadow:       0 24px 80px rgba(0,0,0,0.75), 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* ----------------------------------------------------------------
+   Bubble trigger
+---------------------------------------------------------------- */
+#cw-chatbot-bubble {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    background: #111111;
+    border: 2px solid var(--cw-gold);
+    color: var(--cw-gold);
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: var(--cw-font-title);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 28px rgba(0,0,0,0.55), 0 0 0 0 rgba(201,168,76,0);
+    transition: background 0.22s, color 0.22s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+#cw-chatbot-bubble .cw-bubble-icon { flex-shrink: 0; }
+#cw-chatbot-bubble:hover {
+    background: var(--cw-gold);
+    color: #111;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 6px rgba(201,168,76,0.18);
+}
+#cw-chatbot-bubble:active { transform: translateY(-1px); }
+
+/* ----------------------------------------------------------------
+   Panel
+---------------------------------------------------------------- */
+#cw-chatbot-panel {
+    position: fixed;
+    bottom: 90px;
+    right: 24px;
+    z-index: 9998;
+    width: var(--cw-panel-w);
+    height: var(--cw-panel-h);
+    background: var(--cw-bg);
+    border-radius: var(--cw-radius);
+    box-shadow: var(--cw-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.07);
+    transform: translateY(16px) scale(0.97);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease;
+    will-change: transform, opacity;
+}
+#cw-chatbot-panel.is-open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ----------------------------------------------------------------
+   Header
+---------------------------------------------------------------- */
+.cw-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--cw-header-bg);
+    border-bottom: 1px solid var(--cw-divider);
+    flex-shrink: 0;
+}
+.cw-header-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+.cw-header-badge {
+    width: 46px;
+    height: 46px;
+    background: var(--cw-gold);
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--cw-font-title);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    border-radius: var(--cw-radius);
+    flex-shrink: 0;
+    user-select: none;
+}
+.cw-header-text { min-width: 0; }
+.cw-panel-title {
+    font-family: var(--cw-font-title);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--cw-text);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+.cw-panel-subtitle {
+    font-family: var(--cw-font);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--cw-gold);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+}
+#cw-chatbot-close {
+    background: none;
+    border: none;
+    color: var(--cw-text);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 6px 8px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+    outline: none;
+}
+#cw-chatbot-close:hover { opacity: 1; }
+
+/* ----------------------------------------------------------------
+   Messages outer + scroll button
+---------------------------------------------------------------- */
+.cw-messages-outer {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#cw-chatbot-messages {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 22px 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+}
+#cw-chatbot-messages::-webkit-scrollbar { width: 5px; }
+#cw-chatbot-messages::-webkit-scrollbar-track { background: transparent; }
+#cw-chatbot-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 3px; }
+
+/* Scroll to bottom button */
+.cw-scroll-btn {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.85);
+    width: 34px;
+    height: 34px;
+    background: #1e1e1e;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 50%;
+    color: var(--cw-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, transform 0.2s, background 0.18s;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    outline: none;
+}
+.cw-scroll-btn.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) scale(1);
+}
+.cw-scroll-btn:hover { background: #2a2a2a; }
+
+/* ----------------------------------------------------------------
+   Bot question text — plain left-aligned
+---------------------------------------------------------------- */
+.cw-q-text {
+    font-family: var(--cw-font);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--cw-text);
+    line-height: 1.55;
+    max-width: 82%;
+    opacity: 0;
+    transform: translateY(7px);
+    transition: opacity 0.24s ease, transform 0.24s ease;
+}
+.cw-q-text.visible { opacity: 1; transform: translateY(0); }
+
+/* Intro text */
+.cw-intro-text {
+    font-family: var(--cw-font);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--cw-text);
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(7px);
+    transition: opacity 0.24s ease, transform 0.24s ease;
+}
+.cw-intro-text.visible { opacity: 1; transform: translateY(0); }
+
+/* ----------------------------------------------------------------
+   Answer options — stacked on the right, removed after selection
+---------------------------------------------------------------- */
+.cw-opts-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 7px;
+    opacity: 0;
+    transform: translateY(7px);
+    transition: opacity 0.24s ease 0.08s, transform 0.24s ease 0.08s;
+}
+.cw-opts-wrap.visible { opacity: 1; transform: translateY(0); }
+
+.cw-opt {
+    padding: 11px 20px;
+    background: var(--cw-ans-bg);
+    border: 1px solid var(--cw-ans-border);
+    border-radius: 6px;
+    color: var(--cw-text);
+    font-family: var(--cw-font);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.16s, border-color 0.16s, transform 0.16s;
+    white-space: nowrap;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    text-align: right;
+}
+.cw-opt:hover:not(:disabled) {
+    background: #2a2a2a;
+    border-color: rgba(201,168,76,0.45);
+    transform: translateX(-3px);
+}
+.cw-opt:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ----------------------------------------------------------------
+   Selected answer — dark box on the right (stays in chat)
+---------------------------------------------------------------- */
+.cw-selected-ans {
+    align-self: flex-end;
+    padding: 11px 20px;
+    background: var(--cw-ans-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: var(--cw-text);
+    font-family: var(--cw-font);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(7px);
+    transition: opacity 0.24s ease, transform 0.24s ease;
+    max-width: 72%;
+    text-align: right;
+    word-break: break-word;
+}
+.cw-selected-ans.visible { opacity: 1; transform: translateY(0); }
+
+/* ----------------------------------------------------------------
+   Loading dots
+---------------------------------------------------------------- */
+.cw-loading-dots {
+    display: flex;
+    gap: 5px;
+    padding: 6px 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.cw-loading-dots.visible { opacity: 1; }
+.cw-loading-dots span {
+    width: 7px;
+    height: 7px;
+    background: var(--cw-text-muted);
+    border-radius: 50%;
+    animation: cwDotPulse 1.2s infinite ease-in-out;
+}
+.cw-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.cw-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes cwDotPulse {
+    0%, 80%, 100% { transform: scale(0.5); opacity: 0.4; }
+    40%           { transform: scale(1);   opacity: 1; }
+}
+
+/* ----------------------------------------------------------------
+   Result section — inline in chat
+---------------------------------------------------------------- */
+.cw-result {
+    opacity: 0;
+    transform: translateY(7px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    padding-top: 6px;
+}
+.cw-result.visible { opacity: 1; transform: translateY(0); }
+
+.cw-result-eyebrow {
+    font-family: var(--cw-font-title);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cw-gold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.cw-result-name {
+    font-family: var(--cw-font-title);
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--cw-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+.cw-result-desc {
+    font-family: var(--cw-font);
+    font-size: 14px;
+    color: var(--cw-text-muted);
+    line-height: 1.65;
+}
+
+/* ----------------------------------------------------------------
+   Footer: CTA + Restart
+---------------------------------------------------------------- */
+.cw-panel-footer {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--cw-bg);
+    border-top: 1px solid var(--cw-divider);
+    flex-shrink: 0;
+}
+
+.cw-cta-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px;
+    background: var(--cw-gold);
+    color: #111111;
+    font-family: var(--cw-font-title);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--cw-radius);
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+    line-height: 1;
+}
+.cw-cta-link:hover { background: var(--cw-gold-hover); color: #111; text-decoration: none; }
+.cw-cta-link.is-disabled {
+    opacity: 0.38;
+    pointer-events: none;
+    cursor: default;
+}
+
+.cw-restart-btn {
+    width: 48px;
+    flex-shrink: 0;
+    background: #1e1e1e;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--cw-radius);
+    color: var(--cw-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, border-color 0.18s;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.cw-restart-btn:hover {
+    background: #2a2a2a;
+    border-color: rgba(201,168,76,0.45);
+    color: var(--cw-gold);
+}
+
+/* ----------------------------------------------------------------
+   Responsive
+---------------------------------------------------------------- */
+@media (max-width: 480px) {
+    #cw-chatbot-panel {
+        width: calc(100vw - 16px);
+        right: 8px;
+        bottom: 84px;
+        height: 70vh;
+        max-height: 560px;
+    }
+    #cw-chatbot-bubble {
+        right: 12px;
+        bottom: 12px;
+        padding: 12px 18px;
+        font-size: 14px;
+    }
+}
