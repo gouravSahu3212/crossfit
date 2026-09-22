@@ -1,0 +1,70 @@
+.site-header.mobile {
+    display: none;
+}
+
+a.btn-primery {
+    background-color: var(--cw-gold);
+    color: #111111;
+    padding: 7px 20px;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: max-content;
+    text-align: center;
+    font-size: 14px;
+    display: flex;
+    gap: 10px;
+}
+
+.logo {
+    max-width: 160px;
+}
+
+.main-navigation a {
+    color: #ffff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.logo img {
+    width: 100%;
+    object-fit: contain;
+    height: auto;
+}
+
+.site-header {
+    background-color: #111;
+    color: #ffff;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-top: 15px;
+}
+
+.svg-icon-wrapper svg {
+    stroke: #fff;
+    width: 20px;
+    height: 20px;
+}
+
+.page-width {
+    max-width: calc(100% - 100px);
+    margin: 0 auto;
+}
+
+nav.main-navigation ul {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+}
+
+.menu-item a {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+nav.main-navigation ul li {
+    padding: 0 20px;
+}

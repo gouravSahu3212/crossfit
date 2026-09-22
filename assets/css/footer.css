@@ -1,0 +1,87 @@
+/* ============================================================
+   CrossFit Kouvola — Footer Styles
+   ============================================================ */
+
+.site-footer {
+    background: #0a0a0a;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 64px 0 0;
+    color: #ffffff;
+    font-family: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 12px;
+}
+
+.footer-tagline {
+    font-size: 14px;
+    color: #999;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 320px;
+}
+
+.footer-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 20px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links li,
+.footer-links li a {
+    font-size: 14px;
+    color: #999;
+    text-decoration: none;
+    transition: color 0.18s;
+}
+
+.footer-links li a:hover { color: #c9a84c; }
+
+.footer-contact li { font-size: 14px; color: #999; line-height: 1.6; }
+
+.footer-bottom {
+    padding: 24px 0;
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}

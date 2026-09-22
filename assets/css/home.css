@@ -1,0 +1,486 @@
+/* ============================================================
+   CrossFit Kouvola — Homepage Styles
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+    --bg:          #0a0a0a;
+    --bg-card:     #111111;
+    --bg-card-2:   #1a1a1a;
+    --gold:        #c9a84c;
+    --gold-dark:   #a8883a;
+    --gold-hover:  #d4b55e;
+    --text:        #ffffff;
+    --text-muted:  #999999;
+    --border:      rgba(255,255,255,0.06);
+    --border-2:    rgba(255,255,255,0.1);
+    --font-head:   'Barlow Condensed', sans-serif;
+    --font-body:   'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+    --max-w:       1200px;
+    --section-py:  100px;
+    --radius:      4px;
+}
+
+/* Reset for home page */
+.home-page { background: var(--bg); color: var(--text); }
+.home-page * { box-sizing: border-box; }
+.home-page .page-width { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+/* ---- Section heading utility ---- */
+.hp-section-label {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+.hp-section-title {
+    font-family: var(--font-head);
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.05;
+    margin: 0 0 16px;
+}
+.hp-section-sub {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 600px;
+}
+
+/* ---- Button ---- */
+.btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: var(--gold);
+    color: #111;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.18s;
+    line-height: 1;
+}
+.btn-gold:hover { background: var(--gold-hover); color: #111; transform: translateY(-2px); text-decoration: none; }
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: transparent;
+    color: var(--gold);
+    border: 1.5px solid var(--gold);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1;
+}
+.btn-outline:hover { background: var(--gold); color: #111; text-decoration: none; }
+
+/* ================================================================
+   1. SPLIT HERO
+================================================================ */
+.hp-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 85vh;
+}
+.hp-hero-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px 48px;
+    overflow: hidden;
+}
+.hp-hero-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s ease;
+    z-index: 0;
+}
+.hp-hero-panel:hover::before { transform: scale(1.05); }
+.hp-hero-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.15) 100%);
+    z-index: 1;
+}
+.hp-hero-panel--hyrox::before { background-image: url('../images/hero-hyrox.jpg'); }
+.hp-hero-panel--crossfit::before { background-image: url('../images/hero-crossfit.jpg'); }
+
+.hp-hero-panel > * { position: relative; z-index: 2; }
+.hp-hero-heading {
+    font-family: var(--font-head);
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    margin: 0 0 24px;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+/* ================================================================
+   2. MOTIVATIONAL QUOTE
+================================================================ */
+.hp-quote {
+    padding: var(--section-py) 24px;
+    text-align: center;
+    background: var(--bg);
+}
+.hp-quote-text {
+    font-family: var(--font-head);
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+.hp-quote-body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* ================================================================
+   3. CURRENT PASSES & COURSES
+================================================================ */
+.hp-passes {
+    padding: var(--section-py) 0;
+    background: var(--bg);
+}
+.hp-passes-header {
+    margin-bottom: 48px;
+}
+.hp-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.hp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s, transform 0.25s;
+}
+.hp-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    transform: translateY(-4px);
+}
+.hp-card-title {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin: 0 0 12px;
+}
+.hp-card-desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0 0 20px;
+    flex: 1;
+}
+.hp-card-price {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+    margin: 0 0 24px;
+}
+.hp-card-price span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* ================================================================
+   4. WEEKLY SCHEDULE
+================================================================ */
+.hp-schedule {
+    padding: var(--section-py) 0;
+    background: var(--bg-card);
+}
+.hp-schedule-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.hp-schedule-header .hp-section-sub { margin: 0 auto; }
+.hp-schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+}
+.hp-day {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.hp-day-name {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+.hp-day-slots {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.hp-slot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 6px 0;
+}
+.hp-slot-time {
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 42px;
+    flex-shrink: 0;
+}
+.hp-slot-class {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* ================================================================
+   5. PRICING
+================================================================ */
+.hp-pricing {
+    padding: var(--section-py) 0;
+    background: var(--bg);
+}
+.hp-pricing-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.hp-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+.hp-price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 24px;
+    text-align: center;
+    transition: border-color 0.25s, transform 0.25s;
+}
+.hp-price-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    transform: translateY(-4px);
+}
+.hp-price-card--featured {
+    border-color: var(--gold);
+    background: linear-gradient(180deg, rgba(201,168,76,0.08) 0%, var(--bg-card) 40%);
+}
+.hp-price-name {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin: 0 0 16px;
+}
+.hp-price-amount {
+    font-family: var(--font-head);
+    font-size: 44px;
+    font-weight: 900;
+    color: var(--text);
+    margin: 0 0 4px;
+    line-height: 1;
+}
+.hp-price-amount span {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.hp-price-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.hp-price-features li {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+.hp-price-features li::before {
+    content: '\2713';
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 13px;
+}
+.hp-pricing-link {
+    text-align: center;
+}
+
+/* ================================================================
+   6. ABOUT / COMMUNITY
+================================================================ */
+.hp-about {
+    padding: var(--section-py) 0;
+    background: var(--bg-card);
+}
+.hp-about-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+.hp-about-body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0;
+}
+
+/* ================================================================
+   7. FAQ
+================================================================ */
+.hp-faq {
+    padding: var(--section-py) 0;
+    background: var(--bg);
+}
+.hp-faq-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.hp-faq-list {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.hp-faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+.hp-faq-item.is-open { border-color: rgba(201,168,76,0.25); }
+.hp-faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    gap: 16px;
+    transition: color 0.2s;
+}
+.hp-faq-q:hover { color: var(--gold); }
+.hp-faq-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--gold);
+    transition: transform 0.25s;
+}
+.hp-faq-item.is-open .hp-faq-icon { transform: rotate(45deg); }
+.hp-faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 24px;
+}
+.hp-faq-item.is-open .hp-faq-a {
+    max-height: 300px;
+    padding: 0 24px 20px;
+}
+.hp-faq-a p {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0;
+}
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+@media (max-width: 1024px) {
+    .hp-schedule-grid { grid-template-columns: repeat(4, 1fr); }
+    .hp-pricing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .hp-hero { grid-template-columns: 1fr; min-height: auto; }
+    .hp-hero-panel { min-height: 50vh; padding: 40px 28px; }
+    .hp-cards-grid { grid-template-columns: 1fr; }
+    .hp-schedule-grid { grid-template-columns: repeat(2, 1fr); }
+    .hp-pricing-grid { grid-template-columns: 1fr; }
+    :root { --section-py: 64px; }
+}
+@media (max-width: 480px) {
+    .hp-schedule-grid { grid-template-columns: 1fr; }
+    .hp-hero-heading { font-size: 36px; }
+}

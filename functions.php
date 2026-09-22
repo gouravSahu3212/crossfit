@@ -7,27 +7,27 @@
  * @package Codyweb_Child
  */
 
-/**
- * Enqueue parent and child theme styles.
- */
-function codyweb_child_enqueue_styles() {
-    // Enqueue parent theme stylesheet
-    wp_enqueue_style(
-        'codyweb-parent-style',
-        get_template_directory_uri() . '/style.css',
-        array(),
-        wp_get_theme( get_template() )->get( 'Version' )
-    );
 
-    // Enqueue child theme stylesheet (depends on parent)
-    wp_enqueue_style(
-        'codyweb-child-style',
-        get_stylesheet_uri(),
-        array( 'codyweb-parent-style' ),
-        wp_get_theme()->get( 'Version' )
-    );
+require get_stylesheet_directory() . '/inc/enqueue.php';
+require get_stylesheet_directory() . '/inc/theme-support.php';
+require get_stylesheet_directory() . '/inc/menus.php';
+
+
+// =========================================================
+// Widget Areas
+// =========================================================
+function codyweb_child_register_widgets() {
+    register_sidebar( array(
+        'name'          => 'Footer Widgets',
+        'id'            => 'footer-widgets',
+        'description'   => 'Widgets displayed in the site footer.',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h2 class="widgettitle">',
+        'after_title'   => '</h2>',
+    ) );
 }
-add_action( 'wp_enqueue_scripts', 'codyweb_child_enqueue_styles' );
+add_action( 'widgets_init', 'codyweb_child_register_widgets' );
 
 // =========================================================
 // Training Recommendation Chatbot

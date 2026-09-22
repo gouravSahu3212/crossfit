@@ -22,13 +22,13 @@ function cw_chatbot_enqueue_admin_assets( $hook ) {
     if ( 'toplevel_page_cw-chatbot' === $hook ) {
         wp_enqueue_style(
             'cw-chatbot-questions-admin',
-            $child_uri . '/admin/questions.css',
+            $child_uri . '/admin/css/questions.css',
             array(),
             $version
         );
         wp_enqueue_script(
             'cw-chatbot-questions-admin',
-            $child_uri . '/admin/questions.js',
+            $child_uri . '/admin/js/questions.js',
             array(),
             $version,
             true
@@ -43,13 +43,13 @@ function cw_chatbot_enqueue_admin_assets( $hook ) {
     if ( 'training-chatbot_page_cw-chatbot-rules' === $hook ) {
         wp_enqueue_style(
             'cw-chatbot-rules-admin',
-            $child_uri . '/admin/rules.css',
+            $child_uri . '/admin/css/rules.css',
             array(),
             $version
         );
         wp_enqueue_script(
             'cw-chatbot-rules-admin',
-            $child_uri . '/admin/rules.js',
+            $child_uri . '/admin/js/rules.js',
             array(),
             $version,
             true
@@ -73,14 +73,14 @@ function cw_chatbot_enqueue_frontend_assets() {
 
     wp_enqueue_style(
         'cw-chatbot-frontend',
-        $child_uri . '/assets/chatbot.css',
+        $child_uri . '/assets/css/chatbot.css',
         array(),
         $version
     );
 
     wp_enqueue_script(
         'cw-chatbot-frontend',
-        $child_uri . '/assets/chatbot.js',
+        $child_uri . '/assets/js/chatbot.js',
         array(),
         $version,
         true
