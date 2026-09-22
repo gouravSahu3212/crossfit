@@ -25,21 +25,29 @@ function cw_register_recommendation_cpt() {
     );
 
     $args = array(
-        'labels'          => $labels,
-        'public'          => false,
-        'show_ui'         => true,
-        'show_in_menu'    => true,
-        'show_in_rest'    => false,
-        'capability_type' => 'post',
-        'has_archive'     => false,
-        'hierarchical'    => false,
-        'menu_icon'       => 'dashicons-awards',
-        'menu_position'   => 31,
-        'supports'        => array( 'title' ),
-        'rewrite'         => false,
+        'labels'             => $labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'show_in_rest'       => true,
+        'query_var'          => true,
+        'capability_type'    => 'post',
+        'has_archive'        => false,
+        'hierarchical'       => false,
+        'menu_icon'          => 'dashicons-awards',
+        'menu_position'      => 31,
+        'supports'           => array( 'title', 'editor', 'thumbnail' ),
+        'rewrite'            => array( 'slug' => 'recommendation', 'with_front' => false ),
     );
 
     register_post_type( 'cw_recommendation', $args );
+
+    // Flush rewrite rules once so single post permalinks work immediately
+    if ( ! get_option( 'cw_rec_cpt_flushed_v1' ) ) {
+        flush_rewrite_rules();
+        update_option( 'cw_rec_cpt_flushed_v1', 1 );
+    }
 }
 add_action( 'init', 'cw_register_recommendation_cpt' );
 
@@ -67,7 +75,7 @@ function cw_render_recommendation_meta_box( $post ) {
     wp_nonce_field( 'cw_recommendation_save_meta', 'cw_recommendation_nonce' );
 
     $description = get_post_meta( $post->ID, '_cw_rec_description', true );
-    $url         = get_post_meta( $post->ID, '_cw_rec_url', true );
+    // $url         = get_post_meta( $post->ID, '_cw_rec_url', true );
     $icon        = get_post_meta( $post->ID, '_cw_rec_icon', true );
     ?>
     <style>
@@ -88,15 +96,15 @@ function cw_render_recommendation_meta_box( $post ) {
                     <p class="description">Shown to the visitor in the chatbot result card.</p>
                 </td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <th><label for="cw_rec_url">Link URL</label></th>
                 <td>
                     <input type="url" id="cw_rec_url" name="cw_rec_url"
-                           value="<?php echo esc_attr( $url ); ?>"
+                           value="<?php // echo esc_attr( $url ); ?>"
                            placeholder="https://example.com/training-page" />
                     <p class="description">The page visitors will be sent to via the CTA button.</p>
                 </td>
-            </tr>
+            </tr> -->
             <tr>
                 <th><label for="cw_rec_icon">Icon / Emoji</label></th>
                 <td>
@@ -132,9 +140,9 @@ function cw_save_recommendation_meta( $post_id ) {
     if ( isset( $_POST['cw_rec_description'] ) ) {
         update_post_meta( $post_id, '_cw_rec_description', sanitize_textarea_field( wp_unslash( $_POST['cw_rec_description'] ) ) );
     }
-    if ( isset( $_POST['cw_rec_url'] ) ) {
-        update_post_meta( $post_id, '_cw_rec_url', esc_url_raw( wp_unslash( $_POST['cw_rec_url'] ) ) );
-    }
+    // if ( isset( $_POST['cw_rec_url'] ) ) {
+    //     update_post_meta( $post_id, '_cw_rec_url', esc_url_raw( wp_unslash( $_POST['cw_rec_url'] ) ) );
+    // }
     if ( isset( $_POST['cw_rec_icon'] ) ) {
         update_post_meta( $post_id, '_cw_rec_icon', sanitize_text_field( wp_unslash( $_POST['cw_rec_icon'] ) ) );
     }
