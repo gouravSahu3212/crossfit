@@ -59,6 +59,10 @@ nav.main-navigation ul {
     list-style: none;
 }
 
+.menu-item.current-menu-item a {
+    color: var(--cw-gold);
+}
+
 .menu-item a {
     text-decoration: none;
     font-size: 15px;

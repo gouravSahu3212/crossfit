@@ -11,6 +11,7 @@
 require get_stylesheet_directory() . '/inc/enqueue.php';
 require get_stylesheet_directory() . '/inc/theme-support.php';
 require get_stylesheet_directory() . '/inc/menus.php';
+require get_stylesheet_directory() . '/inc/shortcodes.php';
 
 
 // =========================================================
