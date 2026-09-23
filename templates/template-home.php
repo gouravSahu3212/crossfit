@@ -8,139 +8,61 @@ get_header();
 
 <main id="primary" class="site-main home-page">
 
-    <!-- ==================== 1. SPLIT HERO ==================== -->
-    <section class="hp-hero">
-        <div class="hp-hero-panel hp-hero-panel--hyrox">
-            <h2 class="hp-hero-heading">Start HYROX</h2>
-            <a href="/hyrox" class="btn-gold">Read more</a>
-        </div>
-        <div class="hp-hero-panel hp-hero-panel--crossfit">
-            <h2 class="hp-hero-heading">Start CrossFit</h2>
-            <a href="/crossfit" class="btn-gold">Read more</a>
-        </div>
-    </section>
+    <!-- ==================== 1. HERO SECTION ==================== -->
+    <?php
+    $hero = cw_get_page_hero( get_the_ID() );
+    if ( ! empty( $hero['show'] ) && ! empty( $hero['cards'] ) ) :
+        $col_count = count( $hero['cards'] );
+    ?>
+        <section class="hp-hero hp-hero--cols-<?php echo esc_attr( $col_count ); ?>" style="--hero-cols: <?php echo esc_attr( $col_count ); ?>;">
+            <?php foreach ( $hero['cards'] as $index => $card ) :
+                $bg_img = ! empty( $card['image'] ) ? $card['image'] : '';
+                $panel_class = ( 0 === $index ) ? 'hp-hero-panel--hyrox' : ( ( 1 === $index ) ? 'hp-hero-panel--crossfit' : '' );
+            ?>
+                <div class="hp-hero-panel <?php echo esc_attr( $panel_class ); ?>" <?php echo ! empty( $bg_img ) ? 'style="--panel-bg: url(' . esc_url( $bg_img ) . ');"' : ''; ?>>
+                    <?php if ( ! empty( $card['heading'] ) ) : ?>
+                        <h2 class="hp-hero-heading"><?php echo esc_html( $card['heading'] ); ?></h2>
+                    <?php endif; ?>
+                    <?php if ( ! empty( $card['description'] ) ) : ?>
+                        <p class="hp-hero-desc"><?php echo esc_html( $card['description'] ); ?></p>
+                    <?php endif; ?>
+                    <?php if ( ! empty( $card['btn_text'] ) && ! empty( $card['btn_url'] ) ) : ?>
+                        <a href="<?php echo esc_url( $card['btn_url'] ); ?>" class="btn-gold"><?php echo esc_html( $card['btn_text'] ); ?></a>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </section>
+    <?php endif; ?>
 
-    <!-- ==================== 2. MOTIVATIONAL QUOTE ==================== -->
-    <section class="hp-quote">
-        <div class="page-width">
-            <h2 class="hp-quote-text">You don't need to be fit to start. You only need to decide to walk through the door.</h2>
-            <p class="hp-quote-body">We are a coached functional training gym in Kouvola. CrossFit, HYROX and Easy WOD classes run every day of the week and every workout is scaled to the person doing it &mdash; first-timers and competitors train side by side in the same hour.</p>
-        </div>
-    </section>
+    <!-- ==================== 2. RICH TEXT SECTION ==================== -->
+    <?php
+    $rich_text = cw_get_page_rich_text( get_the_ID() );
+    if ( ! empty( $rich_text['show'] ) && ( ! empty( $rich_text['heading'] ) || ! empty( $rich_text['description'] ) ) ) :
+    ?>
+        <section class="hp-quote hp-rich-text">
+            <div class="page-width">
+                <?php if ( ! empty( $rich_text['heading'] ) ) : ?>
+                    <h2 class="hp-quote-text"><?php echo esc_html( $rich_text['heading'] ); ?></h2>
+                <?php endif; ?>
+                <?php if ( ! empty( $rich_text['description'] ) ) : ?>
+                    <div class="hp-quote-body"><?php echo wp_kses_post( wpautop( $rich_text['description'] ) ); ?></div>
+                <?php endif; ?>
+                <?php if ( ! empty( $rich_text['btn_text'] ) && ! empty( $rich_text['btn_url'] ) ) : ?>
+                    <div class="hp-quote-cta" style="margin-top: 28px;">
+                        <a href="<?php echo esc_url( $rich_text['btn_url'] ); ?>" class="btn-gold"><?php echo esc_html( $rich_text['btn_text'] ); ?></a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- ==================== 3. CURRENT PASSES & COURSES ==================== -->
     <section class="hp-passes">
-        <div class="page-width">
-            <div class="hp-passes-header">
-                <p class="hp-section-label">What's on</p>
-                <h2 class="hp-section-title">Current: passes and courses</h2>
-            </div>
-            <div class="hp-cards-grid">
-
-                <div class="hp-card">
-                    <h3 class="hp-card-title">Autumn On-Ramp course</h3>
-                    <p class="hp-card-desc">Four weeks of coached basics, three sessions a week. No experience needed.</p>
-                    <p class="hp-card-price">132,00 &euro;</p>
-                    <a href="/crossfit" class="btn-gold">Read more</a>
-                </div>
-
-                <div class="hp-card">
-                    <h3 class="hp-card-title">HYROX Prep course</h3>
-                    <p class="hp-card-desc">Eight weeks of race pacing, station work and running intervals.</p>
-                    <p class="hp-card-price">99,00 &euro;</p>
-                    <a href="/hyrox" class="btn-gold">Read more</a>
-                </div>
-
-                <div class="hp-card">
-                    <h3 class="hp-card-title">Super 10-session pass</h3>
-                    <p class="hp-card-desc">Ten visits to CrossFit, HYROX or Easy WOD classes. Valid for three months.</p>
-                    <p class="hp-card-price">139,00 &euro;</p>
-                    <a href="/hinnasto" class="btn-gold">Read more</a>
-                </div>
-
-            </div>
-        </div>
+        <?php echo do_shortcode( '[upcoming_events]' ); ?>
     </section>
 
     <!-- ==================== 4. WEEKLY SCHEDULE ==================== -->
-    <section class="hp-schedule">
-        <div class="page-width">
-            <div class="hp-schedule-header">
-                <p class="hp-section-label">Timetable</p>
-                <h2 class="hp-section-title">Weekly Schedule</h2>
-                <p class="hp-section-sub">All classes for the week. Book your spot in WODconnect.</p>
-            </div>
-            <div class="hp-schedule-grid">
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Monday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">06:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">09:30</span><span class="hp-slot-class">Easy WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">16:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">17:30</span><span class="hp-slot-class">HYROX</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">18:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                    </div>
-                </div>
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Tuesday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">06:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">16:30</span><span class="hp-slot-class">Weightlifting</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">17:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">18:30</span><span class="hp-slot-class">On-Ramp</span></div>
-                    </div>
-                </div>
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Wednesday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">06:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">09:30</span><span class="hp-slot-class">Easy WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">16:30</span><span class="hp-slot-class">HYROX</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">17:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">18:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                    </div>
-                </div>
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Thursday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">06:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">16:30</span><span class="hp-slot-class">Gymnastics</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">17:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">18:30</span><span class="hp-slot-class">On-Ramp</span></div>
-                    </div>
-                </div>
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Friday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">06:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">16:30</span><span class="hp-slot-class">CrossFit WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">17:30</span><span class="hp-slot-class">HYROX</span></div>
-                    </div>
-                </div>
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Saturday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">10:00</span><span class="hp-slot-class">Team WOD</span></div>
-                        <div class="hp-slot"><span class="hp-slot-time">11:00</span><span class="hp-slot-class">Open Gym</span></div>
-                    </div>
-                </div>
-
-                <div class="hp-day">
-                    <div class="hp-day-name">Sunday</div>
-                    <div class="hp-day-slots">
-                        <div class="hp-slot"><span class="hp-slot-time">11:00</span><span class="hp-slot-class">Open Gym</span></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
+    <?php echo do_shortcode( '[weekly_schedule]' ); ?>
 
     <!-- ==================== 5. PRICING ==================== -->
     <section class="hp-pricing">

@@ -78,7 +78,6 @@ function cw_render_recommendation_meta_box( $post ) {
     $price       = get_post_meta( $post->ID, '_cw_rec_price', true );
     $tag         = get_post_meta( $post->ID, '_cw_rec_tag', true );
     // $url         = get_post_meta( $post->ID, '_cw_rec_url', true );
-    $icon        = get_post_meta( $post->ID, '_cw_rec_icon', true );
     ?>
     <style>
         #cw_recommendation_details table { width:100%; border-collapse:collapse; }
@@ -88,7 +87,6 @@ function cw_render_recommendation_meta_box( $post ) {
         #cw_recommendation_details input[type="text"],
         #cw_recommendation_details input[type="url"] { width:100%; max-width:460px; }
         #cw_recommendation_details .description { color:#6b7280; font-size:12px; margin-top:4px; }
-        #cw_recommendation_details .cw-icon-input { width:80px !important; font-size:20px; text-align:center; }
     </style>
     <table>
         <tbody>
@@ -126,14 +124,6 @@ function cw_render_recommendation_meta_box( $post ) {
                     <p class="description">The page visitors will be sent to via the CTA button.</p>
                 </td>
             </tr> -->
-            <tr>
-                <th><label for="cw_rec_icon">Icon / Emoji</label></th>
-                <td>
-                    <input type="text" id="cw_rec_icon" name="cw_rec_icon" class="cw-icon-input"
-                           value="<?php echo esc_attr( $icon ); ?>" placeholder="&#x1F3CB;" />
-                    <p class="description">Optional emoji displayed on the chatbot result card.</p>
-                </td>
-            </tr>
         </tbody>
     </table>
     <?php
@@ -170,8 +160,5 @@ function cw_save_recommendation_meta( $post_id ) {
     // if ( isset( $_POST['cw_rec_url'] ) ) {
     //     update_post_meta( $post_id, '_cw_rec_url', esc_url_raw( wp_unslash( $_POST['cw_rec_url'] ) ) );
     // }
-    if ( isset( $_POST['cw_rec_icon'] ) ) {
-        update_post_meta( $post_id, '_cw_rec_icon', sanitize_text_field( wp_unslash( $_POST['cw_rec_icon'] ) ) );
-    }
 }
 add_action( 'save_post_cw_recommendation', 'cw_save_recommendation_meta' );

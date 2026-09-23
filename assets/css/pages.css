@@ -654,3 +654,73 @@
     margin: 0 auto 26px;
     line-height: 1.6;
 }
+
+/* ================================================================
+   Weekly Schedule (Shortcode Styles)
+   ================================================================ */
+.hp-schedule {
+    padding: 80px 0;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    margin: 40px 0;
+}
+.hp-schedule-header {
+    margin-bottom: 48px;
+}
+.hp-schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+}
+.hp-day {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.hp-day-name {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+.hp-day-slots {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.hp-slot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 6px 0;
+}
+.hp-slot-time {
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 42px;
+    flex-shrink: 0;
+}
+.hp-slot-class {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+    .hp-schedule-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 768px) {
+    .hp-schedule-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .hp-schedule-grid { grid-template-columns: 1fr; }
+}
+

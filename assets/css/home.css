@@ -103,21 +103,29 @@
 ================================================================ */
 .hp-hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(var(--hero-cols, 2), 1fr);
     min-height: 85vh;
 }
+.hp-hero--cols-1 { grid-template-columns: 1fr; }
+.hp-hero--cols-2 { grid-template-columns: 1fr 1fr; }
+.hp-hero--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.hp-hero--cols-4 { grid-template-columns: repeat(4, 1fr); }
+
 .hp-hero-panel {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-evenly;
     padding: 60px 48px;
     overflow: hidden;
+    background-color: #111;
+    align-items: center;
 }
 .hp-hero-panel::before {
     content: '';
     position: absolute;
     inset: 0;
+    background-image: var(--panel-bg);
     background-size: cover;
     background-position: center;
     transition: transform 0.6s ease;
@@ -128,23 +136,31 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.15) 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.15) 100%);
     z-index: 1;
 }
-.hp-hero-panel--hyrox::before { background-image: url('../images/hero-hyrox.jpg'); }
-.hp-hero-panel--crossfit::before { background-image: url('../images/hero-crossfit.jpg'); }
+.hp-hero-panel--hyrox::before { background-image: var(--panel-bg, url('../images/hero-hyrox.jpg')); }
+.hp-hero-panel--crossfit::before { background-image: var(--panel-bg, url('../images/hero-crossfit.jpg')); }
 
 .hp-hero-panel > * { position: relative; z-index: 2; }
 .hp-hero-heading {
     font-family: var(--font-head);
-    font-size: clamp(42px, 6vw, 72px);
+    font-size: clamp(38px, 5.5vw, 68px);
     font-weight: 900;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #fff;
     line-height: 1;
-    margin: 0 0 24px;
+    margin: 0 0 16px;
     text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+.hp-hero-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+    margin: 0 0 24px;
+    max-width: 480px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 /* ================================================================
@@ -232,6 +248,91 @@
     font-weight: 600;
     color: var(--text-muted);
 }
+/* Event Cards */
+.event-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.event-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-2);
+}
+.event-card-thumb {
+    margin: -28px -28px 20px -28px;
+    overflow: hidden;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    aspect-ratio: 16 / 9;
+    background: #181818;
+}
+.event-card-thumb a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.event-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+.event-card:hover .event-card-thumb img {
+    transform: scale(1.05);
+}
+.event-card-tag {
+    display: inline-block;
+    background: var(--gold-light);
+    color: var(--gold);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 14px;
+    align-self: flex-start;
+}
+.event-card-title {
+    font-family: var(--font-head);
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0 0 10px;
+}
+.event-card-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 16px;
+}
+.event-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+.event-card-price {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gold);
+}
+.cards-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
 
 /* ================================================================
    4. WEEKLY SCHEDULE
@@ -241,10 +342,9 @@
     background: var(--bg-card);
 }
 .hp-schedule-header {
-    text-align: center;
+    /* text-align: center; */
     margin-bottom: 48px;
 }
-.hp-schedule-header .hp-section-sub { margin: 0 auto; }
 .hp-schedule-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
