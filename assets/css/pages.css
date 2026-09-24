@@ -20,8 +20,8 @@
     --text-dim:    #666666;
     --border:      rgba(255, 255, 255, 0.08);
     --border-2:    rgba(255, 255, 255, 0.15);
-    --font-head:   'Fira Sans Condensed', sans-serif;
-    --font-body:  'Fira Sans Condensed', sans-serif;
+    --font-head:   'D-DIN Regular', sans-serif;
+    --font-body:  'D-DIN Regular', sans-serif;
     --max-w:       1200px;
     --radius:      6px;
 }
