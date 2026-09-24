@@ -9,6 +9,7 @@
     --bg-card:     #111111;
     --bg-card-2:   #1a1a1a;
     --gold:        #c9a84c;
+    --cw-gold:     #bc8e54;
     --gold-dark:   #a8883a;
     --gold-hover:  #d4b55e;
     --text:        #ffffff;
@@ -119,7 +120,7 @@ p,a,span{
 .hp-hero {
     display: grid;
     grid-template-columns: repeat(var(--hero-cols, 2), 1fr);
-    min-height: 85vh;
+    min-height: 58vh;
 }
 .hp-hero--cols-1 { grid-template-columns: 1fr; }
 .hp-hero--cols-2 { grid-template-columns: 1fr 1fr; }
@@ -130,11 +131,12 @@ p,a,span{
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: center;
     padding: 60px 48px 60px 140px;
     overflow: hidden;
     background-color: #111;
     align-items: center;
+    gap: 0rem;
 }
 .hp-hero-panel:last-child {
     padding: 60px 138px 60px 48px;

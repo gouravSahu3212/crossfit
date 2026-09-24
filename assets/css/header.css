@@ -3,19 +3,21 @@
 }
 
 a.btn-primery {
-    background-color: var(--cw-gold);
+    background-color: #bc8e54;
     color: #111111;
-    padding: 7px 20px;
-    border-radius: 10px;
+    padding: 15px 20px;
+    border-radius: 4px;
     display: inline-block;
     max-width: max-content;
     text-align: center;
     font-size: 14px;
     display: flex;
     gap: 10px;
+    text-decoration: none;
 }
 header.site-main-header {
     background-color: #111111;
+    border-bottom: 1px solid #464646;
 }
 .logo {
     max-width: 228px;
@@ -39,7 +41,6 @@ header.site-main-header {
     justify-content: space-between;
     gap: 20px;
     align-items: center;
-    padding-top: 15px;
 }
 
 .svg-icon-wrapper svg {
@@ -70,7 +71,12 @@ nav.main-navigation ul {
     text-transform: uppercase;
     letter-spacing: 0;
 }
-
+nav.main-navigation {
+    width: 80%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
 nav.main-navigation ul li {
-    padding: 0 20px;
+    padding: 0 10px;
 }
