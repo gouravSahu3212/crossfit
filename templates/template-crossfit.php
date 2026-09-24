@@ -135,6 +135,9 @@ get_header();
             </div>
         </section>
 
+        <!-- About / Community Section -->
+        <?php echo cw_render_page_about(); ?>
+
         <!-- CrossFit FAQ -->
         <?php echo cw_render_page_faq(); ?>
 

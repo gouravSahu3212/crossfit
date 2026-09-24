@@ -44,6 +44,9 @@ get_header();
             <?php echo do_shortcode( '[upcoming_events]' ); ?>
         </section>
 
+        <!-- About / Community Section -->
+        <?php echo cw_render_page_about(); ?>
+
         <!-- Events FAQ -->
         <?php echo cw_render_page_faq(); ?>
 

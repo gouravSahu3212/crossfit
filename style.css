@@ -191,3 +191,25 @@ body {
     text-align: center;
     box-sizing: border-box;
 }
+
+/* About / Community Component */
+.hp-about {
+    padding: var(--section-py, 100px) 0;
+    background: var(--bg-card, #111111);
+}
+.hp-about-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+.hp-about-body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-muted, #999999);
+    line-height: 1.75;
+    margin: 0;
+}
+.hp-about-cta {
+    margin-top: 28px;
+    text-align: center;
+}

@@ -365,5 +365,35 @@ add_shortcode( 'page_faq', 'cw_page_faq_shortcode' );
 add_shortcode( 'cw_faq', 'cw_page_faq_shortcode' );
 add_shortcode( 'faq_section', 'cw_page_faq_shortcode' );
 
+/**
+ * Shortcode to display About / Community section for the current page or specified ID.
+ *
+ * Usage:
+ *   [about_section]
+ *   [about_section id="123"]
+ *
+ * @param array $atts Shortcode attributes.
+ * @return string HTML output.
+ */
+function cw_about_section_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'id' => 0,
+        ),
+        $atts,
+        'about_section'
+    );
+
+    $post_id = ! empty( $atts['id'] ) ? intval( $atts['id'] ) : get_the_ID();
+    if ( function_exists( 'cw_render_page_about' ) ) {
+        return cw_render_page_about( $post_id );
+    }
+    return '';
+}
+add_shortcode( 'about_section', 'cw_about_section_shortcode' );
+add_shortcode( 'cw_about', 'cw_about_section_shortcode' );
+add_shortcode( 'community_section', 'cw_about_section_shortcode' );
+
+
 
 

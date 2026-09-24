@@ -44,6 +44,16 @@ function cw_register_page_meta_boxes() {
         'normal',
         'high'
     );
+
+    // 4. About / Community Section
+    add_meta_box(
+        'cw_page_about_section',
+        __( 'About / Community Section Settings', 'codyweb-child' ),
+        'cw_render_page_about_meta_box',
+        'page',
+        'normal',
+        'high'
+    );
 }
 add_action( 'add_meta_boxes', 'cw_register_page_meta_boxes' );
 
@@ -1187,5 +1197,291 @@ function cw_render_page_faq( $post_id = null ) {
     <?php
     return ob_get_clean();
 }
+
+// =========================================================
+// 4. About / Community Section Meta Box & Functions
+// =========================================================
+
+/**
+ * Render the About / Community Section meta box on page edit screens.
+ *
+ * @param WP_Post $post Current post object.
+ */
+function cw_render_page_about_meta_box( $post ) {
+    wp_nonce_field( 'cw_page_about_save_meta', 'cw_page_about_nonce' );
+
+    $about_data  = cw_get_page_about( $post->ID );
+    $show        = $about_data['show'] ? 'yes' : 'no';
+    $label       = $about_data['label'];
+    $title       = $about_data['title'];
+    $description = $about_data['description'];
+    $btn_text    = $about_data['btn_text'];
+    $btn_url     = $about_data['btn_url'];
+    $btn_style   = $about_data['btn_style'];
+    ?>
+    <div class="cw-hero-meta-wrap">
+
+        <!-- 1. Show (Yes / No) -->
+        <div class="cw-meta-row" style="border-top: none;">
+            <div class="cw-meta-label">
+                <label><?php esc_html_e( 'Show About / Community Section', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <div class="cw-radio-group">
+                    <label>
+                        <input type="radio" name="cw_about_show" value="yes" <?php checked( $show, 'yes' ); ?>>
+                        <span><?php esc_html_e( 'Yes (Show)', 'codyweb-child' ); ?></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="cw_about_show" value="no" <?php checked( $show, 'no' ); ?>>
+                        <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Section Label -->
+        <div class="cw-meta-row">
+            <div class="cw-meta-label">
+                <label for="cw_about_label"><?php esc_html_e( 'Section Label', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <input type="text"
+                       id="cw_about_label"
+                       name="cw_about_label"
+                       value="<?php echo esc_attr( $label ); ?>"
+                       placeholder="e.g. Our story or Community">
+                <p class="cw-help-text"><?php esc_html_e( 'Small eyebrow tag displayed above the main heading.', 'codyweb-child' ); ?></p>
+            </div>
+        </div>
+
+        <!-- 3. Section Heading -->
+        <div class="cw-meta-row">
+            <div class="cw-meta-label">
+                <label for="cw_about_title"><?php esc_html_e( 'Section Heading *', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <input type="text"
+                       id="cw_about_title"
+                       name="cw_about_title"
+                       value="<?php echo esc_attr( $title ); ?>"
+                       placeholder="e.g. Training at CrossFit Kouvola">
+            </div>
+        </div>
+
+        <!-- 4. Description / Body Text -->
+        <div class="cw-meta-row">
+            <div class="cw-meta-label">
+                <label for="cw_about_description"><?php esc_html_e( 'Description / Body Text', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <textarea id="cw_about_description"
+                          name="cw_about_description"
+                          rows="4"
+                          placeholder="e.g. Our gym has been part of the Kouvola community since 2013..."><?php echo esc_textarea( $description ); ?></textarea>
+            </div>
+        </div>
+
+        <!-- 5. CTA Button (Optional) -->
+        <div class="cw-meta-row" style="border-bottom: none;">
+            <div class="cw-meta-label">
+                <label><?php esc_html_e( 'CTA Button (Optional)', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+                    <input type="text"
+                           name="cw_about_btn_text"
+                           value="<?php echo esc_attr( $btn_text ); ?>"
+                           placeholder="Button Text (leave blank if none)"
+                           style="flex: 1; min-width: 180px;">
+                    <input type="text"
+                           name="cw_about_btn_url"
+                           value="<?php echo esc_attr( $btn_url ); ?>"
+                           placeholder="Button Link (e.g. /yhteystiedot)"
+                           style="flex: 2; min-width: 220px;">
+                    <select name="cw_about_btn_style" style="width: 140px;">
+                        <option value="outline" <?php selected( $btn_style, 'outline' ); ?>><?php esc_html_e( 'Outline', 'codyweb-child' ); ?></option>
+                        <option value="gold" <?php selected( $btn_style, 'gold' ); ?>><?php esc_html_e( 'Gold', 'codyweb-child' ); ?></option>
+                    </select>
+                </div>
+                <p class="cw-help-text"><?php esc_html_e( 'If button text or link is left blank, no button will be shown.', 'codyweb-child' ); ?></p>
+            </div>
+        </div>
+
+    </div>
+    <?php
+}
+
+/**
+ * Save About / Community Section Meta Data.
+ *
+ * @param int $post_id Post ID.
+ */
+function cw_save_page_about_meta( $post_id ) {
+    if ( ! isset( $_POST['cw_page_about_nonce'] ) ) {
+        return;
+    }
+    if ( ! wp_verify_nonce( $_POST['cw_page_about_nonce'], 'cw_page_about_save_meta' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+        return;
+    }
+
+    $show = ( isset( $_POST['cw_about_show'] ) && 'no' === $_POST['cw_about_show'] ) ? 'no' : 'yes';
+    update_post_meta( $post_id, '_cw_about_show', $show );
+
+    if ( isset( $_POST['cw_about_label'] ) ) {
+        update_post_meta( $post_id, '_cw_about_label', sanitize_text_field( wp_unslash( $_POST['cw_about_label'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_about_title'] ) ) {
+        update_post_meta( $post_id, '_cw_about_title', sanitize_text_field( wp_unslash( $_POST['cw_about_title'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_about_description'] ) ) {
+        update_post_meta( $post_id, '_cw_about_description', sanitize_textarea_field( wp_unslash( $_POST['cw_about_description'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_about_btn_text'] ) ) {
+        update_post_meta( $post_id, '_cw_about_btn_text', sanitize_text_field( wp_unslash( $_POST['cw_about_btn_text'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_about_btn_url'] ) ) {
+        update_post_meta( $post_id, '_cw_about_btn_url', sanitize_text_field( wp_unslash( $_POST['cw_about_btn_url'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_about_btn_style'] ) ) {
+        $btn_style = in_array( $_POST['cw_about_btn_style'], array( 'gold', 'outline' ), true ) ? $_POST['cw_about_btn_style'] : 'outline';
+        update_post_meta( $post_id, '_cw_about_btn_style', $btn_style );
+    }
+}
+add_action( 'save_post_page', 'cw_save_page_about_meta' );
+
+/**
+ * Retrieve About / Community section data for a given page.
+ *
+ * @param int|null $post_id Page ID.
+ * @return array
+ */
+function cw_get_page_about( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! $post_id ) {
+        return array(
+            'show'        => false,
+            'label'       => '',
+            'title'       => '',
+            'description' => '',
+            'btn_text'    => '',
+            'btn_url'     => '',
+            'btn_style'   => 'outline',
+        );
+    }
+
+    $raw_show    = get_post_meta( $post_id, '_cw_about_show', true );
+    $label       = get_post_meta( $post_id, '_cw_about_label', true );
+    $title       = get_post_meta( $post_id, '_cw_about_title', true );
+    $description = get_post_meta( $post_id, '_cw_about_description', true );
+    $btn_text    = get_post_meta( $post_id, '_cw_about_btn_text', true );
+    $btn_url     = get_post_meta( $post_id, '_cw_about_btn_url', true );
+    $btn_style   = get_post_meta( $post_id, '_cw_about_btn_style', true );
+    if ( empty( $btn_style ) ) {
+        $btn_style = 'outline';
+    }
+
+    // Default fallback on homepage if not yet explicitly saved
+    $template = get_page_template_slug( $post_id );
+    $slug     = get_post_field( 'post_name', $post_id );
+    $is_home  = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
+    if ( '' === $raw_show && '' === $title && '' === $description ) {
+        if ( $is_home ) {
+            return array(
+                'show'        => true,
+                'label'       => 'Our story',
+                'title'       => 'Training at CrossFit Kouvola',
+                'description' => 'Our gym has been part of the Kouvola community since 2013. Everything we do is built around coached group classes, honest work and a room where people know your name.',
+                'btn_text'    => '',
+                'btn_url'     => '',
+                'btn_style'   => 'outline',
+            );
+        } else {
+            return array(
+                'show'        => false,
+                'label'       => 'Our story',
+                'title'       => 'Training at CrossFit Kouvola',
+                'description' => 'Our gym has been part of the Kouvola community since 2013. Everything we do is built around coached group classes, honest work and a room where people know your name.',
+                'btn_text'    => '',
+                'btn_url'     => '',
+                'btn_style'   => 'outline',
+            );
+        }
+    }
+
+    return array(
+        'show'        => ( 'no' !== $raw_show ),
+        'label'       => $label,
+        'title'       => $title,
+        'description' => $description,
+        'btn_text'    => $btn_text,
+        'btn_url'     => $btn_url,
+        'btn_style'   => $btn_style,
+    );
+}
+
+/**
+ * Render About / Community Section HTML for a given page.
+ *
+ * @param int|null $post_id Page ID.
+ * @return string HTML output.
+ */
+function cw_render_page_about( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    $about = cw_get_page_about( $post_id );
+
+    if ( empty( $about['show'] ) || ( empty( $about['title'] ) && empty( $about['description'] ) ) ) {
+        return '';
+    }
+
+    $btn_class = ( ! empty( $about['btn_style'] ) && 'gold' === $about['btn_style'] ) ? 'btn-gold' : 'btn-outline';
+
+    ob_start();
+    ?>
+    <!-- About / Community Section -->
+    <section class="hp-about page-section">
+        <div class="page-width">
+            <div class="hp-about-inner">
+                <?php if ( ! empty( $about['label'] ) ) : ?>
+                    <p class="hp-section-label"><?php echo esc_html( $about['label'] ); ?></p>
+                <?php endif; ?>
+                <?php if ( ! empty( $about['title'] ) ) : ?>
+                    <h2 class="hp-section-title"><?php echo esc_html( $about['title'] ); ?></h2>
+                <?php endif; ?>
+                <?php if ( ! empty( $about['description'] ) ) : ?>
+                    <div class="hp-about-body">
+                        <?php echo wpautop( wp_kses_post( $about['description'] ) ); ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ( ! empty( $about['btn_text'] ) && ! empty( $about['btn_url'] ) ) : ?>
+                    <div class="hp-about-cta" style="margin-top: 28px;">
+                        <a href="<?php echo esc_url( $about['btn_url'] ); ?>" class="<?php echo esc_attr( $btn_class ); ?>">
+                            <?php echo esc_html( $about['btn_text'] ); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+    <?php
+    return ob_get_clean();
+}
+
 
 

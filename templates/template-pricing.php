@@ -52,6 +52,9 @@ get_header();
             </div>
         </section>
 
+        <!-- About / Community Section -->
+        <?php echo cw_render_page_about(); ?>
+
         <!-- Pricing FAQ -->
         <?php echo cw_render_page_faq(); ?>
 

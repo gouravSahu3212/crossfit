@@ -65,71 +65,13 @@ get_header();
     <?php echo do_shortcode( '[weekly_schedule]' ); ?>
 
     <!-- ==================== 5. PRICING ==================== -->
-    <section class="hp-pricing">
-        <div class="page-width">
-            <div class="hp-pricing-header">
-                <p class="hp-section-label">Plans</p>
-                <h2 class="hp-section-title">Pricing</h2>
-            </div>
-            <div class="hp-pricing-grid">
-
-                <div class="hp-price-card hp-price-card--featured">
-                    <h3 class="hp-price-name">Full membership</h3>
-                    <p class="hp-price-amount">89 &euro; <span>/ kk</span></p>
-                    <ul class="hp-price-features">
-                        <li>Unlimited classes</li>
-                        <li>CrossFit, HYROX &amp; Easy WOD</li>
-                        <li>Open gym access</li>
-                    </ul>
-                </div>
-
-                <div class="hp-price-card">
-                    <h3 class="hp-price-name">10-session pass</h3>
-                    <p class="hp-price-amount">139 &euro;</p>
-                    <ul class="hp-price-features">
-                        <li>10 class visits</li>
-                        <li>Valid for 3 months</li>
-                        <li>All class types</li>
-                    </ul>
-                </div>
-
-                <div class="hp-price-card">
-                    <h3 class="hp-price-name">Student / senior</h3>
-                    <p class="hp-price-amount">69 &euro; <span>/ kk</span></p>
-                    <ul class="hp-price-features">
-                        <li>Unlimited classes</li>
-                        <li>Valid ID required</li>
-                        <li>Open gym access</li>
-                    </ul>
-                </div>
-
-                <div class="hp-price-card">
-                    <h3 class="hp-price-name">Drop-in</h3>
-                    <p class="hp-price-amount">20 &euro;</p>
-                    <ul class="hp-price-features">
-                        <li>One single class</li>
-                        <li>Visiting athletes welcome</li>
-                        <li>Book in advance</li>
-                    </ul>
-                </div>
-
-            </div>
-            <div class="hp-pricing-link">
-                <a href="/hinnasto" class="btn-outline">View all pricing</a>
-            </div>
-        </div>
+    <section class="hp-pricing page-section">
+        <?php echo do_shortcode( '[pricing_table]' ); ?>
     </section>
 
     <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->
-    <section class="hp-about">
-        <div class="page-width">
-            <div class="hp-about-inner">
-                <p class="hp-section-label">Our story</p>
-                <h2 class="hp-section-title">Training at CrossFit Kouvola</h2>
-                <p class="hp-about-body">Our gym has been part of the Kouvola community since 2013. Everything we do is built around coached group classes, honest work and a room where people know your name.</p>
-            </div>
-        </div>
-    </section>
+    <?php echo cw_render_page_about(); ?>
+
 
     <!-- ==================== 7. FAQ ==================== -->
     <?php echo cw_render_page_faq(); ?>
