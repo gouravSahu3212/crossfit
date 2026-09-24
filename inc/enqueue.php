@@ -17,7 +17,7 @@ function codyweb_child_enqueue_styles() {
         'codyweb-child-style',
         get_stylesheet_uri(),
         array( 'codyweb-parent-style' ),
-        wp_get_theme()->get( 'Version' )
+        time()
     );
 
     // Header CSS

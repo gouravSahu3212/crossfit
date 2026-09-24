@@ -16,8 +16,8 @@
     --text-muted:  #999999;
     --border:      rgba(255,255,255,0.06);
     --border-2:    rgba(255,255,255,0.1);
-    --font-head:   'D-DIN Regular', sans-serif;
-    --font-body:   'D-DIN Regular', sans-serif;
+    --font-head:   'D-DIN Condensed Regular';
+    --font-body:   'D-DIN Condensed Regular';
     --max-w:       1200px;
     --section-py:  100px;
     --radius:      4px;
