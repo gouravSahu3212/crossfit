@@ -14,6 +14,7 @@ require get_stylesheet_directory() . '/inc/menus.php';
 require get_stylesheet_directory() . '/inc/shortcodes.php';
 require get_stylesheet_directory() . '/inc/page-fields.php';
 require get_stylesheet_directory() . '/inc/schedule.php';
+require get_stylesheet_directory() . '/inc/pricing.php';
 
 
 // =========================================================

@@ -209,3 +209,161 @@ function cw_weekly_schedule_shortcode( $atts ) {
 }
 add_shortcode( 'weekly_schedule', 'cw_weekly_schedule_shortcode' );
 
+/**
+ * Shortcode to display Pricing Plans.
+ *
+ * Usage:
+ *   [pricing_table]
+ *   [pricing_table title="Pricing" label="Plans"]
+ *   [pricing_table title="Pricing" columns="4" link_more_text="View all pricing" link_more_url="/hinnasto"]
+ *
+ * @param array $atts Shortcode attributes.
+ * @return string HTML output.
+ */
+function cw_pricing_table_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'title'          => '',
+            'heading'        => '',
+            'subtitle'       => '',
+            'label'          => '',
+            'columns'        => '4',
+            'link_more_text' => '',
+            'link_more_url'  => '',
+        ),
+        $atts,
+        'pricing_table'
+    );
+
+    $title          = ! empty( $atts['heading'] ) ? $atts['heading'] : $atts['title'];
+    $subtitle       = $atts['subtitle'];
+    $label          = $atts['label'];
+    $columns        = in_array( $atts['columns'], array( '2', '3', '4' ), true ) ? $atts['columns'] : '4';
+    $link_more_text = $atts['link_more_text'];
+    $link_more_url  = $atts['link_more_url'];
+
+    $plans = function_exists( 'cw_get_pricing_plans' ) ? cw_get_pricing_plans() : array();
+
+    ob_start();
+    ?>
+    <div class="pricing-table-container">
+        <?php if ( ! empty( $title ) || ! empty( $label ) || ! empty( $subtitle ) ) : ?>
+            <div class="hp-pricing-header" style="margin-bottom: 40px;">
+                <?php if ( ! empty( $label ) ) : ?>
+                    <p class="hp-section-label"><?php echo esc_html( $label ); ?></p>
+                <?php endif; ?>
+                <?php if ( ! empty( $title ) ) : ?>
+                    <h2 class="hp-section-title"><?php echo esc_html( $title ); ?></h2>
+                <?php endif; ?>
+                <?php if ( ! empty( $subtitle ) ) : ?>
+                    <p class="hp-section-sub"><?php echo esc_html( $subtitle ); ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $plans ) ) : ?>
+            <div class="pricing-grid cards-grid-<?php echo esc_attr( $columns ); ?>">
+                <?php
+                foreach ( $plans as $plan ) :
+                    $is_featured = ( ! empty( $plan['featured'] ) && 'yes' === $plan['featured'] );
+                    $card_class  = 'pricing-card' . ( $is_featured ? ' pricing-card--popular' : '' );
+                    $badge       = ! empty( $plan['badge'] ) ? $plan['badge'] : '';
+
+                    // Button style
+                    $btn_style = ! empty( $plan['btn_style'] ) ? $plan['btn_style'] : 'auto';
+                    if ( 'gold' === $btn_style ) {
+                        $btn_class = 'btn-gold';
+                    } elseif ( 'outline' === $btn_style ) {
+                        $btn_class = 'btn-outline';
+                    } else {
+                        $btn_class = $is_featured ? 'btn-gold' : 'btn-outline';
+                    }
+
+                    // Features list
+                    $features_raw = ! empty( $plan['features'] ) ? $plan['features'] : '';
+                    $features     = array_filter( array_map( 'trim', explode( "\n", str_replace( "\r", '', $features_raw ) ) ) );
+                    ?>
+                    <div class="<?php echo esc_attr( $card_class ); ?>">
+                        <?php if ( ! empty( $badge ) ) : ?>
+                            <span class="pricing-badge"><?php echo esc_html( $badge ); ?></span>
+                        <?php endif; ?>
+
+                        <h3 class="pricing-card-title"><?php echo esc_html( $plan['title'] ); ?></h3>
+
+                        <div class="pricing-card-price">
+                            <?php echo esc_html( $plan['price'] ); ?>
+                            <?php if ( ! empty( $plan['period'] ) ) : ?>
+                                <span><?php echo esc_html( $plan['period'] ); ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if ( ! empty( $features ) ) : ?>
+                            <ul class="pricing-card-features">
+                                <?php foreach ( $features as $feature ) : ?>
+                                    <li><?php echo esc_html( $feature ); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+
+                        <?php
+                        if ( ! empty( $plan['btn_text'] ) && ! empty( $plan['btn_url'] ) ) :
+                            $is_external = ( 0 === strpos( $plan['btn_url'], 'http' ) && false === strpos( $plan['btn_url'], home_url() ) );
+                            ?>
+                            <a href="<?php echo esc_url( $plan['btn_url'] ); ?>"
+                               <?php echo $is_external ? 'target="_blank" rel="noreferrer"' : ''; ?>
+                               class="<?php echo esc_attr( $btn_class ); ?>">
+                                <?php echo esc_html( $plan['btn_text'] ); ?>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else : ?>
+            <p style="color: var(--text-muted); font-size: 15px; padding: 20px 0;">No pricing plans found.</p>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $link_more_text ) && ! empty( $link_more_url ) ) : ?>
+            <div class="hp-pricing-link" style="text-align: center; margin-top: 36px;">
+                <a href="<?php echo esc_url( $link_more_url ); ?>" class="btn-outline"><?php echo esc_html( $link_more_text ); ?></a>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'pricing_table', 'cw_pricing_table_shortcode' );
+add_shortcode( 'cw_pricing', 'cw_pricing_table_shortcode' );
+add_shortcode( 'pricing_plans', 'cw_pricing_table_shortcode' );
+
+/**
+ * Shortcode to display the FAQ section for the current page or specified page ID.
+ *
+ * Usage:
+ *   [page_faq]
+ *   [page_faq id="123"]
+ *
+ * @param array $atts Shortcode attributes.
+ * @return string HTML output.
+ */
+function cw_page_faq_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'id' => 0,
+        ),
+        $atts,
+        'page_faq'
+    );
+
+    $post_id = ! empty( $atts['id'] ) ? intval( $atts['id'] ) : get_the_ID();
+    if ( function_exists( 'cw_render_page_faq' ) ) {
+        return cw_render_page_faq( $post_id );
+    }
+    return '';
+}
+add_shortcode( 'page_faq', 'cw_page_faq_shortcode' );
+add_shortcode( 'cw_faq', 'cw_page_faq_shortcode' );
+add_shortcode( 'faq_section', 'cw_page_faq_shortcode' );
+
+
+

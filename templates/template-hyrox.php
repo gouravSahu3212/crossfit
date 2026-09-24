@@ -131,43 +131,8 @@ get_header();
         </section>
 
         <!-- HYROX FAQ -->
-        <section class="page-section page-faq">
-            <div class="page-section-header">
-                <p class="page-section-label">Questions</p>
-                <h2 class="page-section-title">HYROX FAQ</h2>
-            </div>
-            <div class="page-faq-list">
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        Do I need running or fitness experience before joining?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Not at all. Our HYROX classes are designed for everyone from total beginners wanting to build aerobic endurance to athletes preparing for an official race. Everything is scaled to your current fitness.</p>
-                    </div>
-                </div>
+        <?php echo cw_render_page_faq(); ?>
 
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        Do I need an On-Ramp course for HYROX?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>No! Unlike standard CrossFit which uses barbells and gymnastic rigs, HYROX movements are simple functional exercises that coaches instruct directly in the warm-up.</p>
-                    </div>
-                </div>
-
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        What gear do I need for HYROX sessions?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Just breathable workout clothing, good running or indoor training shoes, and a water bottle. All sleds, weights, rowers, and SkiErgs are provided at the gym.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- CTA Strip -->
         <div class="page-cta-banner">

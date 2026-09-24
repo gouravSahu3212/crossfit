@@ -108,6 +108,8 @@ get_header();
             </div>
         </section>
 
+        <?php echo cw_render_page_faq(); ?>
+
         <!-- Map / Directions Banner -->
         <div class="page-cta-banner">
             <h2>Find Us In Kouvola</h2>

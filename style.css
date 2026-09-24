@@ -1,4 +1,4 @@
-﻿/*
+/*
 Theme Name: Codyweb Child
 Theme URI: https://codyweb.com/codyweb-child/
 Author: Codyweb
@@ -14,3 +14,110 @@ Text Domain: codyweb-child
 /* =========================================================
    Add your custom CSS overrides below this line
    ========================================================= */
+
+/* Pricing Table & Cards Component (for [pricing_table] shortcode) */
+.pricing-table-container {
+    width: 100%;
+}
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.pricing-grid.cards-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.pricing-grid.cards-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 1040px) {
+    .pricing-grid,
+    .pricing-grid.cards-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 680px) {
+    .pricing-grid,
+    .pricing-grid.cards-grid-4,
+    .pricing-grid.cards-grid-3,
+    .pricing-grid.cards-grid-2 { grid-template-columns: 1fr; }
+}
+.pricing-card {
+    background: var(--bg-card, #111111);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: var(--radius, 6px);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    box-sizing: border-box;
+}
+.pricing-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-2, rgba(255, 255, 255, 0.18));
+}
+.pricing-card--popular {
+    border-color: var(--gold, #c9a84c) !important;
+    background: #14130e;
+}
+.pricing-badge {
+    position: absolute;
+    top: -11px;
+    left: 24px;
+    background: var(--gold, #c9a84c);
+    color: #0a0a0a;
+    font-family: var(--font-head, 'Montserrat', sans-serif);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+}
+.pricing-card-title {
+    font-family: var(--font-head, 'Montserrat', sans-serif);
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text, #ffffff);
+    margin: 0 0 14px;
+}
+.pricing-card-price {
+    font-family: var(--font-head, 'Montserrat', sans-serif);
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--text, #ffffff);
+    line-height: 1;
+    margin: 0 0 20px;
+}
+.pricing-card-price span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted, #888888);
+}
+.pricing-card-features {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+    flex-grow: 1;
+}
+.pricing-card-features li {
+    font-size: 14px;
+    color: var(--text-muted, #888888);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.pricing-card-features li::before {
+    content: '✓';
+    color: var(--gold, #c9a84c);
+    font-weight: bold;
+}
+.pricing-card .btn-gold,
+.pricing-card .btn-outline {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+

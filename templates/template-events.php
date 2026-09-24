@@ -45,33 +45,8 @@ get_header();
         </section>
 
         <!-- Events FAQ -->
-        <section class="page-section page-faq">
-            <div class="page-section-header">
-                <p class="page-section-label">Questions</p>
-                <h2 class="page-section-title">Events FAQ</h2>
-            </div>
-            <div class="page-faq-list">
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        Can non-members participate in events?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Yes! Most of our events, beginner workshops, and Saturday Team WODs are open to non-members unless stated otherwise.</p>
-                    </div>
-                </div>
+        <?php echo cw_render_page_faq(); ?>
 
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        How do I reserve a spot for a workshop or course?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>You can sign up directly via WODconnect if you already have an account, or send us a message through our Contact page to reserve a spot.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- CTA Strip -->
         <div class="page-cta-banner">

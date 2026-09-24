@@ -132,67 +132,8 @@ get_header();
     </section>
 
     <!-- ==================== 7. FAQ ==================== -->
-    <section class="hp-faq">
-        <div class="page-width">
-            <div class="hp-faq-header">
-                <p class="hp-section-label">Questions</p>
-                <h2 class="hp-section-title">FAQ</h2>
-            </div>
-            <div class="hp-faq-list">
+    <?php echo cw_render_page_faq(); ?>
 
-                <div class="hp-faq-item">
-                    <button class="hp-faq-q" type="button">
-                        Do I need to be in shape before starting?
-                        <svg class="hp-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="hp-faq-a">
-                        <p>No. Every workout is scaled to your level and our coaches adjust the movements and loads for you from day one.</p>
-                    </div>
-                </div>
-
-                <div class="hp-faq-item">
-                    <button class="hp-faq-q" type="button">
-                        What is the difference between CrossFit and HYROX?
-                        <svg class="hp-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="hp-faq-a">
-                        <p>CrossFit focuses on varied functional movements at high intensity. HYROX is a specific race format combining running with functional workout stations. Both are coached and suitable for all levels.</p>
-                    </div>
-                </div>
-
-                <div class="hp-faq-item">
-                    <button class="hp-faq-q" type="button">
-                        Can I try a class before committing?
-                        <svg class="hp-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="hp-faq-a">
-                        <p>Absolutely! We offer a free trial class so you can experience a session before signing up.</p>
-                    </div>
-                </div>
-
-                <div class="hp-faq-item">
-                    <button class="hp-faq-q" type="button">
-                        What should I bring to my first class?
-                        <svg class="hp-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="hp-faq-a">
-                        <p>Comfortable workout clothes, indoor training shoes and a water bottle. We have all the equipment you need at the gym.</p>
-                    </div>
-                </div>
-
-                <div class="hp-faq-item">
-                    <button class="hp-faq-q" type="button">
-                        How do I book classes?
-                        <svg class="hp-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="hp-faq-a">
-                        <p>All bookings are made through WODconnect. You'll receive access when you sign up for a membership or pass.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
 
 </main>
 

@@ -28,66 +28,7 @@ get_header();
 
         <!-- Pricing Cards Grid -->
         <section id="plans" class="page-section">
-            <div class="pricing-grid">
-
-                <!-- Full Membership -->
-                <div class="pricing-card pricing-card--popular">
-                    <span class="pricing-badge">Most Popular</span>
-                    <h3 class="pricing-card-title">Full Membership</h3>
-                    <div class="pricing-card-price">89 &euro; <span>/ month</span></div>
-                    <ul class="pricing-card-features">
-                        <li>Unlimited coached classes</li>
-                        <li>CrossFit, HYROX &amp; Easy WOD</li>
-                        <li>Open Gym access during open hours</li>
-                        <li>WODconnect workout tracking</li>
-                        <li>Continuous monthly billing</li>
-                    </ul>
-                    <a href="https://www.wodconnect.com/crossfit-kouvola" target="_blank" rel="noreferrer" class="btn-gold">Choose Plan</a>
-                </div>
-
-                <!-- 10-Session Pass -->
-                <div class="pricing-card">
-                    <h3 class="pricing-card-title">10-Session Pass</h3>
-                    <div class="pricing-card-price">139 &euro; <span>/ 10 visits</span></div>
-                    <ul class="pricing-card-features">
-                        <li>10 class visits of your choice</li>
-                        <li>Valid for 3 full months</li>
-                        <li>Access to all class formats</li>
-                        <li>Great for flexible training schedules</li>
-                        <li>No ongoing commitment</li>
-                    </ul>
-                    <a href="https://www.wodconnect.com/crossfit-kouvola" target="_blank" rel="noreferrer" class="btn-outline">Get 10-Pass</a>
-                </div>
-
-                <!-- Student / Senior -->
-                <div class="pricing-card">
-                    <h3 class="pricing-card-title">Student / Senior</h3>
-                    <div class="pricing-card-price">69 &euro; <span>/ month</span></div>
-                    <ul class="pricing-card-features">
-                        <li>Unlimited coached classes</li>
-                        <li>CrossFit, HYROX &amp; Easy WOD</li>
-                        <li>Open Gym access</li>
-                        <li>Valid student / senior ID required</li>
-                        <li>Continuous monthly billing</li>
-                    </ul>
-                    <a href="https://www.wodconnect.com/crossfit-kouvola" target="_blank" rel="noreferrer" class="btn-outline">Choose Plan</a>
-                </div>
-
-                <!-- Drop-In -->
-                <div class="pricing-card">
-                    <h3 class="pricing-card-title">Drop-In</h3>
-                    <div class="pricing-card-price">20 &euro; <span>/ class</span></div>
-                    <ul class="pricing-card-features">
-                        <li>One single class visit</li>
-                        <li>Visiting athletes welcome</li>
-                        <li>Book easily before arriving</li>
-                        <li>Shower &amp; locker facilities</li>
-                        <li>Includes workout coaching</li>
-                    </ul>
-                    <a href="/yhteystiedot" class="btn-outline">Book Drop-In</a>
-                </div>
-
-            </div>
+            <?php echo do_shortcode( '[pricing_table]' ); ?>
         </section>
 
         <!-- Billing Info & Sports Benefits -->
@@ -112,43 +53,8 @@ get_header();
         </section>
 
         <!-- Pricing FAQ -->
-        <section class="page-section page-faq">
-            <div class="page-section-header">
-                <p class="page-section-label">Questions</p>
-                <h2 class="page-section-title">Pricing FAQ</h2>
-            </div>
-            <div class="page-faq-list">
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        Is there a registration or joining fee?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>No joining fee whatsoever. You only pay for your active membership or pass, and you can begin training immediately.</p>
-                    </div>
-                </div>
+        <?php echo cw_render_page_faq(); ?>
 
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        How can I freeze my membership if I get injured or travel?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Memberships can be frozen for documented medical reasons (doctor's certificate) or prolonged travel upon request by emailing us at info@crossfitkouvola.com.</p>
-                    </div>
-                </div>
-
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        Can I test a class before buying a membership?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Yes! We offer a completely free trial session so you can experience our coaching, equipment, and community before deciding on a plan.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- CTA Strip -->
         <div class="page-cta-banner">

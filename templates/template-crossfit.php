@@ -136,43 +136,8 @@ get_header();
         </section>
 
         <!-- CrossFit FAQ -->
-        <section class="page-section page-faq">
-            <div class="page-section-header">
-                <p class="page-section-label">Questions</p>
-                <h2 class="page-section-title">CrossFit FAQ</h2>
-            </div>
-            <div class="page-faq-list">
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        What is an On-Ramp course?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>On-Ramp is our beginner course. In four weeks you learn the fundamental movements (squats, presses, Olympic lifts, gymnastics), safe technique, and how WODs are structured before joining the regular class schedule.</p>
-                    </div>
-                </div>
+        <?php echo cw_render_page_faq(); ?>
 
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        What if I cannot do pull-ups or lift heavy weights?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Every single movement has multiple variations. We use resistance bands, ring rows, lighter barbells, and dumbells so that you get the exact right stimulus for your current level without risking injury.</p>
-                    </div>
-                </div>
-
-                <div class="page-faq-item">
-                    <button class="page-faq-q" type="button">
-                        Can I test a class before signing up for On-Ramp?
-                        <svg class="page-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <div class="page-faq-a">
-                        <p>Yes! We offer a free trial class where you can experience the gym, meet the coaches, and try a beginner-friendly workout with zero commitment.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- CTA Strip -->
         <div class="page-cta-banner">

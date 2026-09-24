@@ -34,6 +34,16 @@ function cw_register_page_meta_boxes() {
         'normal',
         'high'
     );
+
+    // 3. FAQ Section
+    add_meta_box(
+        'cw_page_faq_section',
+        __( 'FAQ Section Settings', 'codyweb-child' ),
+        'cw_render_page_faq_meta_box',
+        'page',
+        'normal',
+        'high'
+    );
 }
 add_action( 'add_meta_boxes', 'cw_register_page_meta_boxes' );
 
@@ -642,4 +652,540 @@ function cw_get_page_rich_text( $post_id = null ) {
         'btn_url'     => $btn_url,
     );
 }
+
+// =========================================================
+// 3. FAQ Section Meta Box & Functions
+// =========================================================
+
+/**
+ * Render the FAQ Section meta box on page edit screens.
+ *
+ * @param WP_Post $post Current post object.
+ */
+function cw_render_page_faq_meta_box( $post ) {
+    wp_nonce_field( 'cw_page_faq_save_meta', 'cw_page_faq_nonce' );
+
+    $faq_data = cw_get_page_faq( $post->ID );
+    $show     = $faq_data['show'] ? 'yes' : 'no';
+    $label    = $faq_data['label'];
+    $title    = $faq_data['title'];
+    $items    = ! empty( $faq_data['items'] ) && is_array( $faq_data['items'] ) ? $faq_data['items'] : array();
+    ?>
+    <style>
+        .cw-faq-meta-wrap {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            color: #1e293b;
+        }
+        .cw-faq-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+        }
+        .cw-faq-item-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            transition: border-color 0.2s;
+        }
+        .cw-faq-item-card:hover {
+            border-color: #94a3b8;
+        }
+        .cw-faq-item-head {
+            background: #0f172a;
+            color: #fff;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cw-faq-item-head span.cw-faq-title-preview {
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+        }
+        .cw-faq-item-body {
+            padding: 16px;
+        }
+        .cw-faq-remove-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .cw-faq-remove-btn:hover {
+            background: #ef4444;
+            color: #fff;
+            border-color: #dc2626;
+        }
+        .cw-add-faq-btn {
+            background: #f8fafc;
+            border: 2px dashed #94a3b8;
+            border-radius: 6px;
+            padding: 12px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+            margin-top: 14px;
+        }
+        .cw-add-faq-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+            border-color: #64748b;
+        }
+    </style>
+
+    <div class="cw-faq-meta-wrap">
+
+        <!-- 1. Show FAQ (Yes / No) -->
+        <div class="cw-meta-row" style="border-top: none;">
+            <div class="cw-meta-label">
+                <label><?php esc_html_e( 'Show FAQ Section', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <div class="cw-radio-group">
+                    <label>
+                        <input type="radio" name="cw_faq_show" value="yes" <?php checked( $show, 'yes' ); ?>>
+                        <span><?php esc_html_e( 'Yes (Show)', 'codyweb-child' ); ?></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="cw_faq_show" value="no" <?php checked( $show, 'no' ); ?>>
+                        <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Section Label -->
+        <div class="cw-meta-row">
+            <div class="cw-meta-label">
+                <label for="cw_faq_label"><?php esc_html_e( 'Section Label', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <input type="text"
+                       id="cw_faq_label"
+                       name="cw_faq_label"
+                       value="<?php echo esc_attr( $label ); ?>"
+                       placeholder="e.g. Questions">
+                <p class="cw-help-text"><?php esc_html_e( 'Small eyebrow tag displayed above the main heading.', 'codyweb-child' ); ?></p>
+            </div>
+        </div>
+
+        <!-- 3. Section Heading -->
+        <div class="cw-meta-row">
+            <div class="cw-meta-label">
+                <label for="cw_faq_title"><?php esc_html_e( 'Section Heading', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <input type="text"
+                       id="cw_faq_title"
+                       name="cw_faq_title"
+                       value="<?php echo esc_attr( $title ); ?>"
+                       placeholder="e.g. Pricing FAQ or FAQ">
+            </div>
+        </div>
+
+        <!-- 4. FAQ Items Repeater -->
+        <div class="cw-meta-row" style="border-bottom: none; align-items: flex-start;">
+            <div class="cw-meta-label" style="padding-top: 6px;">
+                <label><?php esc_html_e( 'FAQ Items', 'codyweb-child' ); ?></label>
+                <p class="cw-help-text" style="margin-top: 6px;"><?php esc_html_e( 'Add, edit, or remove questions and answers for this page.', 'codyweb-child' ); ?></p>
+            </div>
+            <div class="cw-meta-field">
+                <div class="cw-faq-items-list" id="cw-faq-items-container">
+                    <?php
+                    foreach ( $items as $index => $item ) :
+                        $q = isset( $item['question'] ) ? $item['question'] : '';
+                        $a = isset( $item['answer'] ) ? $item['answer'] : '';
+                        ?>
+                        <div class="cw-faq-item-card" data-index="<?php echo esc_attr( $index ); ?>">
+                            <div class="cw-faq-item-head">
+                                <span class="cw-faq-title-preview"><?php echo ! empty( $q ) ? esc_html( $q ) : sprintf( esc_html__( 'Question #%d', 'codyweb-child' ), $index + 1 ); ?></span>
+                                <button type="button" class="cw-faq-remove-btn"><?php esc_html_e( 'Remove', 'codyweb-child' ); ?></button>
+                            </div>
+                            <div class="cw-faq-item-body">
+                                <div style="margin-bottom: 12px;">
+                                    <label style="display:block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #475569; margin-bottom: 4px;"><?php esc_html_e( 'Question', 'codyweb-child' ); ?></label>
+                                    <input type="text"
+                                           class="cw-faq-q-input"
+                                           name="cw_faq_items[<?php echo esc_attr( $index ); ?>][question]"
+                                           value="<?php echo esc_attr( $q ); ?>"
+                                           placeholder="e.g. Do I need to be in shape before starting?"
+                                           style="max-width: 100%;">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #475569; margin-bottom: 4px;"><?php esc_html_e( 'Answer', 'codyweb-child' ); ?></label>
+                                    <textarea name="cw_faq_items[<?php echo esc_attr( $index ); ?>][answer]"
+                                              rows="3"
+                                              placeholder="Enter answer..."
+                                              style="max-width: 100%;"><?php echo esc_textarea( $a ); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <button type="button" class="cw-add-faq-btn" id="cw-add-faq-btn">
+                    + <?php esc_html_e( 'Add Another FAQ Item', 'codyweb-child' ); ?>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    (function($){
+        $(document).ready(function(){
+            // Live update question header preview
+            $(document).on('input', '.cw-faq-q-input', function(){
+                var val = $(this).val();
+                var $card = $(this).closest('.cw-faq-item-card');
+                $card.find('.cw-faq-title-preview').text(val ? val : 'New Question');
+            });
+
+            // Add new FAQ item
+            $('#cw-add-faq-btn').on('click', function(e){
+                e.preventDefault();
+                var timestamp = Date.now();
+                var count = $('.cw-faq-item-card').length + 1;
+
+                var tpl = '<div class="cw-faq-item-card" data-index="' + timestamp + '">' +
+                    '<div class="cw-faq-item-head">' +
+                        '<span class="cw-faq-title-preview">New Question #' + count + '</span>' +
+                        '<button type="button" class="cw-faq-remove-btn">Remove</button>' +
+                    '</div>' +
+                    '<div class="cw-faq-item-body">' +
+                        '<div style="margin-bottom: 12px;">' +
+                            '<label style="display:block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #475569; margin-bottom: 4px;">Question</label>' +
+                            '<input type="text" class="cw-faq-q-input" name="cw_faq_items[' + timestamp + '][question]" value="" placeholder="Enter question..." style="max-width: 100%;">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label style="display:block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #475569; margin-bottom: 4px;">Answer</label>' +
+                            '<textarea name="cw_faq_items[' + timestamp + '][answer]" rows="3" placeholder="Enter answer..." style="max-width: 100%;"></textarea>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+                var $newCard = $(tpl).hide();
+                $('#cw-faq-items-container').append($newCard);
+                $newCard.fadeIn(150);
+                $newCard.find('.cw-faq-q-input').focus();
+            });
+
+            // Remove FAQ item
+            $(document).on('click', '.cw-faq-remove-btn', function(e){
+                e.preventDefault();
+                var $card = $(this).closest('.cw-faq-item-card');
+                $card.fadeOut(150, function(){
+                    $card.remove();
+                });
+            });
+        });
+    })(jQuery);
+    </script>
+    <?php
+}
+
+/**
+ * Save FAQ Section Meta Data.
+ *
+ * @param int $post_id Post ID.
+ */
+function cw_save_page_faq_meta( $post_id ) {
+    if ( ! isset( $_POST['cw_page_faq_nonce'] ) ) {
+        return;
+    }
+    if ( ! wp_verify_nonce( $_POST['cw_page_faq_nonce'], 'cw_page_faq_save_meta' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+        return;
+    }
+
+    $show = ( isset( $_POST['cw_faq_show'] ) && 'no' === $_POST['cw_faq_show'] ) ? 'no' : 'yes';
+    update_post_meta( $post_id, '_cw_faq_show', $show );
+
+    if ( isset( $_POST['cw_faq_label'] ) ) {
+        update_post_meta( $post_id, '_cw_faq_label', sanitize_text_field( wp_unslash( $_POST['cw_faq_label'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_faq_title'] ) ) {
+        update_post_meta( $post_id, '_cw_faq_title', sanitize_text_field( wp_unslash( $_POST['cw_faq_title'] ) ) );
+    }
+
+    $clean_items = array();
+    if ( isset( $_POST['cw_faq_items'] ) && is_array( $_POST['cw_faq_items'] ) ) {
+        foreach ( $_POST['cw_faq_items'] as $item ) {
+            $q = isset( $item['question'] ) ? sanitize_text_field( wp_unslash( $item['question'] ) ) : '';
+            $a = isset( $item['answer'] ) ? wp_kses_post( wp_unslash( $item['answer'] ) ) : '';
+
+            if ( ! empty( $q ) || ! empty( $a ) ) {
+                $clean_items[] = array(
+                    'question' => $q,
+                    'answer'   => $a,
+                );
+            }
+        }
+    }
+    update_post_meta( $post_id, '_cw_faq_items', $clean_items );
+}
+add_action( 'save_post_page', 'cw_save_page_faq_meta' );
+
+/**
+ * Return default contextual FAQ data for a post/page based on its template or slug.
+ *
+ * @param int $post_id Post ID.
+ * @return array
+ */
+function cw_get_default_faq_data_for_post( $post_id ) {
+    $template = get_page_template_slug( $post_id );
+    $slug     = get_post_field( 'post_name', $post_id );
+    $is_home  = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
+    if ( $is_home ) {
+        return array(
+            'show'  => true,
+            'label' => 'Questions',
+            'title' => 'FAQ',
+            'items' => array(
+                array(
+                    'question' => 'Do I need to be in shape before starting?',
+                    'answer'   => 'No. Every workout is scaled to your level and our coaches adjust the movements and loads for you from day one.',
+                ),
+                array(
+                    'question' => 'What is the difference between CrossFit and HYROX?',
+                    'answer'   => 'CrossFit focuses on varied functional movements at high intensity. HYROX is a specific race format combining running with functional workout stations. Both are coached and suitable for all levels.',
+                ),
+                array(
+                    'question' => 'Can I try a class before committing?',
+                    'answer'   => 'Absolutely! We offer a free trial class so you can experience a session before signing up.',
+                ),
+                array(
+                    'question' => 'What should I bring to my first class?',
+                    'answer'   => 'Comfortable workout clothes, indoor training shoes and a water bottle. We have all the equipment you need at the gym.',
+                ),
+                array(
+                    'question' => 'How do I book classes?',
+                    'answer'   => "All bookings are made through WODconnect. You'll receive access when you sign up for a membership or pass.",
+                ),
+            ),
+        );
+    }
+
+    if ( 'templates/template-pricing.php' === $template || in_array( $slug, array( 'pricing', 'hinnasto' ), true ) ) {
+        return array(
+            'show'  => true,
+            'label' => 'Questions',
+            'title' => 'Pricing FAQ',
+            'items' => array(
+                array(
+                    'question' => 'Is there a registration or joining fee?',
+                    'answer'   => 'No joining fee whatsoever. You only pay for your active membership or pass, and you can begin training immediately.',
+                ),
+                array(
+                    'question' => 'How can I freeze my membership if I get injured or travel?',
+                    'answer'   => "Memberships can be frozen for documented medical reasons (doctor's certificate) or prolonged travel upon request by emailing us at info@crossfitkouvola.com.",
+                ),
+                array(
+                    'question' => 'Can I test a class before buying a membership?',
+                    'answer'   => 'Yes! We offer a completely free trial session so you can experience our coaching, equipment, and community before deciding on a plan.',
+                ),
+            ),
+        );
+    }
+
+    if ( 'templates/template-hyrox.php' === $template || 'hyrox' === $slug ) {
+        return array(
+            'show'  => true,
+            'label' => 'Questions',
+            'title' => 'HYROX FAQ',
+            'items' => array(
+                array(
+                    'question' => 'Do I need running or fitness experience before joining?',
+                    'answer'   => 'Not at all. Our HYROX classes are designed for everyone from total beginners wanting to build aerobic endurance to athletes preparing for an official race. Everything is scaled to your current fitness.',
+                ),
+                array(
+                    'question' => 'Do I need an On-Ramp course for HYROX?',
+                    'answer'   => 'No! Unlike standard CrossFit which uses barbells and gymnastic rigs, HYROX movements are simple functional exercises that coaches instruct directly in the warm-up.',
+                ),
+                array(
+                    'question' => 'What gear do I need for HYROX sessions?',
+                    'answer'   => 'Just breathable workout clothing, good running or indoor training shoes, and a water bottle. All sleds, weights, rowers, and SkiErgs are provided at the gym.',
+                ),
+            ),
+        );
+    }
+
+    if ( 'templates/template-crossfit.php' === $template || 'crossfit' === $slug ) {
+        return array(
+            'show'  => true,
+            'label' => 'Questions',
+            'title' => 'CrossFit FAQ',
+            'items' => array(
+                array(
+                    'question' => 'What is an On-Ramp course?',
+                    'answer'   => 'On-Ramp is our beginner course. In four weeks you learn the fundamental movements (squats, presses, Olympic lifts, gymnastics), safe technique, and how WODs are structured before joining the regular class schedule.',
+                ),
+                array(
+                    'question' => 'What if I cannot do pull-ups or lift heavy weights?',
+                    'answer'   => 'Every single movement has multiple variations. We use resistance bands, ring rows, lighter barbells, and dumbells so that you get the exact right stimulus for your current level without risking injury.',
+                ),
+                array(
+                    'question' => 'Can I test a class before signing up for On-Ramp?',
+                    'answer'   => 'Yes! We offer a free trial class where you can experience the gym, meet the coaches, and try a beginner-friendly workout with zero commitment.',
+                ),
+            ),
+        );
+    }
+
+    if ( 'templates/template-events.php' === $template || in_array( $slug, array( 'events', 'tapahtumat' ), true ) ) {
+        return array(
+            'show'  => true,
+            'label' => 'Questions',
+            'title' => 'Events FAQ',
+            'items' => array(
+                array(
+                    'question' => 'Can non-members participate in events?',
+                    'answer'   => 'Yes! Most of our events, beginner workshops, and Saturday Team WODs are open to non-members unless stated otherwise.',
+                ),
+                array(
+                    'question' => 'How do I reserve a spot for a workshop or course?',
+                    'answer'   => 'You can sign up directly via WODconnect if you already have an account, or send us a message through our Contact page to reserve a spot.',
+                ),
+            ),
+        );
+    }
+
+    // Default for any other page
+    return array(
+        'show'  => true,
+        'label' => 'Questions',
+        'title' => 'FAQ',
+        'items' => array(),
+    );
+}
+
+/**
+ * Retrieve FAQ data for any page.
+ *
+ * @param int|null $post_id Page ID.
+ * @return array
+ */
+function cw_get_page_faq( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! $post_id ) {
+        return array(
+            'show'  => false,
+            'label' => '',
+            'title' => '',
+            'items' => array(),
+        );
+    }
+
+    $raw_show = get_post_meta( $post_id, '_cw_faq_show', true );
+    $label    = get_post_meta( $post_id, '_cw_faq_label', true );
+    $title    = get_post_meta( $post_id, '_cw_faq_title', true );
+    $items    = get_post_meta( $post_id, '_cw_faq_items', true );
+
+    // If never saved yet, return defaults
+    if ( '' === $raw_show && '' === $title && '' === $label && ( false === $items || '' === $items ) ) {
+        return cw_get_default_faq_data_for_post( $post_id );
+    }
+
+    return array(
+        'show'  => ( 'no' !== $raw_show ),
+        'label' => $label,
+        'title' => $title,
+        'items' => is_array( $items ) ? $items : array(),
+    );
+}
+
+/**
+ * Render FAQ Section HTML for a given page.
+ *
+ * @param int|null $post_id Page ID.
+ * @return string HTML output.
+ */
+function cw_render_page_faq( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    $faq = cw_get_page_faq( $post_id );
+
+    if ( empty( $faq['show'] ) || empty( $faq['items'] ) ) {
+        return '';
+    }
+
+    $template = get_page_template_slug( $post_id );
+    $slug     = get_post_field( 'post_name', $post_id );
+    $is_home  = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
+    $section_class = $is_home ? 'hp-faq' : 'page-section page-faq';
+    $header_class  = $is_home ? 'hp-faq-header' : 'page-section-header';
+    $label_class   = $is_home ? 'hp-section-label' : 'page-section-label';
+    $title_class   = $is_home ? 'hp-section-title' : 'page-section-title';
+    $list_class    = $is_home ? 'hp-faq-list' : 'page-faq-list';
+    $item_class    = $is_home ? 'hp-faq-item' : 'page-faq-item';
+    $btn_class     = $is_home ? 'hp-faq-q' : 'page-faq-q';
+    $icon_class    = $is_home ? 'hp-faq-icon' : 'page-faq-icon';
+    $ans_class     = $is_home ? 'hp-faq-a' : 'page-faq-a';
+
+    ob_start();
+    ?>
+    <section class="<?php echo esc_attr( $section_class ); ?>">
+        <?php if ( $is_home ) : ?><div class="page-width"><?php endif; ?>
+
+        <?php if ( ! empty( $faq['label'] ) || ! empty( $faq['title'] ) ) : ?>
+            <div class="<?php echo esc_attr( $header_class ); ?>">
+                <?php if ( ! empty( $faq['label'] ) ) : ?>
+                    <p class="<?php echo esc_attr( $label_class ); ?>"><?php echo esc_html( $faq['label'] ); ?></p>
+                <?php endif; ?>
+                <?php if ( ! empty( $faq['title'] ) ) : ?>
+                    <h2 class="<?php echo esc_attr( $title_class ); ?>"><?php echo esc_html( $faq['title'] ); ?></h2>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="<?php echo esc_attr( $list_class ); ?>">
+            <?php foreach ( $faq['items'] as $item ) : ?>
+                <div class="<?php echo esc_attr( $item_class ); ?>">
+                    <button class="<?php echo esc_attr( $btn_class ); ?>" type="button">
+                        <?php echo esc_html( $item['question'] ); ?>
+                        <svg class="<?php echo esc_attr( $icon_class ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </button>
+                    <div class="<?php echo esc_attr( $ans_class ); ?>">
+                        <?php echo wpautop( wp_kses_post( $item['answer'] ) ); ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <?php if ( $is_home ) : ?></div><?php endif; ?>
+    </section>
+    <?php
+    return ob_get_clean();
+}
+
 
