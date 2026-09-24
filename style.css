@@ -15,6 +15,14 @@ Text Domain: codyweb-child
    Add your custom CSS overrides below this line
    ========================================================= */
 
+:root {
+    --font-primary: "Fira Sans Condensed", sans-serif;
+}
+html,
+body {
+    font-family: var(--font-primary);
+}
+
 /* Pricing Table & Cards Component (for [pricing_table] shortcode) */
 .pricing-table-container {
     width: 100%;
