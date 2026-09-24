@@ -7,8 +7,8 @@
 :root {
     --bg:          #0a0a0a;
     --bg-card:     #111111;
-    --bg-card-2:   #1a1a1a;
-    --gold:        #c9a84c;
+    --bg-card-2:   #c9a84c;
+    --gold:        #bc8e54;
     --cw-gold:     #bc8e54;
     --gold-dark:   #a8883a;
     --gold-hover:  #d4b55e;
@@ -19,7 +19,7 @@
     --font-head:   'D-DIN Condensed Regular';
     --font-body:   'D-DIN Condensed Regular';
     --max-w:       1200px;
-    --section-py:  100px;
+    --section-py:  64px;
     --radius:      4px;
 }
 
@@ -55,33 +55,33 @@ p,a,span{
 }
 .hp-section-title {
     font-family: var(--font-head);
-    font-size: clamp(32px, 5vw, 48px);
-    font-weight: 800;
+    font-size: clamp(24px, 5vw, 42px);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text);
     line-height: 1.05;
-    margin: 0 0 16px;
+    margin: 0 0 10px;
 }
 .hp-section-sub {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-muted);
     line-height: 1.65;
     max-width: 600px;
+    margin-top: 0;
 }
 
 /* ---- Button ---- */
 .btn-gold {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
     padding: 14px 32px;
     background: var(--gold);
     color: #111;
     font-family: var(--font-head);
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 400;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
@@ -90,6 +90,7 @@ p,a,span{
     cursor: pointer;
     transition: background 0.2s, transform 0.18s;
     line-height: 1;
+    justify-content: center;
 }
 .btn-gold:hover { background: var(--gold-hover); color: #111; transform: translateY(-2px); text-decoration: none; }
 
@@ -97,14 +98,12 @@ p,a,span{
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 28px;
+    padding: 15px 30px;
     background: transparent;
     color: var(--gold);
     border: 1.5px solid var(--gold);
     font-family: var(--font-head);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-size: 16px;
     text-transform: uppercase;
     text-decoration: none;
     border-radius: var(--radius);
@@ -193,20 +192,20 @@ p,a,span{
 }
 .hp-quote-text {
     font-family: var(--font-head);
-    font-size: clamp(24px, 4vw, 40px);
+    font-size: clamp(24px, 4vw, 48px);
     font-weight: 700;
     color: var(--text);
-    line-height: 1.25;
-    max-width: 900px;
+    line-height: 1;
+    max-width: 856px;
     margin: 0 auto 28px;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
 }
 .hp-quote-body {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: 17px;
     color: var(--text-muted);
-    line-height: 1.75;
+    line-height: 1.5;
     max-width: 720px;
     margin: 0 auto;
 }
@@ -219,7 +218,7 @@ p,a,span{
     background: var(--bg);
 }
 .hp-passes-header {
-    margin-bottom: 48px;
+    margin-bottom: 30px;
 }
 .hp-cards-grid {
     display: grid;
@@ -323,29 +322,29 @@ p,a,span{
 .event-card-title {
     font-family: var(--font-head);
     font-size: 24px;
-    font-weight: 800;
     text-transform: uppercase;
     color: var(--text);
     margin: 0 0 10px;
 }
 .event-card-desc {
-    font-size: 15px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.6;
     margin: 0 0 16px;
 }
 .event-card-footer {
+    width: 100%;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     padding-top: 16px;
-    border-top: 1px solid var(--border);
     margin-top: auto;
+    flex-direction: column;
+    gap: 10px;
 }
 .event-card-price {
     font-family: var(--font-head);
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 26px;
     color: var(--gold);
 }
 .cards-grid-3 {
@@ -363,7 +362,7 @@ p,a,span{
 }
 .hp-schedule-header {
     /* text-align: center; */
-    margin-bottom: 48px;
+    margin-bottom: 32px;
 }
 .hp-schedule-grid {
     display: grid;
@@ -378,11 +377,10 @@ p,a,span{
 }
 .hp-day-name {
     font-family: var(--font-head);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-size: 20px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--text);
+    color: var(--gold);
     padding: 14px 14px 10px;
     border-bottom: 1px solid var(--border);
     text-align: center;
@@ -400,16 +398,21 @@ p,a,span{
     font-family: var(--font-body);
     font-size: 13px;
     padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+}
+.hp-slot:last-child {
+    border: 0;
 }
 .hp-slot-time {
-    font-weight: 600;
-    color: var(--gold);
-    min-width: 42px;
+    color: var(--text);
+    min-width: 44px;
     flex-shrink: 0;
+    font-size: 18px;
 }
 .hp-slot-class {
     color: var(--text-muted);
     font-weight: 500;
+    font-size: 14px;
 }
 
 /* ================================================================
@@ -420,8 +423,8 @@ p,a,span{
     background: var(--bg);
 }
 .hp-pricing-header {
-    text-align: center;
-    margin-bottom: 48px;
+    text-align: left;
+    margin-bottom: 32px;
 }
 .hp-pricing-grid {
     display: grid;
@@ -438,35 +441,35 @@ p,a,span{
     transition: border-color 0.25s, transform 0.25s;
 }
 .hp-price-card:hover {
-    border-color: rgba(201,168,76,0.3);
+    border-color: rgb(188 142 84 / 49%);
     transform: translateY(-4px);
 }
 .hp-price-card--featured {
-    border-color: var(--gold);
     background: linear-gradient(180deg, rgba(201,168,76,0.08) 0%, var(--bg-card) 40%);
 }
+.hp-quote  .btn-gold {
+    width: fit-content;
+    margin: auto;
+}
+
 .hp-price-name {
     font-family: var(--font-head);
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 30px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.01em;
     color: var(--text);
-    margin: 0 0 16px;
+    margin: 0 0 28px;
+     text-align: left;
 }
 .hp-price-amount {
     font-family: var(--font-head);
     font-size: 44px;
-    font-weight: 900;
-    color: var(--text);
+    color: var(--gold);
     margin: 0 0 4px;
     line-height: 1;
+    text-align: left;
 }
-.hp-price-amount span {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-muted);
-}
+
 .hp-price-features {
     list-style: none;
     padding: 0;
@@ -477,12 +480,12 @@ p,a,span{
 }
 .hp-price-features li {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 8px;
-    justify-content: center;
+    justify-content: start;
 }
 .hp-price-features li::before {
     content: '\2713';
