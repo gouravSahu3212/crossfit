@@ -19,11 +19,28 @@
     --text-dim:    #666666;
     --border:      rgba(255, 255, 255, 0.08);
     --border-2:    rgba(255, 255, 255, 0.15);
-    --font-head:   'Barlow Condensed', sans-serif;
-    --font-body:   'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-head:   'Fira Sans Condensed', sans-serif;
+    --font-body:  'Fira Sans Condensed', sans-serif;
     --max-w:       1200px;
     --radius:      6px;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-head);
+     font-weight:500;
+}
+p,a,span{
+ font-family: var(--font-head);
+    font-weight:400;
+   }
+
+
+
 
 /* Page Base */
 .inner-page {
@@ -723,4 +740,3 @@
 @media (max-width: 480px) {
     .hp-schedule-grid { grid-template-columns: 1fr; }
 }
-

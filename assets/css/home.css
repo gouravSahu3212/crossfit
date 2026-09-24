@@ -15,12 +15,27 @@
     --text-muted:  #999999;
     --border:      rgba(255,255,255,0.06);
     --border-2:    rgba(255,255,255,0.1);
-    --font-head:   'Barlow Condensed', sans-serif;
-    --font-body:   'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-head:   'Fira Sans Condensed', sans-serif;
+    --font-body:   'Fira Sans Condensed', sans-serif;
     --max-w:       1200px;
     --section-py:  100px;
     --radius:      4px;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-head);
+    font-weight:500;
+}
+p,a,span{
+ font-family: var(--font-head);
+    font-weight:400;
+   }
+
 
 /* Reset for home page */
 .home-page { background: var(--bg); color: var(--text); }
@@ -116,10 +131,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: 60px 48px;
+    padding: 60px 48px 60px 140px;
     overflow: hidden;
     background-color: #111;
     align-items: center;
+}
+.hp-hero-panel:last-child {
+    padding: 60px 138px 60px 48px;
 }
 .hp-hero-panel::before {
     content: '';
@@ -145,9 +163,9 @@
 .hp-hero-panel > * { position: relative; z-index: 2; }
 .hp-hero-heading {
     font-family: var(--font-head);
-    font-size: clamp(38px, 5.5vw, 68px);
-    font-weight: 900;
-    letter-spacing: 0.05em;
+    font-size: clamp(38px, 5.5vw, 48px);
+    font-weight: 400;
+    letter-spacing: 0;
     text-transform: uppercase;
     color: #fff;
     line-height: 1;

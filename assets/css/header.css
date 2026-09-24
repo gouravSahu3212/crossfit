@@ -14,9 +14,11 @@ a.btn-primery {
     display: flex;
     gap: 10px;
 }
-
+header.site-main-header {
+    background-color: #111111;
+}
 .logo {
-    max-width: 160px;
+    max-width: 228px;
 }
 
 .main-navigation a {
@@ -32,13 +34,11 @@ a.btn-primery {
 }
 
 .site-header {
-    background-color: #111;
     color: #ffff;
     display: flex;
     justify-content: space-between;
     gap: 20px;
     align-items: center;
-    margin-bottom: 40px;
     padding-top: 15px;
 }
 
@@ -49,7 +49,7 @@ a.btn-primery {
 }
 
 .page-width {
-    max-width: calc(100% - 100px);
+    max-width: 1150px;
     margin: 0 auto;
 }
 
@@ -65,8 +65,10 @@ nav.main-navigation ul {
 
 .menu-item a {
     text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0;
 }
 
 nav.main-navigation ul li {
