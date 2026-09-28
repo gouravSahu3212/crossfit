@@ -64,7 +64,7 @@ add_action( 'add_meta_boxes', 'cw_register_page_meta_boxes' );
  */
 function cw_page_hero_admin_assets( $hook ) {
     global $post;
-    if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && isset( $post ) && 'page' === $post->post_type ) {
+    if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && isset( $post ) && in_array( $post->post_type, array( 'page', 'cw_recommendation' ), true ) ) {
         wp_enqueue_media();
     }
 }
@@ -421,7 +421,7 @@ function cw_save_page_hero_meta( $post_id ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
         return;
     }
-    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
         return;
     }
 
@@ -453,6 +453,7 @@ function cw_save_page_hero_meta( $post_id ) {
     update_post_meta( $post_id, '_cw_hero_cards', $sanitized_cards );
 }
 add_action( 'save_post_page', 'cw_save_page_hero_meta' );
+add_action( 'save_post_cw_recommendation', 'cw_save_page_hero_meta' );
 
 /**
  * Helper function to retrieve the hero data for any page.
@@ -608,7 +609,7 @@ function cw_save_page_rich_text_meta( $post_id ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
         return;
     }
-    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
         return;
     }
 
@@ -629,6 +630,7 @@ function cw_save_page_rich_text_meta( $post_id ) {
     }
 }
 add_action( 'save_post_page', 'cw_save_page_rich_text_meta' );
+add_action( 'save_post_cw_recommendation', 'cw_save_page_rich_text_meta' );
 
 /**
  * Helper function to retrieve the Rich Text section data for any page.
@@ -925,7 +927,7 @@ function cw_save_page_faq_meta( $post_id ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
         return;
     }
-    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
         return;
     }
 
@@ -957,6 +959,7 @@ function cw_save_page_faq_meta( $post_id ) {
     update_post_meta( $post_id, '_cw_faq_items', $clean_items );
 }
 add_action( 'save_post_page', 'cw_save_page_faq_meta' );
+add_action( 'save_post_cw_recommendation', 'cw_save_page_faq_meta' );
 
 /**
  * Return default contextual FAQ data for a post/page based on its template or slug.
@@ -1327,7 +1330,7 @@ function cw_save_page_about_meta( $post_id ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
         return;
     }
-    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
         return;
     }
 
@@ -1360,6 +1363,7 @@ function cw_save_page_about_meta( $post_id ) {
     }
 }
 add_action( 'save_post_page', 'cw_save_page_about_meta' );
+add_action( 'save_post_cw_recommendation', 'cw_save_page_about_meta' );
 
 /**
  * Retrieve About / Community section data for a given page.
