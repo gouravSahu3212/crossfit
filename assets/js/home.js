@@ -22,3 +22,11 @@
         setupAccordions('.page-faq-item', '.page-faq-q');
     });
 }());
+
+document.querySelector('.mobile-humburger').addEventListener('click', function () {
+    document.querySelector('nav.main-navigation').classList.add('active');
+});
+
+document.querySelector('.close-menu').addEventListener('click', function () {
+    document.querySelector('nav.main-navigation').classList.remove('active');
+});

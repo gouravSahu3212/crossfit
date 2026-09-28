@@ -88,7 +88,8 @@ body {
 
 /* Pricing Table & Cards Component (for [pricing_table] shortcode) */
 .pricing-table-container {
-    width: 100%;
+    width: 1150px;
+    margin: 0 auto;
 }
 .pricing-grid {
     display: grid;
@@ -146,24 +147,17 @@ body {
 }
 .pricing-card-title {
     font-family: var(--font-head, 'Montserrat', sans-serif);
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 28px;
     text-transform: uppercase;
     color: var(--text, #ffffff);
     margin: 0 0 14px;
 }
 .pricing-card-price {
     font-family: var(--font-head, 'Montserrat', sans-serif);
-    font-size: 42px;
-    font-weight: 900;
-    color: var(--text, #ffffff);
+    font-size: 32px;
+    color: var(--gold);
     line-height: 1;
     margin: 0 0 20px;
-}
-.pricing-card-price span {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-muted, #888888);
 }
 .pricing-card-features {
     list-style: none;
@@ -212,4 +206,4 @@ body {
 .hp-about-cta {
     margin-top: 28px;
     text-align: center;
-}
+}

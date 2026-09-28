@@ -56,7 +56,6 @@ p,a,span{
 .hp-section-title {
     font-family: var(--font-head);
     font-size: clamp(24px, 5vw, 42px);
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text);
     line-height: 1.05;
@@ -507,11 +506,14 @@ p,a,span{
 .hp-about-inner {
     max-width: 720px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
+}
+.hp-about  a.btn-gold {
+    width: fit-content;
 }
 .hp-about-body {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-muted);
     line-height: 1.75;
     margin: 0;
@@ -525,8 +527,10 @@ p,a,span{
     background: var(--bg);
 }
 .hp-faq-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 48px;
+    max-width: 780px;
+    margin: 0px auto 30px;
 }
 .hp-faq-list {
     max-width: 780px;
@@ -554,7 +558,7 @@ p,a,span{
     width: 100%;
     text-align: left;
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--text);
     outline: none;
@@ -582,10 +586,18 @@ p,a,span{
 }
 .hp-faq-a p {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-muted);
     line-height: 1.75;
     margin: 0;
+}
+h4.footer-heading {
+    font-family: var(--font-head);
+    font-size: 20px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
 }
 
 /* ================================================================

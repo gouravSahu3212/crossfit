@@ -17,6 +17,7 @@
                 </div>
 
                 <nav class="main-navigation">
+                    <div class="mobile-nav">
                     <?php
                     wp_nav_menu(array(
                         'theme_location' => 'primary_menu',
@@ -25,12 +26,17 @@
                         'fallback_cb'    => false,
                     ));
                     ?>
+                    </div>
+                    <span class="close-menu"><img src="https://crossfitkouvola.codeyweb.com/wp-content/uploads/2026/09/close.png"</span>
+                
                 </nav>
+                
+                <span class="mobile-humburger"><img src="https://crossfitkouvola.codeyweb.com/wp-content/uploads/2026/09/burger-bar.png"></span>
                 <a href="https://www.wodconnect.com/crossfit-kouvola" target="_blank" rel="noreferrer" class="btn-primery">WODCONNECT</a>
             </div>
             <div class="site-header mobile">
                 <div class="logo">
-                    <?php the_custom_logo(); ?>
+                   <a href="/"></a> <?php the_custom_logo(); ?></a>
                 </div>
                 
                 <nav class="main-navigation mobile-nav">

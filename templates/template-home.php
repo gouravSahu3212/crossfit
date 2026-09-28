@@ -66,7 +66,7 @@ get_header();
 
     <!-- ==================== 5. PRICING ==================== -->
     <section class="hp-pricing page-section">
-        <?php echo do_shortcode( '[pricing_table]' ); ?>
+        <?php echo do_shortcode( '[pricing_table title="Pricing"]' ); ?>
     </section>
 
     <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->

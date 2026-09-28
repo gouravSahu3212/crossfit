@@ -10,7 +10,7 @@
     --bg-card:     #111111;
     --bg-card-2:   #171717;
     --bg-card-hover: #1e1e1e;
-    --gold:        #c9a84c;
+    --gold:        #bc8e54;;
     --cw-gold:     #bc8e54;
     --gold-dark:   #a8883a;
     --gold-hover:  #d4b55e;
@@ -57,7 +57,7 @@ p,a,span{
 .inner-page .page-width {
     max-width: var(--max-w);
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 40px;
 }
 
 /* Page Banner / Hero */
@@ -65,6 +65,8 @@ p,a,span{
     padding: 60px 0 50px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 60px;
+    background-size: cover;
+    background-position: center;
 }
 .page-hero-label {
     font-family: var(--font-head);
@@ -91,6 +93,40 @@ p,a,span{
     max-width: 680px;
     line-height: 1.6;
     margin: 0 0 28px;
+}
+.cd-from label {
+    width: 100%;
+    display: block;
+}
+.cd-from textarea.wpcf7-form-control.wpcf7-textarea {
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    height: 120px;
+    margin-top: 10px;
+}
+.cd-from input.wpcf7-form-control.wpcf7-submit.has-spinner {
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-family: 'Barlow Condensed';
+    background-color: #bc8e54;
+    width: auto;
+    min-width: 150px;
+    border-radius: 5px;
+}
+.cd-from .wpcf7-not-valid-tip {
+    position: absolute;
+    top: -20px;
+    right: 0;
+}
+.cd-from input {
+    width: 100%;
+    display: block;
+    padding: 13px;
+    border-radius: 10px;
+    border: 0;
+    margin-top: 5px;
 }
 .page-hero-actions {
     display: flex;
@@ -554,7 +590,7 @@ p,a,span{
 .contact-form-box p {
     font-size: 14px;
     color: var(--text-muted);
-    margin: 0 0 24px;
+    margin: 0 0 20px;
 }
 .form-group {
     margin-bottom: 18px;
@@ -649,12 +685,9 @@ p,a,span{
 
 /* CTA Banner Strip */
 .page-cta-banner {
-    background: #121212;
-    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 50px 36px;
-    text-align: center;
-    margin-top: 60px;
+    padding: 50px 0px;
+    text-align: left;
 }
 .page-cta-banner h2 {
     font-family: var(--font-head);
@@ -669,8 +702,8 @@ p,a,span{
     font-size: 16px;
     color: var(--text-muted);
     max-width: 540px;
-    margin: 0 auto 26px;
     line-height: 1.6;
+    text-align: left;
 }
 
 /* ================================================================

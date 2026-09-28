@@ -20,8 +20,7 @@
 
 .footer-logo {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 30px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #ffffff;
@@ -29,7 +28,7 @@
 }
 
 .footer-tagline {
-    font-size: 14px;
+    font-size: 16px;
     color: #999;
     line-height: 1.7;
     margin: 0;
@@ -57,15 +56,17 @@
 
 .footer-links li,
 .footer-links li a {
-    font-size: 14px;
+    font-size: 16px;
     color: #999;
     text-decoration: none;
     transition: color 0.18s;
 }
 
-.footer-links li a:hover { color: #c9a84c; }
+.footer-links li a:hover {
+    color: var(--gold);
+}
 
-.footer-contact li { font-size: 14px; color: #999; line-height: 1.6; }
+.footer-contact li { font-size: 16px; color: #999; line-height: 1.6; }
 
 .footer-bottom {
     padding: 24px 0;

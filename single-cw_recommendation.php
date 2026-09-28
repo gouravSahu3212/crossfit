@@ -9,7 +9,7 @@ get_header();
 ?>
 
 <main id="primary" class="site-main inner-page single-recommendation">
-    <div class="page-width">
+    <div class="cat-banner" >
         <?php
         while ( have_posts() ) :
             the_post();
@@ -19,8 +19,9 @@ get_header();
             $tag         = get_post_meta( get_the_ID(), '_cw_rec_tag', true );
             ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'recommendation-article' ); ?>>
-                <header class="page-hero" style="border-bottom: 1px solid var(--border); padding: 50px 0 35px;">
-                    <?php if ( $icon ) : ?>
+                <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
+                    <div class="page-width">
+                        <?php if ( $icon ) : ?>
                         <div style="font-size: 42px; margin-bottom: 12px; line-height: 1;"><?php echo esc_html( $icon ); ?></div>
                     <?php endif; ?>
                     <?php if ( $tag ) : ?>
@@ -35,18 +36,20 @@ get_header();
                     <?php if ( $description ) : ?>
                         <p class="page-hero-desc"><?php echo esc_html( $description ); ?></p>
                     <?php endif; ?>
+                    </div>
                 </header>
-
+                <?php if ( get_the_content() ) : ?>
                 <div class="entry-content" style="font-size: 16px; line-height: 1.8; color: var(--text-muted); padding: 40px 0 20px;">
-                    <?php if ( has_post_thumbnail() ) : ?>
-                        <div class="recommendation-featured-media" style="margin-bottom: 30px; border-radius: var(--radius); overflow: hidden;">
-                            <?php the_post_thumbnail( 'large', array( 'style' => 'width:100%; max-height:460px; object-fit:cover; display:block;' ) ); ?>
-                        </div>
-                    <?php endif; ?>
+                    <!--<?php if ( has_post_thumbnail() ) : ?>-->
+                    <!--    <div class="recommendation-featured-media" style="margin-bottom: 30px; border-radius: var(--radius); overflow: hidden;">-->
+                            <!--<?php the_post_thumbnail( 'large', array( 'style' => 'width:100%; max-height:460px; object-fit:cover; display:block;' ) ); ?>-->
+                    <!--    </div>-->
+                    <!--<?php endif; ?>-->
                     <?php the_content(); ?>
                 </div>
+                <?php endif; ?>
 
-                <div class="page-cta-banner" style="margin-top: 40px;">
+                <div class="page-cta-banner page-width" style="margin-top: 40px;">
                     <h2>Interested in <?php the_title(); ?>?</h2>
                     <p>Contact our coaching team or book your trial session to get started.</p>
                     <a href="/yhteystiedot" class="btn-gold">Get In Touch</a>

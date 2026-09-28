@@ -64,45 +64,8 @@ get_header();
                     <div class="contact-form-box">
                         <h3>Send Us A Message</h3>
                         <p>Interested in trying a free class, joining an On-Ramp course, or have a question? Leave a note below.</p>
-
-                        <form action="<?php echo esc_url( $_SERVER['REQUEST_URI'] ); ?>" method="POST" class="contact-form">
-                            <?php wp_nonce_field( 'cf_contact_form', 'cf_contact_nonce' ); ?>
-
-                            <div class="form-group">
-                                <label for="contact_name">Full Name *</label>
-                                <input type="text" id="contact_name" name="contact_name" required placeholder="Your name">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="contact_email">Email Address *</label>
-                                <input type="email" id="contact_email" name="contact_email" required placeholder="your.email@example.com">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="contact_phone">Phone Number</label>
-                                <input type="tel" id="contact_phone" name="contact_phone" placeholder="+358 ...">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="contact_interest">I'm interested in</label>
-                                <select id="contact_interest" name="contact_interest">
-                                    <option value="trial">Booking a Free Trial Class</option>
-                                    <option value="onramp">On-Ramp Beginner Course</option>
-                                    <option value="hyrox">HYROX Training</option>
-                                    <option value="membership">Membership &amp; Passes</option>
-                                    <option value="corporate">Company / Group Training</option>
-                                    <option value="other">Other Inquiry</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="contact_message">Message *</label>
-                                <textarea id="contact_message" name="contact_message" required placeholder="Tell us how we can help..."></textarea>
-                            </div>
-
-                            <button type="submit" class="btn-gold" style="width: 100%;">Send Message</button>
-                        </form>
-                    </div>
+                            <?php echo do_shortcode('[contact-form-7 id="45f9435" title="Contact form 1"]'); ?>                    
+                        </div>
                 </div>
 
             </div>

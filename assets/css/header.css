@@ -59,9 +59,12 @@ nav.main-navigation ul {
     gap: 10px;
     list-style: none;
 }
+#upcoming > .page-width {
+    padding: 0;
+}
 
 .menu-item.current-menu-item a {
-    color: var(--cw-gold);
+    color: var(--gold);
 }
 
 .menu-item a {
@@ -79,4 +82,74 @@ nav.main-navigation {
 }
 nav.main-navigation ul li {
     padding: 0 10px;
+}
+
+@media only screen and (min-width:999px){
+.close-menu img, .mobile-humburger img {
+    display: none;
+}
+}
+@media only screen and (max-width:989px){
+.site-header.desktop a.btn-primery {
+    display: none;
+}
+.site-header {
+    padding: 0 20px 0 5px;
+}
+nav.main-navigation {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    background-color: #000;
+    z-index: 99999;
+    max-width: 300px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+span.close-menu {
+    cursor: pointer;
+    max-width: 20px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+span.close-menu img {
+    width: 100%;
+}
+nav.main-navigation.active {
+    transform: translateX(0);
+}
+.main-navigation .mobile-nav ul {
+    flex-direction: column;
+}
+span.mobile-humburger img {
+    width: 100%;
+}
+span.mobile-humburger {
+    max-width: 30px;
+}
+.logo {
+    max-width: 160px;
+}
+.site-footer {
+    padding: 20px 20px 0px !important;
+}
+.pricing-table-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+}
+@media only screen and (max-width:767px){
+.event-card-footer {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+}
+.inner-page .page-width {
+    padding: 0 20px !important;
+}
 }
