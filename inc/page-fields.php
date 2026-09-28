@@ -20,7 +20,7 @@ function cw_register_page_meta_boxes() {
         'cw_page_hero_section',
         __( 'Hero Section Settings', 'codyweb-child' ),
         'cw_render_page_hero_meta_box',
-        'page',
+        ['page', 'cw_recommendation'],
         'normal',
         'high'
     );
@@ -30,7 +30,7 @@ function cw_register_page_meta_boxes() {
         'cw_page_rich_text_section',
         __( 'Rich Text Section Settings', 'codyweb-child' ),
         'cw_render_page_rich_text_meta_box',
-        'page',
+        ['page', 'cw_recommendation'],
         'normal',
         'high'
     );
@@ -40,7 +40,7 @@ function cw_register_page_meta_boxes() {
         'cw_page_faq_section',
         __( 'FAQ Section Settings', 'codyweb-child' ),
         'cw_render_page_faq_meta_box',
-        'page',
+        ['page', 'cw_recommendation'],
         'normal',
         'high'
     );
@@ -50,7 +50,7 @@ function cw_register_page_meta_boxes() {
         'cw_page_about_section',
         __( 'About / Community Section Settings', 'codyweb-child' ),
         'cw_render_page_about_meta_box',
-        'page',
+        ['page', 'cw_recommendation'],
         'normal',
         'high'
     );
