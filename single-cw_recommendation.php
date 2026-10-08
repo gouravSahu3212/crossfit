@@ -30,30 +30,14 @@ get_header();
                         <p class="page-hero-label">Recommended Training</p>
                     <?php endif; ?>
                     <h1 class="page-hero-title"><?php the_title(); ?></h1>
-                    <?php if ( $price ) : ?>
-                        <div style="font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--gold); margin-bottom: 14px;"><?php echo esc_html( $price ); ?></div>
-                    <?php endif; ?>
+                    <!-- <?php if ( $price ) : ?> -->
+                        <!-- <div style="font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--gold); margin-bottom: 14px;"><?php echo esc_html( $price ); ?></div> -->
+                    <!-- <?php endif; ?> -->
                     <?php if ( $description ) : ?>
                         <p class="page-hero-desc"><?php echo esc_html( $description ); ?></p>
                     <?php endif; ?>
                     </div>
                 </header>
-                <?php if ( get_the_content() ) : ?>
-                <div class="entry-content" style="font-size: 16px; line-height: 1.8; color: var(--text-muted); padding: 40px 0 20px;">
-                    <!--<?php if ( has_post_thumbnail() ) : ?>-->
-                    <!--    <div class="recommendation-featured-media" style="margin-bottom: 30px; border-radius: var(--radius); overflow: hidden;">-->
-                            <!--<?php the_post_thumbnail( 'large', array( 'style' => 'width:100%; max-height:460px; object-fit:cover; display:block;' ) ); ?>-->
-                    <!--    </div>-->
-                    <!--<?php endif; ?>-->
-                    <?php the_content(); ?>
-                </div>
-                <?php endif; ?>
-
-                <div class="page-cta-banner page-width" style="margin-top: 40px;">
-                    <h2>Interested in <?php the_title(); ?>?</h2>
-                    <p>Contact our coaching team or book your trial session to get started.</p>
-                    <a href="/yhteystiedot" class="btn-gold">Get In Touch</a>
-                </div>
 
                 <!-- ==================== 1. HERO SECTION ==================== -->
                 <?php
@@ -83,24 +67,97 @@ get_header();
                     </section>
                 <?php endif; ?>
 
-                <!-- ==================== 2. RICH TEXT SECTION ==================== -->
+                <!-- ==================== 2. CONTENT / SEO SECTION ==================== -->
                 <?php
-                $rich_text = cw_get_page_rich_text( get_the_ID() );
-                if ( ! empty( $rich_text['show'] ) && ( ! empty( $rich_text['heading'] ) || ! empty( $rich_text['description'] ) ) ) :
+                $content_raw = get_the_content();
+                if ( ! empty( $content_raw ) ) :
+                    $full_content = apply_filters( 'the_content', $content_raw );
+
+                    // Separate first paragraph/block from remaining content
+                    $first_p  = '';
+                    $rest_p   = '';
+                    $has_more = false;
+
+                    // 1. Support standard WordPress <!--more--> quicktag
+                    if ( preg_match( '/<!--more(.*?)?-->/i', $full_content ) ) {
+                        $parts    = preg_split( '/<!--more(.*?)?-->/i', $full_content, 2 );
+                        $first_p  = trim( $parts[0] );
+                        $rest_p   = trim( $parts[1] );
+                        $has_more = ! empty( trim( strip_tags( $rest_p, '<img><iframe><video><audio>' ) ) );
+                    }
+                    // 2. Support initial container blocks such as <div ...>...</div>, <p ...>...</p>, or <section ...>...</section>
+                    elseif ( preg_match( '#^(\s*<(div|p|section)\b[^>]*>.*?</\2>)(.*)$#is', trim( $full_content ), $matches ) && ! empty( trim( strip_tags( $matches[3], '<img><iframe><video><audio>' ) ) ) ) {
+                        $first_p  = trim( $matches[1] );
+                        $rest_p   = trim( $matches[3] );
+                        $has_more = true;
+                    }
+                    // 3. Fallback: check for earliest closing </p> or </div> tag
+                    else {
+                        $pos_p   = stripos( $full_content, '</p>' );
+                        $pos_div = stripos( $full_content, '</div>' );
+                        $split_pos = false;
+                        $tag_len   = 0;
+
+                        if ( false !== $pos_p && false !== $pos_div ) {
+                            if ( $pos_p < $pos_div ) {
+                                $split_pos = $pos_p;
+                                $tag_len   = 4;
+                            } else {
+                                $split_pos = $pos_div;
+                                $tag_len   = 6;
+                            }
+                        } elseif ( false !== $pos_p ) {
+                            $split_pos = $pos_p;
+                            $tag_len   = 4;
+                        } elseif ( false !== $pos_div ) {
+                            $split_pos = $pos_div;
+                            $tag_len   = 6;
+                        }
+
+                        if ( false !== $split_pos ) {
+                            $temp_first = substr( $full_content, 0, $split_pos + $tag_len );
+                            $temp_rest  = trim( substr( $full_content, $split_pos + $tag_len ) );
+                            if ( ! empty( trim( strip_tags( $temp_rest, '<img><iframe><video><audio>' ) ) ) ) {
+                                $first_p  = $temp_first;
+                                $rest_p   = $temp_rest;
+                                $has_more = true;
+                            }
+                        }
+
+                        // 4. Fallback for plain text: split on first double newline
+                        if ( ! $has_more && preg_match( '#^(.*?)(?:\r?\n\s*\r?\n)(.*)$#s', trim( $full_content ), $nl_matches ) ) {
+                            $temp_rest = trim( $nl_matches[2] );
+                            if ( ! empty( trim( strip_tags( $temp_rest, '<img><iframe><video><audio>' ) ) ) ) {
+                                $first_p  = wpautop( trim( $nl_matches[1] ) );
+                                $rest_p   = wpautop( $temp_rest );
+                                $has_more = true;
+                            }
+                        }
+
+                        // Fallback if no splitting occurred
+                        if ( ! $has_more ) {
+                            $first_p  = $full_content;
+                            $has_more = false;
+                        }
+                    }
                 ?>
-                    <section class="hp-quote hp-rich-text">
+                    <section class="hp-quote hp-content-section" id="recommendation-content">
                         <div class="page-width">
-                            <?php if ( ! empty( $rich_text['heading'] ) ) : ?>
-                                <h2 class="hp-quote-text"><?php echo esc_html( $rich_text['heading'] ); ?></h2>
-                            <?php endif; ?>
-                            <?php if ( ! empty( $rich_text['description'] ) ) : ?>
-                                <div class="hp-quote-body"><?php echo wp_kses_post( wpautop( $rich_text['description'] ) ); ?></div>
-                            <?php endif; ?>
-                            <?php if ( ! empty( $rich_text['btn_text'] ) && ! empty( $rich_text['btn_url'] ) ) : ?>
-                                <div class="hp-quote-cta" style="margin-top: 28px;">
-                                    <a href="<?php echo esc_url( $rich_text['btn_url'] ); ?>" class="btn-gold"><?php echo esc_html( $rich_text['btn_text'] ); ?></a>
+                            <h2 class="hp-quote-text">Interested in <?php the_title(); ?>?</h2>
+                            <div class="hp-quote-body cw-read-more-container">
+                                <div class="cw-content-excerpt">
+                                    <?php echo $first_p; ?>
                                 </div>
-                            <?php endif; ?>
+                                <?php if ( $has_more ) : ?>
+                                    <div class="cw-content-rest">
+                                        <?php echo $rest_p; ?>
+                                    </div>
+                                    <div class="cw-content-actions" style="margin-top: 28px;">
+                                        <button type="button" class="btn-gold cw-read-more-btn">Read More</button>
+                                        <button type="button" class="btn-gold cw-read-less-btn">Read Less</button>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </section>
                 <?php endif; ?>

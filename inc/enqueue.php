@@ -36,8 +36,8 @@ function codyweb_child_enqueue_styles() {
         filemtime(get_stylesheet_directory() . '/assets/css/footer.css')
     );
 
-    // Homepage CSS & JS — only on the Home Page template
-    if ( is_page_template( 'templates/template-home.php' ) ) {
+    // Homepage CSS & JS — on Home Page template and single Recommendation pages
+    if ( is_page_template( 'templates/template-home.php' ) || is_singular( 'cw_recommendation' ) ) {
         wp_enqueue_style(
             'theme-home',
             get_stylesheet_directory_uri() . '/assets/css/home.css',

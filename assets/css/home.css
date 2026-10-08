@@ -186,7 +186,7 @@ p,a,span{
 ================================================================ */
 .hp-quote {
     padding: var(--section-py) 24px;
-    text-align: center;
+    /* text-align: center; */
     background: var(--bg);
 }
 .hp-quote-text {
@@ -204,9 +204,121 @@ p,a,span{
     font-family: var(--font-body);
     font-size: 17px;
     color: var(--text-muted);
-    line-height: 1.5;
-    max-width: 720px;
+    line-height: 1.65;
+    max-width: 760px;
     margin: 0 auto;
+}
+.hp-quote-body p {
+    margin: 0 0 1.25em;
+}
+.hp-quote-body p:last-child {
+    margin-bottom: 0;
+}
+.hp-quote-body a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+.hp-quote-body a:hover {
+    color: #fff;
+}
+.hp-quote-body h3,
+.hp-quote-body h4 {
+    color: var(--text);
+    font-family: var(--font-head);
+    margin: 1.5em 0 0.5em;
+    line-height: 1.3;
+}
+.hp-quote-body ul,
+.hp-quote-body ol {
+    text-align: left;
+    margin: 1.2em auto;
+    padding-left: 24px;
+    max-width: 680px;
+}
+.hp-quote-body li {
+    margin-bottom: 0.5em;
+}
+
+/* ---- Read More / Read Less Content Toggle ---- */
+.cw-read-more-container .cw-content-rest {
+    display: none;
+    margin-top: 1.25em;
+}
+.cw-read-more-container.is-expanded .cw-content-rest {
+    display: block;
+    animation: cwFadeIn 0.35s ease;
+}
+.cw-read-more-container .cw-read-less-btn {
+    display: none;
+}
+.cw-read-more-container.is-expanded .cw-read-more-btn {
+    display: none;
+}
+.cw-read-more-container.is-expanded .cw-read-less-btn {
+    display: flex;
+}
+.cw-read-more-container .cw-content-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+@keyframes cwFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- Prose Site / Recommendation Content Styling ---- */
+.hp-content-section .hp-quote-text {
+    text-align: center;
+}
+.hp-content-section .hp-quote-body {
+    text-align: left;
+}
+.prose-site {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+.prose-site h2 {
+    font-family: var(--font-head);
+    font-size: 28px;
+    color: var(--text);
+    margin: 28px 0 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+}
+.prose-site h3 {
+    font-family: var(--font-head);
+    font-size: 22px;
+    color: var(--gold);
+    margin: 24px 0 12px;
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+.prose-site p {
+    margin: 0 0 1.25em;
+}
+.prose-site ul,
+.prose-site ol {
+    margin: 14px 0 24px;
+    padding-left: 24px;
+}
+.prose-site li {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+.mt-5 {
+    margin-top: 1.5rem;
 }
 
 /* ================================================================

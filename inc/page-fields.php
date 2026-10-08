@@ -30,7 +30,7 @@ function cw_register_page_meta_boxes() {
         'cw_page_rich_text_section',
         __( 'Rich Text Section Settings', 'codyweb-child' ),
         'cw_render_page_rich_text_meta_box',
-        ['page', 'cw_recommendation'],
+        ['page'],
         'normal',
         'high'
     );
@@ -555,16 +555,26 @@ function cw_render_page_rich_text_meta_box( $post ) {
             </div>
         </div>
 
-        <!-- Description -->
-        <div class="cw-meta-row">
-            <div class="cw-meta-label">
-                <label for="cw_rich_text_description"><?php esc_html_e( 'Description', 'codyweb-child' ); ?></label>
+        <!-- Description / Content -->
+        <div class="cw-meta-row" style="align-items: flex-start;">
+            <div class="cw-meta-label" style="padding-top: 10px;">
+                <label for="cw_rich_text_editor"><?php esc_html_e( 'Description / Content', 'codyweb-child' ); ?></label>
             </div>
-            <div class="cw-meta-field">
-                <textarea id="cw_rich_text_description"
-                          name="cw_rich_text_description"
-                          rows="5"
-                          placeholder="<?php esc_attr_e( 'Enter section description or motivational body text...', 'codyweb-child' ); ?>"><?php echo esc_textarea( $description ); ?></textarea>
+            <div class="cw-meta-field" style="max-width: 100%;">
+                <?php
+                wp_editor(
+                    $description,
+                    'cw_rich_text_editor',
+                    array(
+                        'textarea_name' => 'cw_rich_text_description',
+                        'textarea_rows' => 12,
+                        'media_buttons' => true,
+                        'teeny'         => false,
+                        'quicktags'     => true,
+                    )
+                );
+                ?>
+                <p class="cw-help-text" style="margin-top: 8px;"><?php esc_html_e( 'Use the rich text editor to format your SEO text with headings, paragraphs, lists, links, or bold styling.', 'codyweb-child' ); ?></p>
             </div>
         </div>
 
@@ -620,7 +630,7 @@ function cw_save_page_rich_text_meta( $post_id ) {
         update_post_meta( $post_id, '_cw_rich_text_heading', sanitize_text_field( wp_unslash( $_POST['cw_rich_text_heading'] ) ) );
     }
     if ( isset( $_POST['cw_rich_text_description'] ) ) {
-        update_post_meta( $post_id, '_cw_rich_text_description', sanitize_textarea_field( wp_unslash( $_POST['cw_rich_text_description'] ) ) );
+        update_post_meta( $post_id, '_cw_rich_text_description', wp_kses_post( wp_unslash( $_POST['cw_rich_text_description'] ) ) );
     }
     if ( isset( $_POST['cw_rich_text_btn_text'] ) ) {
         update_post_meta( $post_id, '_cw_rich_text_btn_text', sanitize_text_field( wp_unslash( $_POST['cw_rich_text_btn_text'] ) ) );

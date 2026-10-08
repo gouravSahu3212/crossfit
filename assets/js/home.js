@@ -20,13 +20,44 @@
 
         setupAccordions('.hp-faq-item', '.hp-faq-q');
         setupAccordions('.page-faq-item', '.page-faq-q');
+
+        // Read More / Read Less Toggle for Recommendation & Content Sections
+        var contentContainers = document.querySelectorAll('.cw-read-more-container');
+        contentContainers.forEach(function (container) {
+            var moreBtn = container.querySelector('.cw-read-more-btn');
+            var lessBtn = container.querySelector('.cw-read-less-btn');
+            var targetSection = container.closest('.hp-content-section') || container;
+
+            if (moreBtn) {
+                moreBtn.addEventListener('click', function () {
+                    container.classList.add('is-expanded');
+                });
+            }
+            if (lessBtn) {
+                lessBtn.addEventListener('click', function () {
+                    container.classList.remove('is-expanded');
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+        });
+
+        // Mobile Menu Navigation
+        var hamburger = document.querySelector('.mobile-humburger');
+        if (hamburger) {
+            hamburger.addEventListener('click', function () {
+                var nav = document.querySelector('nav.main-navigation');
+                if (nav) nav.classList.add('active');
+            });
+        }
+
+        var closeMenu = document.querySelector('.close-menu');
+        if (closeMenu) {
+            closeMenu.addEventListener('click', function () {
+                var nav = document.querySelector('nav.main-navigation');
+                if (nav) nav.classList.remove('active');
+            });
+        }
     });
 }());
-
-document.querySelector('.mobile-humburger').addEventListener('click', function () {
-    document.querySelector('nav.main-navigation').classList.add('active');
-});
-
-document.querySelector('.close-menu').addEventListener('click', function () {
-    document.querySelector('nav.main-navigation').classList.remove('active');
-});
