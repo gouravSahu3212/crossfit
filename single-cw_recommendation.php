@@ -123,7 +123,9 @@ get_header();
 
 
                 <!-- ==================== 7. FAQ ==================== -->
-                <?php echo cw_render_page_faq(); ?>
+                <div class="page-width">
+                    <?php echo cw_render_page_faq(); ?>
+                </div>
             </article>
         <?php endwhile; ?>
     </div>
