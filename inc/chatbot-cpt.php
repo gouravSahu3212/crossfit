@@ -52,6 +52,92 @@ function cw_register_recommendation_cpt() {
 add_action( 'init', 'cw_register_recommendation_cpt' );
 
 /**
+ * Remove "/recommendation" base from cw_recommendation CPT permalinks.
+ * Transforms URLs from /recommendation/hyrox/ -> /hyrox/
+ *
+ * @param string  $post_link The post's permalink.
+ * @param WP_Post $post      The post object.
+ * @return string Modified permalink.
+ */
+function cw_recommendation_remove_cpt_slug_permalink( $post_link, $post ) {
+    if ( is_object( $post ) && 'cw_recommendation' === $post->post_type ) {
+        if ( 'publish' === $post->post_status || ! empty( $post->post_name ) ) {
+            return home_url( user_trailingslashit( $post->post_name ) );
+        }
+    }
+    return $post_link;
+}
+add_filter( 'post_type_link', 'cw_recommendation_remove_cpt_slug_permalink', 10, 2 );
+
+/**
+ * Parse incoming requests to match cw_recommendation posts at the root level (/slug/).
+ * When a root slug is requested without a base, checks if a cw_recommendation post exists
+ * before falling back to 404 or pages.
+ *
+ * @param array $query_vars The array of requested query variables.
+ * @return array Modified query variables.
+ */
+function cw_recommendation_parse_request( $query_vars ) {
+    if ( is_admin() ) {
+        return $query_vars;
+    }
+
+    $slug = '';
+    if ( ! empty( $query_vars['pagename'] ) ) {
+        $slug = $query_vars['pagename'];
+    } elseif ( ! empty( $query_vars['name'] ) && empty( $query_vars['post_type'] ) ) {
+        $slug = $query_vars['name'];
+    }
+
+    if ( ! empty( $slug ) ) {
+        $slug      = trim( $slug, '/' );
+        $leaf_slug = basename( $slug );
+
+        // 1. Verify if an existing standard WordPress page uses this slug
+        $page = get_page_by_path( $slug, OBJECT, 'page' );
+        if ( ! $page ) {
+            // 2. Check if a published cw_recommendation post exists with this slug
+            global $wpdb;
+            $post_id = $wpdb->get_var( $wpdb->prepare(
+                "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type = 'cw_recommendation' AND post_status = 'publish' LIMIT 1",
+                $leaf_slug
+            ) );
+
+            if ( $post_id ) {
+                $query_vars['post_type'] = 'cw_recommendation';
+                $query_vars['name']      = $leaf_slug;
+                unset( $query_vars['pagename'] );
+                unset( $query_vars['error'] );
+            }
+        }
+    }
+
+    return $query_vars;
+}
+add_filter( 'request', 'cw_recommendation_parse_request', 10, 1 );
+
+/**
+ * 301 Redirect old /recommendation/{slug}/ URLs to root-level /{slug}/
+ */
+function cw_recommendation_redirect_old_base() {
+    if ( is_admin() || is_preview() ) {
+        return;
+    }
+
+    if ( is_singular( 'cw_recommendation' ) ) {
+        $requested_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+        if ( false !== strpos( $requested_uri, '/recommendation/' ) ) {
+            global $post;
+            if ( $post && 'cw_recommendation' === $post->post_type ) {
+                wp_safe_redirect( home_url( user_trailingslashit( $post->post_name ) ), 301 );
+                exit;
+            }
+        }
+    }
+}
+add_action( 'template_redirect', 'cw_recommendation_redirect_old_base' );
+
+/**
  * Add Recommendation Details meta box.
  */
 function cw_add_recommendation_meta_boxes() {

@@ -167,14 +167,6 @@ get_header();
                     <?php echo do_shortcode( '[upcoming_events]' ); ?>
                 </section>
 
-                <!-- ==================== 4. WEEKLY SCHEDULE ==================== -->
-                <?php echo do_shortcode( '[weekly_schedule]' ); ?>
-
-                <!-- ==================== 5. PRICING ==================== -->
-                <section class="hp-pricing page-section">
-                    <?php echo do_shortcode( '[pricing_table]' ); ?>
-                </section>
-
                 <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->
                 <?php echo cw_render_page_about(); ?>
 
