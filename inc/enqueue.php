@@ -62,7 +62,7 @@ function codyweb_child_enqueue_styles() {
         'templates/template-contact.php',
     );
 
-    if ( is_page_template( $inner_templates ) || is_singular( 'cw_recommendation' ) ) {
+    if ( is_page_template( $inner_templates ) || is_singular( 'cw_recommendation' ) || is_singular( 'page' ) ) {
         wp_enqueue_style(
             'theme-pages',
             get_stylesheet_directory_uri() . '/assets/css/pages.css',
