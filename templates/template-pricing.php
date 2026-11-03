@@ -27,9 +27,16 @@ get_header();
     <div class="page-width">
 
         <!-- Pricing Cards Grid -->
+        <?php if ( cw_show_pricing_section() ) : ?>
         <section id="plans" class="page-section">
-            <?php echo do_shortcode( '[pricing_table]' ); ?>
+            <?php
+            $pricing_title = get_post_meta( get_the_ID(), '_cw_pricing_title', true );
+            $pricing_sc    = ! empty( $pricing_title ) ? '[pricing_table title="' . esc_attr( $pricing_title ) . '"]' : '[pricing_table]';
+            echo do_shortcode( $pricing_sc );
+            ?>
         </section>
+
+        <?php endif; ?>
 
         <!-- Billing Info & Sports Benefits -->
         <section class="page-section">

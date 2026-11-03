@@ -90,17 +90,13 @@ get_header();
     <?php endif; ?>
 
     <!-- ==================== 3. CURRENT PASSES & COURSES ==================== -->
-    <section class="hp-passes">
-        <?php echo do_shortcode( '[upcoming_events]' ); ?>
-    </section>
+    <?php echo cw_render_page_passes(); ?>
 
     <!-- ==================== 4. WEEKLY SCHEDULE ==================== -->
-    <?php echo do_shortcode( '[weekly_schedule]' ); ?>
+    <?php echo cw_render_page_schedule(); ?>
 
     <!-- ==================== 5. PRICING ==================== -->
-    <section class="hp-pricing page-section">
-        <?php echo do_shortcode( '[pricing_table title="Pricing"]' ); ?>
-    </section>
+    <?php echo cw_render_page_pricing(); ?>
 
     <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->
     <?php echo cw_render_page_about(); ?>

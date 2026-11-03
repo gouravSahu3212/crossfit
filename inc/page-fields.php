@@ -30,12 +30,22 @@ function cw_register_page_meta_boxes() {
         'cw_page_rich_text_section',
         __( 'Rich Text Section Settings', 'codyweb-child' ),
         'cw_render_page_rich_text_meta_box',
-        ['page'],
+        ['page', 'cw_recommendation'],
         'normal',
         'high'
     );
 
-    // 3. FAQ Section
+    // 3. Section Visibility Settings (Passes, Schedule, Pricing)
+    add_meta_box(
+        'cw_page_sections_visibility',
+        __( 'Section Visibility Settings', 'codyweb-child' ),
+        'cw_render_page_sections_visibility_meta_box',
+        ['page', 'cw_recommendation'],
+        'normal',
+        'high'
+    );
+
+    // 4. FAQ Section
     add_meta_box(
         'cw_page_faq_section',
         __( 'FAQ Section Settings', 'codyweb-child' ),
@@ -45,7 +55,7 @@ function cw_register_page_meta_boxes() {
         'high'
     );
 
-    // 4. About / Community Section
+    // 5. About / Community Section
     add_meta_box(
         'cw_page_about_section',
         __( 'About / Community Section Settings', 'codyweb-child' ),
@@ -1499,3 +1509,393 @@ function cw_render_page_about( $post_id = null ) {
 
 
 
+
+
+// =========================================================
+// 5. Section Visibility (Passes, Schedule, Pricing)
+// =========================================================
+
+/**
+ * Render the Section Visibility Settings meta box.
+ *
+ * Allows choosing whether to show/hide Current Passes & Courses, Weekly Schedule, and Pricing on this page.
+ *
+ * @param WP_Post $post Current post object.
+ */
+function cw_render_page_sections_visibility_meta_box( $post ) {
+    wp_nonce_field( 'cw_page_sections_save_meta', 'cw_page_sections_nonce' );
+
+    $settings      = cw_get_page_sections_visibility( $post->ID );
+    $show_passes   = $settings['passes'] ? 'yes' : 'no';
+    $show_schedule = $settings['schedule'] ? 'yes' : 'no';
+    $show_pricing  = $settings['pricing'] ? 'yes' : 'no';
+
+    $passes_title   = $settings['passes_title'];
+    $schedule_title = $settings['schedule_title'];
+    $pricing_title  = $settings['pricing_title'];
+    ?>
+    <style>
+        .cw-sections-meta-wrap {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            color: #1e293b;
+        }
+        .cw-section-toggle-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+        .cw-section-toggle-box:last-child {
+            margin-bottom: 0;
+        }
+        .cw-section-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .cw-section-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cw-section-box-badge {
+            background: #e2e8f0;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 4px;
+            letter-spacing: 0.04em;
+        }
+    </style>
+
+    <div class="cw-sections-meta-wrap">
+
+        <!-- 1. Current Passes & Courses -->
+        <div class="cw-section-toggle-box" id="cw-box-passes">
+            <div class="cw-section-box-header">
+                <span class="cw-section-box-title">
+                    <span class="dashicons dashicons-tickets-alt" style="color: #64748b;"></span>
+                    <?php esc_html_e( '1. Current Passes & Courses', 'codyweb-child' ); ?>
+                </span>
+                <span class="cw-section-box-badge"><?php esc_html_e( '[upcoming_events]', 'codyweb-child' ); ?></span>
+            </div>
+
+            <div class="cw-meta-row" style="border-top: none; padding-top: 4px;">
+                <div class="cw-meta-label">
+                    <label><?php esc_html_e( 'Show Section', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <div class="cw-radio-group">
+                        <label>
+                            <input type="radio" name="cw_passes_show" value="yes" <?php checked( $show_passes, 'yes' ); ?>>
+                            <span><?php esc_html_e( 'Yes (Show)', 'codyweb-child' ); ?></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="cw_passes_show" value="no" <?php checked( $show_passes, 'no' ); ?>>
+                            <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
+                        </label>
+                    </div>
+                    <p class="cw-help-text"><?php esc_html_e( 'Choose whether to display the current passes and courses section.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+
+            <div class="cw-meta-row cw-passes-title-row" style="border-bottom: none; <?php echo ( 'no' === $show_passes ) ? 'opacity: 0.45;' : ''; ?>">
+                <div class="cw-meta-label">
+                    <label for="cw_passes_title"><?php esc_html_e( 'Section Heading (Optional)', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <input type="text"
+                           id="cw_passes_title"
+                           name="cw_passes_title"
+                           value="<?php echo esc_attr( $passes_title ); ?>"
+                           placeholder="<?php esc_attr_e( 'Current: passes and courses (default)', 'codyweb-child' ); ?>">
+                    <p class="cw-help-text"><?php esc_html_e( 'Leave blank to use the default title.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Weekly Schedule -->
+        <div class="cw-section-toggle-box" id="cw-box-schedule">
+            <div class="cw-section-box-header">
+                <span class="cw-section-box-title">
+                    <span class="dashicons dashicons-calendar-alt" style="color: #64748b;"></span>
+                    <?php esc_html_e( '2. Weekly Schedule', 'codyweb-child' ); ?>
+                </span>
+                <span class="cw-section-box-badge"><?php esc_html_e( '[weekly_schedule]', 'codyweb-child' ); ?></span>
+            </div>
+
+            <div class="cw-meta-row" style="border-top: none; padding-top: 4px;">
+                <div class="cw-meta-label">
+                    <label><?php esc_html_e( 'Show Section', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <div class="cw-radio-group">
+                        <label>
+                            <input type="radio" name="cw_schedule_show" value="yes" <?php checked( $show_schedule, 'yes' ); ?>>
+                            <span><?php esc_html_e( 'Yes (Show)', 'codyweb-child' ); ?></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="cw_schedule_show" value="no" <?php checked( $show_schedule, 'no' ); ?>>
+                            <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
+                        </label>
+                    </div>
+                    <p class="cw-help-text"><?php esc_html_e( 'Choose whether to display the 7-day weekly schedule timetable.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+
+            <div class="cw-meta-row cw-schedule-title-row" style="border-bottom: none; <?php echo ( 'no' === $show_schedule ) ? 'opacity: 0.45;' : ''; ?>">
+                <div class="cw-meta-label">
+                    <label for="cw_schedule_title"><?php esc_html_e( 'Section Heading (Optional)', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <input type="text"
+                           id="cw_schedule_title"
+                           name="cw_schedule_title"
+                           value="<?php echo esc_attr( $schedule_title ); ?>"
+                           placeholder="<?php esc_attr_e( 'Weekly Schedule (default)', 'codyweb-child' ); ?>">
+                    <p class="cw-help-text"><?php esc_html_e( 'Leave blank to use the default title.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Pricing -->
+        <div class="cw-section-toggle-box" id="cw-box-pricing">
+            <div class="cw-section-box-header">
+                <span class="cw-section-box-title">
+                    <span class="dashicons dashicons-tag" style="color: #64748b;"></span>
+                    <?php esc_html_e( '3. Pricing', 'codyweb-child' ); ?>
+                </span>
+                <span class="cw-section-box-badge"><?php esc_html_e( '[pricing_table]', 'codyweb-child' ); ?></span>
+            </div>
+
+            <div class="cw-meta-row" style="border-top: none; padding-top: 4px;">
+                <div class="cw-meta-label">
+                    <label><?php esc_html_e( 'Show Section', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <div class="cw-radio-group">
+                        <label>
+                            <input type="radio" name="cw_pricing_show" value="yes" <?php checked( $show_pricing, 'yes' ); ?>>
+                            <span><?php esc_html_e( 'Yes (Show)', 'codyweb-child' ); ?></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="cw_pricing_show" value="no" <?php checked( $show_pricing, 'no' ); ?>>
+                            <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
+                        </label>
+                    </div>
+                    <p class="cw-help-text"><?php esc_html_e( 'Choose whether to display the membership and pass pricing section.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+
+            <div class="cw-meta-row cw-pricing-title-row" style="border-bottom: none; <?php echo ( 'no' === $show_pricing ) ? 'opacity: 0.45;' : ''; ?>">
+                <div class="cw-meta-label">
+                    <label for="cw_pricing_title"><?php esc_html_e( 'Section Heading (Optional)', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <input type="text"
+                           id="cw_pricing_title"
+                           name="cw_pricing_title"
+                           value="<?php echo esc_attr( $pricing_title ); ?>"
+                           placeholder="<?php esc_attr_e( 'Pricing (default)', 'codyweb-child' ); ?>">
+                    <p class="cw-help-text"><?php esc_html_e( 'Leave blank to use the default title.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    (function($){
+        $(document).ready(function(){
+            $('input[name="cw_passes_show"]').on('change', function(){
+                $('.cw-passes-title-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
+            });
+            $('input[name="cw_schedule_show"]').on('change', function(){
+                $('.cw-schedule-title-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
+            });
+            $('input[name="cw_pricing_show"]').on('change', function(){
+                $('.cw-pricing-title-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
+            });
+        });
+    })(jQuery);
+    </script>
+    <?php
+}
+
+/**
+ * Save Section Visibility Meta Data.
+ *
+ * @param int $post_id Post ID.
+ */
+function cw_save_page_sections_meta( $post_id ) {
+    if ( ! isset( $_POST['cw_page_sections_nonce'] ) ) {
+        return;
+    }
+    if ( ! wp_verify_nonce( $_POST['cw_page_sections_nonce'], 'cw_page_sections_save_meta' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    // 1. Current Passes & Courses
+    $passes_show = ( isset( $_POST['cw_passes_show'] ) && 'no' === $_POST['cw_passes_show'] ) ? 'no' : 'yes';
+    update_post_meta( $post_id, '_cw_passes_show', $passes_show );
+    if ( isset( $_POST['cw_passes_title'] ) ) {
+        update_post_meta( $post_id, '_cw_passes_title', sanitize_text_field( wp_unslash( $_POST['cw_passes_title'] ) ) );
+    }
+
+    // 2. Weekly Schedule
+    $schedule_show = ( isset( $_POST['cw_schedule_show'] ) && 'no' === $_POST['cw_schedule_show'] ) ? 'no' : 'yes';
+    update_post_meta( $post_id, '_cw_schedule_show', $schedule_show );
+    if ( isset( $_POST['cw_schedule_title'] ) ) {
+        update_post_meta( $post_id, '_cw_schedule_title', sanitize_text_field( wp_unslash( $_POST['cw_schedule_title'] ) ) );
+    }
+
+    // 3. Pricing
+    $pricing_show = ( isset( $_POST['cw_pricing_show'] ) && 'no' === $_POST['cw_pricing_show'] ) ? 'no' : 'yes';
+    update_post_meta( $post_id, '_cw_pricing_show', $pricing_show );
+    if ( isset( $_POST['cw_pricing_title'] ) ) {
+        update_post_meta( $post_id, '_cw_pricing_title', sanitize_text_field( wp_unslash( $_POST['cw_pricing_title'] ) ) );
+    }
+}
+add_action( 'save_post_page', 'cw_save_page_sections_meta' );
+add_action( 'save_post_cw_recommendation', 'cw_save_page_sections_meta' );
+
+/**
+ * Retrieve sections visibility and configuration for a given post/page.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return array
+ */
+function cw_get_page_sections_visibility( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! $post_id ) {
+        return array(
+            'passes'         => true,
+            'schedule'       => true,
+            'pricing'        => true,
+            'passes_title'   => '',
+            'schedule_title' => '',
+            'pricing_title'  => '',
+        );
+    }
+
+    $raw_passes   = get_post_meta( $post_id, '_cw_passes_show', true );
+    $raw_schedule = get_post_meta( $post_id, '_cw_schedule_show', true );
+    $raw_pricing  = get_post_meta( $post_id, '_cw_pricing_show', true );
+
+    return array(
+        'passes'         => ( 'no' !== $raw_passes ),
+        'schedule'       => ( 'no' !== $raw_schedule ),
+        'pricing'        => ( 'no' !== $raw_pricing ),
+        'passes_title'   => (string) get_post_meta( $post_id, '_cw_passes_title', true ),
+        'schedule_title' => (string) get_post_meta( $post_id, '_cw_schedule_title', true ),
+        'pricing_title'  => (string) get_post_meta( $post_id, '_cw_pricing_title', true ),
+    );
+}
+
+/**
+ * Check if Current Passes & Courses section should be shown.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return bool
+ */
+function cw_show_passes_section( $post_id = null ) {
+    $settings = cw_get_page_sections_visibility( $post_id );
+    return ! empty( $settings['passes'] );
+}
+
+/**
+ * Check if Weekly Schedule section should be shown.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return bool
+ */
+function cw_show_schedule_section( $post_id = null ) {
+    $settings = cw_get_page_sections_visibility( $post_id );
+    return ! empty( $settings['schedule'] );
+}
+
+/**
+ * Check if Pricing section should be shown.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return bool
+ */
+function cw_show_pricing_section( $post_id = null ) {
+    $settings = cw_get_page_sections_visibility( $post_id );
+    return ! empty( $settings['pricing'] );
+}
+
+/**
+ * Render Current Passes & Courses section HTML.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return string HTML output.
+ */
+function cw_render_page_passes( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! cw_show_passes_section( $post_id ) ) {
+        return '';
+    }
+    $title = get_post_meta( $post_id, '_cw_passes_title', true );
+    $sc    = ! empty( $title ) ? '[upcoming_events title="' . esc_attr( $title ) . '"]' : '[upcoming_events]';
+    return '<section class="hp-passes">' . do_shortcode( $sc ) . '</section>';
+}
+
+/**
+ * Render Weekly Schedule section HTML.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return string HTML output.
+ */
+function cw_render_page_schedule( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! cw_show_schedule_section( $post_id ) ) {
+        return '';
+    }
+    $title = get_post_meta( $post_id, '_cw_schedule_title', true );
+    $sc    = ! empty( $title ) ? '[weekly_schedule title="' . esc_attr( $title ) . '"]' : '[weekly_schedule]';
+    return do_shortcode( $sc );
+}
+
+/**
+ * Render Pricing section HTML.
+ *
+ * @param int|null $post_id Post or Page ID.
+ * @return string HTML output.
+ */
+function cw_render_page_pricing( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! cw_show_pricing_section( $post_id ) ) {
+        return '';
+    }
+    $title = get_post_meta( $post_id, '_cw_pricing_title', true );
+    $title = ! empty( $title ) ? $title : 'Pricing';
+    return '<section class="hp-pricing page-section">' . do_shortcode( '[pricing_table title="' . esc_attr( $title ) . '"]' ) . '</section>';
+}

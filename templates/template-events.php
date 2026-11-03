@@ -35,14 +35,21 @@ get_header();
         </section>
 
         <!-- Upcoming Events Grid -->
+        <?php if ( cw_show_passes_section() ) : ?>
         <section id="upcoming" class="page-section">
             <div class="page-section-header">
                 <p class="page-section-label">What's Next</p>
                 <h2 class="page-section-title">Upcoming Courses &amp; Days</h2>
             </div>
 
-            <?php echo do_shortcode( '[upcoming_events]' ); ?>
+            <?php
+            $passes_title = get_post_meta( get_the_ID(), '_cw_passes_title', true );
+            $passes_sc    = ! empty( $passes_title ) ? '[upcoming_events title="' . esc_attr( $passes_title ) . '"]' : '[upcoming_events]';
+            echo do_shortcode( $passes_sc );
+            ?>
         </section>
+
+        <?php endif; ?>
 
         <!-- About / Community Section -->
         <?php echo cw_render_page_about(); ?>
