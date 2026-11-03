@@ -45,7 +45,45 @@ get_header(); ?>
                     </section>
                 <?php endif; ?>
 
-                <!-- ==================== 2. CONTENT / SEO SECTION ==================== -->
+    <!-- ==================== 2. RICH TEXT SECTION ==================== -->
+    <?php
+    $rich_text = cw_get_page_rich_text( get_the_ID() );
+    if ( ! empty( $rich_text['show'] ) && ( ! empty( $rich_text['heading'] ) || ! empty( $rich_text['description'] ) ) ) :
+    ?>
+        <section class="hp-quote hp-rich-text">
+            <div class="page-width">
+                <?php if ( ! empty( $rich_text['heading'] ) ) : ?>
+                    <h2 class="hp-quote-text"><?php echo esc_html( $rich_text['heading'] ); ?></h2>
+                <?php endif; ?>
+                <?php if ( ! empty( $rich_text['description'] ) ) : ?>
+                    <div class="hp-quote-body"><?php echo wp_kses_post( wpautop( $rich_text['description'] ) ); ?></div>
+                <?php endif; ?>
+                <?php if ( ! empty( $rich_text['btn_text'] ) && ! empty( $rich_text['btn_url'] ) ) : ?>
+                    <div class="hp-quote-cta" style="margin-top: 28px;">
+                        <a href="<?php echo esc_url( $rich_text['btn_url'] ); ?>" class="btn-gold"><?php echo esc_html( $rich_text['btn_text'] ); ?></a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+    <?php endif; ?>
+
+    <!-- ==================== 3. CURRENT PASSES & COURSES ==================== -->
+    <section class="hp-passes">
+        <?php echo do_shortcode( '[upcoming_events]' ); ?>
+    </section>
+
+    <!-- ==================== 4. WEEKLY SCHEDULE ==================== -->
+    <?php echo do_shortcode( '[weekly_schedule]' ); ?>
+
+    <!-- ==================== 5. PRICING ==================== -->
+    <section class="hp-pricing page-section">
+        <?php echo do_shortcode( '[pricing_table title="Pricing"]' ); ?>
+    </section>
+
+                <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->
+                <?php echo cw_render_page_about(); ?>
+
+                <!-- ==================== 7. CONTENT / SEO SECTION ==================== -->
                 <?php
                 $content_raw = get_the_content();
                 if ( ! empty( $content_raw ) ) :
@@ -121,7 +159,6 @@ get_header(); ?>
                 ?>
                     <section class="hp-quote hp-content-section" id="recommendation-content">
                         <div class="page-width">
-                            <h2 class="hp-quote-text"><?php the_title(); ?>?</h2>
                             <div class="hp-quote-body cw-read-more-container">
                                 <div class="cw-content-excerpt">
                                     <?php echo $first_p; ?>
@@ -140,11 +177,8 @@ get_header(); ?>
                     </section>
                 <?php endif; ?>
 
-                <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->
-                <?php echo cw_render_page_about(); ?>
 
-
-                <!-- ==================== 7. FAQ ==================== -->
+                <!-- ==================== 8. FAQ ==================== -->
                 <div class="page-width">
                     <?php echo cw_render_page_faq(); ?>
                 </div>

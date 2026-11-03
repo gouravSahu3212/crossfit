@@ -71,9 +71,103 @@ get_header();
 
     <!-- ==================== 6. ABOUT / COMMUNITY ==================== -->
     <?php echo cw_render_page_about(); ?>
+    
+    <!-- ==================== 7. CONTENT / SEO SECTION ==================== -->
+                <?php
+                $content_raw = get_the_content();
+                if ( ! empty( $content_raw ) ) :
+                    $full_content = apply_filters( 'the_content', $content_raw );
+
+                    // Separate first paragraph/block from remaining content
+                    $first_p  = '';
+                    $rest_p   = '';
+                    $has_more = false;
+
+                    // 1. Support standard WordPress <!--more--> quicktag
+                    if ( preg_match( '/<!--more(.*?)?-->/i', $full_content ) ) {
+                        $parts    = preg_split( '/<!--more(.*?)?-->/i', $full_content, 2 );
+                        $first_p  = trim( $parts[0] );
+                        $rest_p   = trim( $parts[1] );
+                        $has_more = ! empty( trim( strip_tags( $rest_p, '<img><iframe><video><audio>' ) ) );
+                    }
+                    // 2. Support initial container blocks such as <div ...>...</div>, <p ...>...</p>, or <section ...>...</section>
+                    elseif ( preg_match( '#^(\s*<(div|p|section)\b[^>]*>.*?</\2>)(.*)$#is', trim( $full_content ), $matches ) && ! empty( trim( strip_tags( $matches[3], '<img><iframe><video><audio>' ) ) ) ) {
+                        $first_p  = trim( $matches[1] );
+                        $rest_p   = trim( $matches[3] );
+                        $has_more = true;
+                    }
+                    // 3. Fallback: check for earliest closing </p> or </div> tag
+                    else {
+                        $pos_p   = stripos( $full_content, '</p>' );
+                        $pos_div = stripos( $full_content, '</div>' );
+                        $split_pos = false;
+                        $tag_len   = 0;
+
+                        if ( false !== $pos_p && false !== $pos_div ) {
+                            if ( $pos_p < $pos_div ) {
+                                $split_pos = $pos_p;
+                                $tag_len   = 4;
+                            } else {
+                                $split_pos = $pos_div;
+                                $tag_len   = 6;
+                            }
+                        } elseif ( false !== $pos_p ) {
+                            $split_pos = $pos_p;
+                            $tag_len   = 4;
+                        } elseif ( false !== $pos_div ) {
+                            $split_pos = $pos_div;
+                            $tag_len   = 6;
+                        }
+
+                        if ( false !== $split_pos ) {
+                            $temp_first = substr( $full_content, 0, $split_pos + $tag_len );
+                            $temp_rest  = trim( substr( $full_content, $split_pos + $tag_len ) );
+                            if ( ! empty( trim( strip_tags( $temp_rest, '<img><iframe><video><audio>' ) ) ) ) {
+                                $first_p  = $temp_first;
+                                $rest_p   = $temp_rest;
+                                $has_more = true;
+                            }
+                        }
+
+                        // 4. Fallback for plain text: split on first double newline
+                        if ( ! $has_more && preg_match( '#^(.*?)(?:\r?\n\s*\r?\n)(.*)$#s', trim( $full_content ), $nl_matches ) ) {
+                            $temp_rest = trim( $nl_matches[2] );
+                            if ( ! empty( trim( strip_tags( $temp_rest, '<img><iframe><video><audio>' ) ) ) ) {
+                                $first_p  = wpautop( trim( $nl_matches[1] ) );
+                                $rest_p   = wpautop( $temp_rest );
+                                $has_more = true;
+                            }
+                        }
+
+                        // Fallback if no splitting occurred
+                        if ( ! $has_more ) {
+                            $first_p  = $full_content;
+                            $has_more = false;
+                        }
+                    }
+                ?>
+                    <section class="hp-quote hp-content-section" id="recommendation-content">
+                        <div class="page-width">
+                            <div class="hp-quote-body cw-read-more-container">
+                              <div class="cw-content-excerpt">
+                                    <?php echo $first_p; ?>
+                                </div>
+                                <?php if ( $has_more ) : ?>
+                                    <div class="cw-content-rest">
+                                        <?php echo $rest_p; ?>
+                                    </div>
+                                    <div class="cw-content-actions" style="margin-top: 28px;">
+                                        <button type="button" class="btn-gold cw-read-more-btn">Read More</button>
+                                        <button type="button" class="btn-gold cw-read-less-btn">Read Less</button>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </section>
+                <?php endif; ?>
 
 
-    <!-- ==================== 7. FAQ ==================== -->
+    <!-- ==================== 8. FAQ ==================== -->
     <?php echo cw_render_page_faq(); ?>
 
 

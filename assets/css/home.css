@@ -52,6 +52,7 @@ p,a,span{
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 8px;
+    text-align: center;
 }
 .hp-section-title {
     font-family: var(--font-head);
@@ -60,6 +61,7 @@ p,a,span{
     color: var(--text);
     line-height: 1.05;
     margin: 0 0 10px;
+    text-align:center;
 }
 .hp-section-sub {
     font-family: var(--font-body);
@@ -67,7 +69,7 @@ p,a,span{
     color: var(--text-muted);
     line-height: 1.65;
     max-width: 600px;
-    margin-top: 0;
+    margin:auto;
 }
 
 /* ---- Button ---- */
@@ -199,6 +201,7 @@ p,a,span{
     margin: 0 auto 28px;
     text-transform: uppercase;
     letter-spacing: 0;
+    text-align: center;
 }
 .hp-quote-body {
     font-family: var(--font-body);
@@ -207,6 +210,7 @@ p,a,span{
     line-height: 1.65;
     max-width: 760px;
     margin: 0 auto;
+    text-align: center;
 }
 .hp-quote-body p {
     margin: 0 0 1.25em;
@@ -472,7 +476,7 @@ p,a,span{
     background: var(--bg-card);
 }
 .hp-schedule-header {
-    /* text-align: center; */
+     text-align: center; 
     margin-bottom: 32px;
 }
 .hp-schedule-grid {

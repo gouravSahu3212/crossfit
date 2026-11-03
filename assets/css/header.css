@@ -30,7 +30,7 @@ header.site-main-header {
 }
 
 .logo img {
-    width: 100%;
+    width: 70%;
     object-fit: contain;
     height: auto;
 }

@@ -67,6 +67,10 @@ p,a,span{
     margin-bottom: 60px;
     background-size: cover;
     background-position: center;
+    
+}
+.hp-passes-header, .page-section-header, .page-cta-banner {
+    text-align: center;
 }
 .page-hero-label {
     font-family: var(--font-head);
@@ -687,7 +691,7 @@ p,a,span{
 .page-cta-banner {
     border-radius: var(--radius);
     padding: 50px 0px;
-    text-align: left;
+    text-align: center;
 }
 .page-cta-banner h2 {
     font-family: var(--font-head);
@@ -703,7 +707,8 @@ p,a,span{
     color: var(--text-muted);
     max-width: 540px;
     line-height: 1.6;
-    text-align: left;
+    text-align: center;
+    margin: 20px auto;
 }
 
 /* ================================================================
