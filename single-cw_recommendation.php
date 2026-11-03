@@ -46,8 +46,7 @@ get_header();
                     $col_count = count( $hero['cards'] );
                 ?>
                     <section class="hp-hero hp-hero--cols-<?php echo esc_attr( $col_count ); ?>" style="--hero-cols: <?php echo esc_attr( $col_count ); ?>;">
-                       <div class="page-width">
-                            <?php foreach ( $hero['cards'] as $index => $card ) :
+                        <?php foreach ( $hero['cards'] as $index => $card ) :
                             $bg_img = ! empty( $card['image'] ) ? $card['image'] : '';
                             $panel_class = ( 0 === $index ) ? 'hp-hero-panel--hyrox' : ( ( 1 === $index ) ? 'hp-hero-panel--crossfit' : '' );
                         ?>
@@ -63,7 +62,6 @@ get_header();
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
-                       </div>
                     </section>
                 <?php endif; ?>
 
