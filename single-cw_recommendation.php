@@ -19,7 +19,7 @@ get_header();
             $tag         = get_post_meta( get_the_ID(), '_cw_rec_tag', true );
             ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'recommendation-article' ); ?>>
-                <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
+           <!--      <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
                     <div class="page-width">
                         <?php if ( $icon ) : ?>
                         <div style="font-size: 42px; margin-bottom: 12px; line-height: 1;"><?php echo esc_html( $icon ); ?></div>
@@ -30,14 +30,14 @@ get_header();
                         <p class="page-hero-label">Recommended Training</p>
                     <?php endif; ?>
                     <h1 class="page-hero-title"><?php the_title(); ?></h1>
-                    <!-- <?php if ( $price ) : ?> -->
-                        <!-- <div style="font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--gold); margin-bottom: 14px;"><?php echo esc_html( $price ); ?></div> -->
-                    <!-- <?php endif; ?> -->
+                    <?php if ( $price ) : ?>
+                        <div style="font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--gold); margin-bottom: 14px;"><?php echo esc_html( $price ); ?></div>
+                    <?php endif; ?>
                     <?php if ( $description ) : ?>
                         <p class="page-hero-desc"><?php echo esc_html( $description ); ?></p>
                     <?php endif; ?>
                     </div>
-                </header>
+                </header> -->
 
                 <!-- ==================== 1. HERO SECTION ==================== -->
                 <?php
