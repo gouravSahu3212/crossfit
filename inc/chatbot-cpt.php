@@ -143,7 +143,7 @@ add_action( 'template_redirect', 'cw_recommendation_redirect_old_base' );
 function cw_add_recommendation_meta_boxes() {
     add_meta_box(
         'cw_recommendation_details',
-        'Recommendation Details',
+        'Recommendation Header',
         'cw_render_recommendation_meta_box',
         'cw_recommendation',
         'normal',
@@ -160,6 +160,8 @@ add_action( 'add_meta_boxes', 'cw_add_recommendation_meta_boxes' );
 function cw_render_recommendation_meta_box( $post ) {
     wp_nonce_field( 'cw_recommendation_save_meta', 'cw_recommendation_nonce' );
 
+    $header_show = get_post_meta( $post->ID, '_cw_rec_header_show', true );
+    $header_show = ( '' === $header_show ) ? 'yes' : $header_show;
     $description = get_post_meta( $post->ID, '_cw_rec_description', true );
     $price       = get_post_meta( $post->ID, '_cw_rec_price', true );
     $tag         = get_post_meta( $post->ID, '_cw_rec_tag', true );
@@ -176,6 +178,22 @@ function cw_render_recommendation_meta_box( $post ) {
     </style>
     <table>
         <tbody>
+            <tr>
+                <th><label><?php esc_html_e( 'Show Header Section', 'codyweb-child' ); ?></label></th>
+                <td>
+                    <div style="display:flex; gap:20px; align-items:center;">
+                        <label style="display:inline-flex; align-items:center; gap:6px; font-weight:500; cursor:pointer;">
+                            <input type="radio" name="cw_rec_header_show" value="yes" <?php checked( $header_show, 'yes' ); ?>>
+                            <span><?php esc_html_e( 'Yes (Show)', 'codyweb-child' ); ?></span>
+                        </label>
+                        <label style="display:inline-flex; align-items:center; gap:6px; font-weight:500; cursor:pointer;">
+                            <input type="radio" name="cw_rec_header_show" value="no" <?php checked( $header_show, 'no' ); ?>>
+                            <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
+                        </label>
+                    </div>
+                    <p class="description"><?php esc_html_e( 'Choose whether to display the top banner/header section on the single recommendation page.', 'codyweb-child' ); ?></p>
+                </td>
+            </tr>
             <tr>
                 <th><label for="cw_rec_description">Description</label></th>
                 <td>
@@ -234,6 +252,13 @@ function cw_save_recommendation_meta( $post_id ) {
         return;
     }
 
+    if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+        return;
+    }
+
+    $header_show = ( isset( $_POST['cw_rec_header_show'] ) && 'no' === $_POST['cw_rec_header_show'] ) ? 'no' : 'yes';
+    update_post_meta( $post_id, '_cw_rec_header_show', $header_show );
+
     if ( isset( $_POST['cw_rec_description'] ) ) {
         update_post_meta( $post_id, '_cw_rec_description', sanitize_textarea_field( wp_unslash( $_POST['cw_rec_description'] ) ) );
     }
@@ -248,3 +273,21 @@ function cw_save_recommendation_meta( $post_id ) {
     // }
 }
 add_action( 'save_post_cw_recommendation', 'cw_save_recommendation_meta' );
+
+
+/**
+ * Check if the recommendation header section should be shown.
+ *
+ * @param int|null $post_id Post ID.
+ * @return bool
+ */
+function cw_show_recommendation_header( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! $post_id ) {
+        return true;
+    }
+    $show = get_post_meta( $post_id, '_cw_rec_header_show', true );
+    return ( 'no' !== $show );
+}

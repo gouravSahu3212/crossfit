@@ -19,7 +19,8 @@ get_header();
             $tag         = get_post_meta( get_the_ID(), '_cw_rec_tag', true );
             ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'recommendation-article' ); ?>>
-           <!--      <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
+                <?php if ( cw_show_recommendation_header() ) : ?>
+                <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
                     <div class="page-width">
                         <?php if ( $icon ) : ?>
                         <div style="font-size: 42px; margin-bottom: 12px; line-height: 1;"><?php echo esc_html( $icon ); ?></div>
@@ -37,7 +38,8 @@ get_header();
                         <p class="page-hero-desc"><?php echo esc_html( $description ); ?></p>
                     <?php endif; ?>
                     </div>
-                </header> -->
+                </header>
+                <?php endif; ?>
 
                 <!-- ==================== 1. HERO SECTION ==================== -->
                 <?php
