@@ -128,7 +128,7 @@ add_shortcode( 'cw_recommendations', 'cw_upcoming_events_shortcode' );
 function cw_weekly_schedule_shortcode( $atts ) {
     $atts = shortcode_atts(
         array(
-            'title'  => 'Weekly Schedule',
+            'title'    => 'Weekly Schedule',
             'subtitle' => 'All classes for the week. Book your spot in WODconnect.',
             'label'    => 'Timetable',
         ),
@@ -141,6 +141,25 @@ function cw_weekly_schedule_shortcode( $atts ) {
     $label    = $atts['label'];
 
     $schedule = function_exists( 'cw_get_weekly_schedule' ) ? cw_get_weekly_schedule() : array();
+    $days     = isset( $schedule['days'] ) && is_array( $schedule['days'] ) ? $schedule['days'] : array();
+    $slots    = isset( $schedule['slots'] ) && is_array( $schedule['slots'] ) ? $schedule['slots'] : array();
+
+    $default_keys = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+    $default_names = array(
+        'monday'    => __( 'Monday', 'codyweb-child' ),
+        'tuesday'   => __( 'Tuesday', 'codyweb-child' ),
+        'wednesday' => __( 'Wednesday', 'codyweb-child' ),
+        'thursday'  => __( 'Thursday', 'codyweb-child' ),
+        'friday'    => __( 'Friday', 'codyweb-child' ),
+        'saturday'  => __( 'Saturday', 'codyweb-child' ),
+        'sunday'    => __( 'Sunday', 'codyweb-child' ),
+    );
+
+    foreach ( $default_keys as $day_key ) {
+        if ( empty( $days[ $day_key ] ) ) {
+            $days[ $day_key ] = $default_names[ $day_key ];
+        }
+    }
 
     ob_start();
     ?>
@@ -160,47 +179,53 @@ function cw_weekly_schedule_shortcode( $atts ) {
                 </div>
             <?php endif; ?>
 
-            <div class="hp-schedule-grid">
-                <?php
-                if ( ! empty( $schedule ) ) :
-                    foreach ( $schedule as $day_key => $day ) :
-                        $day_name = isset( $day['name'] ) ? $day['name'] : ucfirst( $day_key );
-                        $slots    = isset( $day['slots'] ) && is_array( $day['slots'] ) ? $day['slots'] : array();
-                        ?>
-                        <div class="hp-day">
-                            <div class="hp-day-name"><?php echo esc_html( $day_name ); ?></div>
-                            <div class="hp-day-slots">
-                                <?php
-                                if ( ! empty( $slots ) ) :
-                                    foreach ( $slots as $slot ) :
-                                        $time  = isset( $slot['time'] ) ? $slot['time'] : '';
-                                        $class = isset( $slot['class'] ) ? $slot['class'] : '';
-                                        ?>
-                                        <div class="hp-slot">
-                                            <?php if ( ! empty( $time ) ) : ?>
-                                                <span class="hp-slot-time"><?php echo esc_html( $time ); ?></span>
-                                            <?php endif; ?>
-                                            <?php if ( ! empty( $class ) ) : ?>
-                                                <span class="hp-slot-class"><?php echo esc_html( $class ); ?></span>
-                                            <?php endif; ?>
-                                        </div>
-                                        <?php
-                                    endforeach;
-                                else :
+            <?php if ( ! empty( $slots ) ) : ?>
+                <div class="hp-schedule-table-wrap">
+                    <table class="hp-schedule-table">
+                        <thead>
+                            <tr>
+                                <th class="hp-col-time"><?php esc_html_e( 'Time', 'codyweb-child' ); ?></th>
+                                <?php foreach ( $default_keys as $day_key ) : ?>
+                                    <th class="hp-col-day"><?php echo esc_html( $days[ $day_key ] ); ?></th>
+                                <?php endforeach; ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $slots as $slot ) : 
+                                $time = isset( $slot['time'] ) ? $slot['time'] : '';
+                            ?>
+                                <tr>
+                                    <td class="hp-cell-time">
+                                        <span class="hp-time-badge"><?php echo esc_html( $time ); ?></span>
+                                    </td>
+                                    <?php foreach ( $default_keys as $day_key ) : 
+                                        $class_name = isset( $slot['classes'][ $day_key ] ) ? trim( $slot['classes'][ $day_key ] ) : '';
                                     ?>
-                                    <div class="hp-slot">
-                                        <span class="hp-slot-class" style="color: var(--text-muted); font-size: 12px;">No classes</span>
-                                    </div>
-                                    <?php
-                                endif;
-                                ?>
-                            </div>
-                        </div>
-                        <?php
-                    endforeach;
-                endif;
-                ?>
-            </div>
+                                        <td class="hp-cell-class <?php echo ! empty( $class_name ) ? 'has-class' : 'is-empty'; ?>" data-day="<?php echo esc_attr( $days[ $day_key ] ); ?>">
+                                            <?php if ( ! empty( $class_name ) ) : ?>
+                                                <div class="hp-class-pill">
+                                                    <span class="hp-class-name"><?php echo esc_html( $class_name ); ?></span>
+                                                </div>
+                                            <?php else : ?>
+                                                <span class="hp-class-empty">&mdash;</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="hp-schedule-scroll-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <?php esc_html_e( 'Scroll horizontally to view all days', 'codyweb-child' ); ?>
+                </p>
+            <?php else : ?>
+                <p class="hp-schedule-empty" style="text-align: center; color: var(--text-muted); font-size: 15px;">
+                    <?php esc_html_e( 'No schedule entries found.', 'codyweb-child' ); ?>
+                </p>
+            <?php endif; ?>
         </div>
     </section>
     <?php

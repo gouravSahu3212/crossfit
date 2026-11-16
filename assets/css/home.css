@@ -469,7 +469,7 @@ p,a,span{
 }
 
 /* ================================================================
-   4. WEEKLY SCHEDULE
+   4. WEEKLY SCHEDULE (TIMETABLE MATRIX)
 ================================================================ */
 .hp-schedule {
     padding: var(--section-py) 0;
@@ -479,6 +479,161 @@ p,a,span{
      text-align: center; 
     margin-bottom: 32px;
 }
+
+/* Matrix Table Wrapper */
+.hp-schedule-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #0d0d0d;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    margin: 0 auto;
+}
+
+.hp-schedule-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: center;
+}
+
+.hp-schedule-table th,
+.hp-schedule-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    box-sizing: border-box;
+}
+
+.hp-schedule-table tr th:last-child,
+.hp-schedule-table tr td:last-child {
+    border-right: none;
+}
+
+.hp-schedule-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Header Cells */
+.hp-schedule-table thead th {
+    background: #181818;
+    color: var(--gold);
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 16px 12px;
+}
+
+/* Time Column (Sticky on Horizontal Scroll) */
+.hp-col-time,
+.hp-cell-time {
+    width: 96px;
+    min-width: 96px;
+    max-width: 110px;
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: #141414 !important;
+    border-right: 2px solid var(--border-2) !important;
+    text-align: center;
+}
+
+thead .hp-col-time {
+    z-index: 3;
+    background: #1c1c1c !important;
+    color: var(--text) !important;
+}
+
+.hp-time-badge {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+}
+
+/* Row Zebra & Hover */
+.hp-schedule-table tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.hp-schedule-table tbody tr:hover td {
+    background: rgba(188, 142, 84, 0.05);
+}
+
+.hp-schedule-table tbody tr:hover .hp-cell-time {
+    background: #1a1a1a !important;
+}
+
+/* Class Cells */
+.hp-cell-class {
+    vertical-align: middle;
+}
+
+.hp-class-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(188, 142, 84, 0.1);
+    border: 1px solid rgba(188, 142, 84, 0.28);
+    border-radius: 6px;
+    padding: 8px 10px;
+    width: 92%;
+    min-height: 42px;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.hp-class-pill:hover {
+    background: rgba(188, 142, 84, 0.2);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+}
+
+.hp-class-name {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+    line-height: 1.25;
+}
+
+.hp-class-empty {
+    color: var(--border-2);
+    font-size: 16px;
+    font-weight: 300;
+    opacity: 0.4;
+}
+
+/* Mobile Scroll Hint */
+.hp-schedule-scroll-hint {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.hp-schedule-scroll-hint svg {
+    color: var(--gold);
+}
+
+@media (max-width: 900px) {
+    .hp-schedule-scroll-hint {
+        display: flex;
+    }
+}
+
+/* Legacy Card Grid Fallback */
 .hp-schedule-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);

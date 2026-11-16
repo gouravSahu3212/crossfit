@@ -3,6 +3,7 @@
  * Weekly Schedule Management & Admin Options.
  *
  * Allows managing daily class times and class names for Monday - Sunday in WP Admin.
+ * Timings are defined once across the week with a column for each day.
  *
  * @package Codyweb_Child
  */
@@ -28,85 +29,194 @@ function cw_register_schedule_admin_menu() {
 add_action( 'admin_menu', 'cw_register_schedule_admin_menu' );
 
 /**
- * Return default 7-day schedule data.
+ * Return default 7-day schedule data (matrix format).
  *
- * @return array Default days and class slots.
+ * @return array Default days and time-slot matrix.
  */
 function cw_get_default_weekly_schedule() {
     return array(
-        'monday' => array(
-            'name'  => 'Monday',
-            'slots' => array(
-                array( 'time' => '06:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '09:30', 'class' => 'Easy WOD' ),
-                array( 'time' => '16:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '17:30', 'class' => 'HYROX' ),
-                array( 'time' => '18:30', 'class' => 'CrossFit WOD' ),
-            ),
+        'days' => array(
+            'monday'    => __( 'Monday', 'codyweb-child' ),
+            'tuesday'   => __( 'Tuesday', 'codyweb-child' ),
+            'wednesday' => __( 'Wednesday', 'codyweb-child' ),
+            'thursday'  => __( 'Thursday', 'codyweb-child' ),
+            'friday'    => __( 'Friday', 'codyweb-child' ),
+            'saturday'  => __( 'Saturday', 'codyweb-child' ),
+            'sunday'    => __( 'Sunday', 'codyweb-child' ),
         ),
-        'tuesday' => array(
-            'name'  => 'Tuesday',
-            'slots' => array(
-                array( 'time' => '06:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '16:30', 'class' => 'Weightlifting' ),
-                array( 'time' => '17:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '18:30', 'class' => 'On-Ramp' ),
+        'slots' => array(
+            array(
+                'time'    => '06:30',
+                'classes' => array(
+                    'monday'    => 'CrossFit WOD',
+                    'tuesday'   => 'CrossFit WOD',
+                    'wednesday' => 'CrossFit WOD',
+                    'thursday'  => 'CrossFit WOD',
+                    'friday'    => 'CrossFit WOD',
+                    'saturday'  => '',
+                    'sunday'    => '',
+                ),
             ),
-        ),
-        'wednesday' => array(
-            'name'  => 'Wednesday',
-            'slots' => array(
-                array( 'time' => '06:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '09:30', 'class' => 'Easy WOD' ),
-                array( 'time' => '16:30', 'class' => 'HYROX' ),
-                array( 'time' => '17:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '18:30', 'class' => 'CrossFit WOD' ),
+            array(
+                'time'    => '09:30',
+                'classes' => array(
+                    'monday'    => 'Easy WOD',
+                    'tuesday'   => '',
+                    'wednesday' => 'Easy WOD',
+                    'thursday'  => '',
+                    'friday'    => '',
+                    'saturday'  => '',
+                    'sunday'    => '',
+                ),
             ),
-        ),
-        'thursday' => array(
-            'name'  => 'Thursday',
-            'slots' => array(
-                array( 'time' => '06:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '16:30', 'class' => 'Gymnastics' ),
-                array( 'time' => '17:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '18:30', 'class' => 'On-Ramp' ),
+            array(
+                'time'    => '10:00',
+                'classes' => array(
+                    'monday'    => '',
+                    'tuesday'   => '',
+                    'wednesday' => '',
+                    'thursday'  => '',
+                    'friday'    => '',
+                    'saturday'  => 'Team WOD',
+                    'sunday'    => '',
+                ),
             ),
-        ),
-        'friday' => array(
-            'name'  => 'Friday',
-            'slots' => array(
-                array( 'time' => '06:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '16:30', 'class' => 'CrossFit WOD' ),
-                array( 'time' => '17:30', 'class' => 'HYROX' ),
+            array(
+                'time'    => '11:00',
+                'classes' => array(
+                    'monday'    => '',
+                    'tuesday'   => '',
+                    'wednesday' => '',
+                    'thursday'  => '',
+                    'friday'    => '',
+                    'saturday'  => 'Open Gym',
+                    'sunday'    => 'Open Gym',
+                ),
             ),
-        ),
-        'saturday' => array(
-            'name'  => 'Saturday',
-            'slots' => array(
-                array( 'time' => '10:00', 'class' => 'Team WOD' ),
-                array( 'time' => '11:00', 'class' => 'Open Gym' ),
+            array(
+                'time'    => '16:30',
+                'classes' => array(
+                    'monday'    => 'CrossFit WOD',
+                    'tuesday'   => 'Weightlifting',
+                    'wednesday' => 'HYROX',
+                    'thursday'  => 'Gymnastics',
+                    'friday'    => 'CrossFit WOD',
+                    'saturday'  => '',
+                    'sunday'    => '',
+                ),
             ),
-        ),
-        'sunday' => array(
-            'name'  => 'Sunday',
-            'slots' => array(
-                array( 'time' => '11:00', 'class' => 'Open Gym' ),
+            array(
+                'time'    => '17:30',
+                'classes' => array(
+                    'monday'    => 'HYROX',
+                    'tuesday'   => 'CrossFit WOD',
+                    'wednesday' => 'CrossFit WOD',
+                    'thursday'  => 'CrossFit WOD',
+                    'friday'    => 'HYROX',
+                    'saturday'  => '',
+                    'sunday'    => '',
+                ),
+            ),
+            array(
+                'time'    => '18:30',
+                'classes' => array(
+                    'monday'    => 'CrossFit WOD',
+                    'tuesday'   => 'On-Ramp',
+                    'wednesday' => 'CrossFit WOD',
+                    'thursday'  => 'On-Ramp',
+                    'friday'    => '',
+                    'saturday'  => '',
+                    'sunday'    => '',
+                ),
             ),
         ),
     );
 }
 
 /**
+ * Normalize schedule data to ensure compatibility with both the new matrix format
+ * and any legacy per-day slot format.
+ *
+ * @param mixed $raw_data Raw option value from database.
+ * @return array Normalized array with 'days' and 'slots' keys.
+ */
+function cw_normalize_weekly_schedule( $raw_data ) {
+    $default      = cw_get_default_weekly_schedule();
+    $default_days = $default['days'];
+    $default_keys = array_keys( $default_days );
+
+    if ( empty( $raw_data ) || ! is_array( $raw_data ) ) {
+        return $default;
+    }
+
+    // Already in new matrix format
+    if ( isset( $raw_data['slots'] ) && is_array( $raw_data['slots'] ) ) {
+        $days = isset( $raw_data['days'] ) && is_array( $raw_data['days'] ) ? $raw_data['days'] : array();
+        foreach ( $default_days as $dk => $dv ) {
+            if ( empty( $days[ $dk ] ) ) {
+                $days[ $dk ] = $dv;
+            }
+        }
+        return array(
+            'days'  => $days,
+            'slots' => $raw_data['slots'],
+        );
+    }
+
+    // Convert legacy day-based format: $raw_data['monday']['slots'] => ...
+    $days = array();
+    foreach ( $default_days as $dk => $dv ) {
+        $days[ $dk ] = ! empty( $raw_data[ $dk ]['name'] ) ? $raw_data[ $dk ]['name'] : $dv;
+    }
+
+    $all_times = array();
+    foreach ( $default_keys as $dk ) {
+        if ( ! empty( $raw_data[ $dk ]['slots'] ) && is_array( $raw_data[ $dk ]['slots'] ) ) {
+            foreach ( $raw_data[ $dk ]['slots'] as $slot ) {
+                $t = isset( $slot['time'] ) ? trim( $slot['time'] ) : '';
+                if ( '' !== $t && ! in_array( $t, $all_times, true ) ) {
+                    $all_times[] = $t;
+                }
+            }
+        }
+    }
+
+    usort( $all_times, 'strcmp' );
+
+    $slots = array();
+    foreach ( $all_times as $t ) {
+        $classes = array();
+        foreach ( $default_keys as $dk ) {
+            $classes[ $dk ] = '';
+            if ( ! empty( $raw_data[ $dk ]['slots'] ) && is_array( $raw_data[ $dk ]['slots'] ) ) {
+                foreach ( $raw_data[ $dk ]['slots'] as $slot ) {
+                    if ( isset( $slot['time'] ) && trim( $slot['time'] ) === $t ) {
+                        $classes[ $dk ] = isset( $slot['class'] ) ? $slot['class'] : '';
+                        break;
+                    }
+                }
+            }
+        }
+        $slots[] = array(
+            'time'    => $t,
+            'classes' => $classes,
+        );
+    }
+
+    return array(
+        'days'  => $days,
+        'slots' => ! empty( $slots ) ? $slots : $default['slots'],
+    );
+}
+
+/**
  * Get current weekly schedule from DB or fallback to default.
  *
- * @return array
+ * @return array Normalized array with 'days' and 'slots'.
  */
 function cw_get_weekly_schedule() {
     $saved = get_option( 'cw_weekly_schedule', false );
-    if ( false === $saved || ! is_array( $saved ) || empty( $saved ) ) {
-        return cw_get_default_weekly_schedule();
-    }
-    return $saved;
+    return cw_normalize_weekly_schedule( $saved );
 }
 
 /**
@@ -118,58 +228,67 @@ function cw_render_schedule_admin_page() {
     }
 
     $saved_notice = false;
+    $default_keys = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+    $default_names = array(
+        'monday'    => __( 'Monday', 'codyweb-child' ),
+        'tuesday'   => __( 'Tuesday', 'codyweb-child' ),
+        'wednesday' => __( 'Wednesday', 'codyweb-child' ),
+        'thursday'  => __( 'Thursday', 'codyweb-child' ),
+        'friday'    => __( 'Friday', 'codyweb-child' ),
+        'saturday'  => __( 'Saturday', 'codyweb-child' ),
+        'sunday'    => __( 'Sunday', 'codyweb-child' ),
+    );
 
     // Handle Form Save
     if ( isset( $_POST['cw_save_schedule_nonce'] ) && wp_verify_nonce( $_POST['cw_save_schedule_nonce'], 'cw_save_schedule' ) ) {
-        $raw_days = isset( $_POST['cw_schedule_days'] ) && is_array( $_POST['cw_schedule_days'] ) ? $_POST['cw_schedule_days'] : array();
-        $clean_schedule = array();
+        $raw_days  = isset( $_POST['cw_schedule_days'] ) && is_array( $_POST['cw_schedule_days'] ) ? $_POST['cw_schedule_days'] : array();
+        $raw_slots = isset( $_POST['cw_schedule_slots'] ) && is_array( $_POST['cw_schedule_slots'] ) ? $_POST['cw_schedule_slots'] : array();
 
-        $default_keys = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
-        $default_names = array(
-            'monday'    => 'Monday',
-            'tuesday'   => 'Tuesday',
-            'wednesday' => 'Wednesday',
-            'thursday'  => 'Thursday',
-            'friday'    => 'Friday',
-            'saturday'  => 'Saturday',
-            'sunday'    => 'Sunday',
-        );
-
+        $clean_days = array();
         foreach ( $default_keys as $day_key ) {
-            $day_data = isset( $raw_days[ $day_key ] ) ? $raw_days[ $day_key ] : array();
-            $day_name = isset( $day_data['name'] ) && ! empty( $day_data['name'] ) ? sanitize_text_field( $day_data['name'] ) : $default_names[ $day_key ];
+            $clean_days[ $day_key ] = ! empty( $raw_days[ $day_key ] )
+                ? sanitize_text_field( wp_unslash( $raw_days[ $day_key ] ) )
+                : $default_names[ $day_key ];
+        }
 
-            $clean_slots = array();
-            if ( isset( $day_data['slots'] ) && is_array( $day_data['slots'] ) ) {
-                foreach ( $day_data['slots'] as $slot ) {
-                    $time  = isset( $slot['time'] ) ? sanitize_text_field( $slot['time'] ) : '';
-                    $class = isset( $slot['class'] ) ? sanitize_text_field( $slot['class'] ) : '';
+        $clean_slots = array();
+        foreach ( $raw_slots as $slot_item ) {
+            $time = isset( $slot_item['time'] ) ? sanitize_text_field( wp_unslash( $slot_item['time'] ) ) : '';
+            $classes = array();
+            $has_content = ( '' !== $time );
 
-                    // Only save slot if at least class or time is provided
-                    if ( '' !== $time || '' !== $class ) {
-                        $clean_slots[] = array(
-                            'time'  => $time,
-                            'class' => $class,
-                        );
-                    }
+            foreach ( $default_keys as $day_key ) {
+                $cls = isset( $slot_item['classes'][ $day_key ] ) ? sanitize_text_field( wp_unslash( $slot_item['classes'][ $day_key ] ) ) : '';
+                $classes[ $day_key ] = $cls;
+                if ( '' !== $cls ) {
+                    $has_content = true;
                 }
             }
 
-            $clean_schedule[ $day_key ] = array(
-                'name'  => $day_name,
-                'slots' => $clean_slots,
-            );
+            if ( $has_content ) {
+                $clean_slots[] = array(
+                    'time'    => $time,
+                    'classes' => $classes,
+                );
+            }
         }
+
+        $clean_schedule = array(
+            'days'  => $clean_days,
+            'slots' => $clean_slots,
+        );
 
         update_option( 'cw_weekly_schedule', $clean_schedule );
         $saved_notice = true;
     }
 
     $schedule = cw_get_weekly_schedule();
+    $days     = isset( $schedule['days'] ) ? $schedule['days'] : $default_names;
+    $slots    = isset( $schedule['slots'] ) && is_array( $schedule['slots'] ) ? $schedule['slots'] : array();
     ?>
     <style>
         .cw-sched-wrap {
-            max-width: 1280px;
+            max-width: 1400px;
             margin: 20px 20px 40px 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
         }
@@ -179,134 +298,172 @@ function cw_render_schedule_admin_page() {
             border-radius: 8px;
             border: 1px solid #e2e8f0;
             margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        .cw-sched-header h1 {
+        .cw-sched-header-content h1 {
             font-size: 24px;
             font-weight: 800;
             color: #0f172a;
-            margin: 0 0 8px;
+            margin: 0 0 6px;
         }
-        .cw-sched-header p {
+        .cw-sched-header-content p {
             color: #64748b;
             font-size: 14px;
             margin: 0;
             line-height: 1.5;
         }
-        .cw-sched-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        .cw-sched-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .cw-day-card {
+        .cw-table-card {
             background: #fff;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
             overflow: hidden;
+            margin-bottom: 24px;
         }
-        .cw-day-card-head {
+        .cw-table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .cw-admin-matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .cw-admin-matrix-table th,
+        .cw-admin-matrix-table td {
+            padding: 10px 8px;
+            border: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+        .cw-admin-matrix-table thead th {
             background: #0f172a;
             color: #fff;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .cw-day-card-head input.cw-day-name-input {
-            background: transparent;
-            border: none;
-            color: #fff;
             font-weight: 700;
-            font-size: 16px;
-            padding: 0;
-            margin: 0;
+            text-align: center;
+            padding: 12px 8px;
+        }
+        .cw-admin-matrix-table thead th.cw-th-time {
+            width: 110px;
+            min-width: 100px;
+            background: #1e293b;
+        }
+        .cw-admin-matrix-table thead th.cw-th-actions {
+            width: 80px;
+            background: #1e293b;
+        }
+        .cw-day-head-input {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            text-align: center;
+            font-size: 13px !important;
+            border-radius: 4px;
+            padding: 4px 6px !important;
             width: 100%;
+            max-width: 140px;
+            transition: all 0.2s ease;
         }
-        .cw-day-card-head input.cw-day-name-input:focus {
+        .cw-day-head-input:focus {
+            background: #fff !important;
+            color: #0f172a !important;
+            border-color: #bc8e54 !important;
             outline: none;
-            border-bottom: 1px solid #c9a84c;
         }
-        .cw-day-card-body {
-            padding: 16px;
-            flex-grow: 1;
-        }
-        .cw-slots-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 14px;
-            min-height: 40px;
-        }
-        .cw-slot-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 6px 10px;
-            transition: border-color 0.15s ease;
-        }
-        .cw-slot-row:hover {
-            border-color: #cbd5e1;
-        }
-        .cw-slot-time-input {
-            width: 70px !important;
+        .cw-row-time {
+            width: 90px !important;
             font-weight: 700 !important;
             color: #b45309 !important;
-            background: #fff !important;
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 4px;
             text-align: center;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 4px;
-            padding: 5px 4px !important;
+            padding: 6px 4px !important;
             font-size: 13px !important;
         }
-        .cw-slot-class-input {
-            flex-grow: 1;
-            font-size: 13px !important;
-            border: 1px solid #cbd5e1 !important;
+        .cw-row-time:focus {
+            background: #fff !important;
+            border-color: #b45309 !important;
+            box-shadow: 0 0 0 1px #b45309 !important;
+        }
+        .cw-row-class {
+            width: 100% !important;
+            min-width: 120px;
+            border: 1px solid #e2e8f0 !important;
             border-radius: 4px;
-            padding: 5px 8px !important;
+            padding: 6px 8px !important;
+            font-size: 13px !important;
+            background: #ffffff !important;
+            transition: all 0.15s ease;
+        }
+        .cw-row-class:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 1px #3b82f6 !important;
             background: #fff !important;
         }
-        .cw-remove-slot-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            font-size: 18px;
-            cursor: pointer;
-            padding: 0 4px;
-            line-height: 1;
-            border-radius: 3px;
-        }
-        .cw-remove-slot-btn:hover {
-            color: #ef4444;
-            background: #fee2e2;
-        }
-        .cw-add-slot-btn {
-            width: 100%;
-            background: #f1f5f9;
-            border: 1px dashed #94a3b8;
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: #475569;
-            font-size: 13px;
+        .cw-row-class:not(:placeholder-shown) {
+            background: #f0fdf4 !important;
             font-weight: 600;
-            cursor: pointer;
+            color: #166534;
+        }
+        .cw-admin-matrix-table tbody tr:hover {
+            background: #f8fafc;
+        }
+        .cw-action-btns {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
+        }
+        .cw-btn-del {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 18px;
+            line-height: 1;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
             transition: all 0.15s ease;
         }
-        .cw-add-slot-btn:hover {
+        .cw-btn-del:hover {
+            background: #dc2626;
+            color: #fff;
+            border-color: #dc2626;
+        }
+        .cw-btn-dup {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            font-size: 12px;
+            padding: 5px 7px;
+            border-radius: 4px;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.15s ease;
+        }
+        .cw-btn-dup:hover {
             background: #e2e8f0;
             color: #0f172a;
-            border-color: #64748b;
+        }
+        .cw-table-bottom-bar {
+            padding: 14px 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         }
         .cw-sched-footer {
             background: #fff;
@@ -341,61 +498,110 @@ function cw_render_schedule_admin_page() {
             </div>
         <?php endif; ?>
 
-        <div class="cw-sched-header">
-            <h1><?php esc_html_e( 'Weekly Gym Schedule', 'codyweb-child' ); ?></h1>
-            <p><?php esc_html_e( 'Manage daily class slots (time and class name) for all 7 days. Changes will immediately reflect in the [weekly_schedule] shortcode on the homepage and any other page.', 'codyweb-child' ); ?></p>
-        </div>
-
-        <form method="POST" action="">
+        <form method="POST" action="" id="cw-schedule-form">
             <?php wp_nonce_field( 'cw_save_schedule', 'cw_save_schedule_nonce' ); ?>
 
-            <div class="cw-sched-grid">
-                <?php
-                foreach ( $schedule as $day_key => $day ) :
-                    $day_name = isset( $day['name'] ) ? $day['name'] : ucfirst( $day_key );
-                    $slots    = isset( $day['slots'] ) && is_array( $day['slots'] ) ? $day['slots'] : array();
-                    ?>
-                    <div class="cw-day-card" data-day="<?php echo esc_attr( $day_key ); ?>">
-                        <div class="cw-day-card-head">
-                            <input type="text"
-                                   class="cw-day-name-input"
-                                   name="cw_schedule_days[<?php echo esc_attr( $day_key ); ?>][name]"
-                                   value="<?php echo esc_attr( $day_name ); ?>">
-                        </div>
+            <div class="cw-sched-header">
+                <div class="cw-sched-header-content">
+                    <h1><?php esc_html_e( 'Weekly Gym Schedule', 'codyweb-child' ); ?></h1>
+                    <p><?php esc_html_e( 'Define class timings once on the left and enter the class description for each day of the week. Day column titles are also editable.', 'codyweb-child' ); ?></p>
+                </div>
+                <div class="cw-sched-header-actions">
+                    <button type="button" class="button" id="cw-sort-rows-top-btn" title="Sort rows chronologically by timing">
+                        <span class="dashicons dashicons-sort" style="vertical-align: middle; margin-top: -2px;"></span> <?php esc_html_e( 'Sort by Time', 'codyweb-child' ); ?>
+                    </button>
+                    <button type="button" class="button button-secondary" id="cw-add-row-top-btn">
+                        + <?php esc_html_e( 'Add Time Slot', 'codyweb-child' ); ?>
+                    </button>
+                    <button type="submit" class="button button-primary button-large" style="font-weight: 700;">
+                        <?php esc_html_e( 'Save Schedule', 'codyweb-child' ); ?>
+                    </button>
+                </div>
+            </div>
 
-                        <div class="cw-day-card-body">
-                            <div class="cw-slots-list" id="slots-<?php echo esc_attr( $day_key ); ?>">
-                                <?php
-                                if ( ! empty( $slots ) ) :
-                                    foreach ( $slots as $s_idx => $slot ) :
-                                        $time  = isset( $slot['time'] ) ? $slot['time'] : '';
-                                        $class = isset( $slot['class'] ) ? $slot['class'] : '';
-                                        ?>
-                                        <div class="cw-slot-row">
+            <div class="cw-table-card">
+                <div class="cw-table-responsive">
+                    <table class="cw-admin-matrix-table" id="cw-matrix-table">
+                        <thead>
+                            <tr>
+                                <th class="cw-th-time"><?php esc_html_e( 'Timing', 'codyweb-child' ); ?></th>
+                                <?php foreach ( $default_keys as $day_key ) : ?>
+                                    <th>
+                                        <input type="text"
+                                               class="cw-day-head-input"
+                                               name="cw_schedule_days[<?php echo esc_attr( $day_key ); ?>]"
+                                               value="<?php echo esc_attr( isset( $days[ $day_key ] ) ? $days[ $day_key ] : $default_names[ $day_key ] ); ?>"
+                                               title="<?php esc_attr_e( 'Click to rename day column', 'codyweb-child' ); ?>">
+                                    </th>
+                                <?php endforeach; ?>
+                                <th class="cw-th-actions"><?php esc_html_e( 'Actions', 'codyweb-child' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cw-schedule-tbody">
+                            <?php
+                            if ( ! empty( $slots ) ) :
+                                foreach ( $slots as $s_idx => $slot ) :
+                                    $time = isset( $slot['time'] ) ? $slot['time'] : '';
+                                    ?>
+                                    <tr class="cw-time-row" data-row-id="<?php echo esc_attr( $s_idx ); ?>">
+                                        <td style="text-align: center;">
                                             <input type="text"
-                                                   class="cw-slot-time-input"
-                                                   name="cw_schedule_days[<?php echo esc_attr( $day_key ); ?>][slots][<?php echo esc_attr( $s_idx ); ?>][time]"
+                                                   class="cw-row-time"
+                                                   name="cw_schedule_slots[<?php echo esc_attr( $s_idx ); ?>][time]"
                                                    value="<?php echo esc_attr( $time ); ?>"
                                                    placeholder="06:30">
-                                            <input type="text"
-                                                   class="cw-slot-class-input"
-                                                   name="cw_schedule_days[<?php echo esc_attr( $day_key ); ?>][slots][<?php echo esc_attr( $s_idx ); ?>][class]"
-                                                   value="<?php echo esc_attr( $class ); ?>"
-                                                   placeholder="Class name">
-                                            <button type="button" class="cw-remove-slot-btn" title="Remove slot">&times;</button>
-                                        </div>
-                                        <?php
-                                    endforeach;
-                                endif;
+                                        </td>
+                                        <?php foreach ( $default_keys as $day_key ) : 
+                                            $class_val = isset( $slot['classes'][ $day_key ] ) ? $slot['classes'][ $day_key ] : '';
+                                        ?>
+                                            <td>
+                                                <input type="text"
+                                                       class="cw-row-class"
+                                                       name="cw_schedule_slots[<?php echo esc_attr( $s_idx ); ?>][classes][<?php echo esc_attr( $day_key ); ?>]"
+                                                       value="<?php echo esc_attr( $class_val ); ?>"
+                                                       placeholder="&mdash;">
+                                            </td>
+                                        <?php endforeach; ?>
+                                        <td>
+                                            <div class="cw-action-btns">
+                                                <button type="button" class="cw-btn-dup" title="<?php esc_attr_e( 'Duplicate this row', 'codyweb-child' ); ?>">&#x2398;</button>
+                                                <button type="button" class="cw-btn-del" title="<?php esc_attr_e( 'Delete this time row', 'codyweb-child' ); ?>">&times;</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                            else :
                                 ?>
-                            </div>
+                                <tr class="cw-time-row" data-row-id="0">
+                                    <td style="text-align: center;">
+                                        <input type="text" class="cw-row-time" name="cw_schedule_slots[0][time]" value="" placeholder="06:30">
+                                    </td>
+                                    <?php foreach ( $default_keys as $day_key ) : ?>
+                                        <td>
+                                            <input type="text" class="cw-row-class" name="cw_schedule_slots[0][classes][<?php echo esc_attr( $day_key ); ?>]" value="" placeholder="&mdash;">
+                                        </td>
+                                    <?php endforeach; ?>
+                                    <td>
+                                        <div class="cw-action-btns">
+                                            <button type="button" class="cw-btn-dup" title="<?php esc_attr_e( 'Duplicate this row', 'codyweb-child' ); ?>">&#x2398;</button>
+                                            <button type="button" class="cw-btn-del" title="<?php esc_attr_e( 'Delete this time row', 'codyweb-child' ); ?>">&times;</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-                            <button type="button" class="cw-add-slot-btn" data-day="<?php echo esc_attr( $day_key ); ?>">
-                                + <?php esc_html_e( 'Add Class Slot', 'codyweb-child' ); ?>
-                            </button>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+                <div class="cw-table-bottom-bar">
+                    <button type="button" class="button button-secondary" id="cw-add-row-btn" style="font-weight: 600;">
+                        + <?php esc_html_e( 'Add Another Time Slot', 'codyweb-child' ); ?>
+                    </button>
+                    <button type="button" class="button" id="cw-sort-rows-btn">
+                        <span class="dashicons dashicons-sort" style="vertical-align: middle; margin-top: -2px;"></span> <?php esc_html_e( 'Sort Rows Chronologically', 'codyweb-child' ); ?>
+                    </button>
+                </div>
             </div>
 
             <div class="cw-sched-footer">
@@ -409,36 +615,96 @@ function cw_render_schedule_admin_page() {
         </form>
     </div>
 
-    <!-- Interactive script to add and remove class slots -->
+    <!-- Interactive script to add, duplicate, remove, and sort time rows -->
     <script>
     (function($){
         $(document).ready(function(){
-            // Add slot
-            $('.cw-add-slot-btn').on('click', function(e){
-                e.preventDefault();
-                var day = $(this).attr('data-day');
-                var $container = $('#slots-' + day);
-                var timestamp = Date.now();
+            var defaultKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-                var rowHtml = '<div class="cw-slot-row">' +
-                    '<input type="text" class="cw-slot-time-input" name="cw_schedule_days[' + day + '][slots][' + timestamp + '][time]" value="" placeholder="06:30">' +
-                    '<input type="text" class="cw-slot-class-input" name="cw_schedule_days[' + day + '][slots][' + timestamp + '][class]" value="" placeholder="Class name">' +
-                    '<button type="button" class="cw-remove-slot-btn" title="Remove slot">&times;</button>' +
-                    '</div>';
+            function buildRowHtml(idx, timeVal, classes) {
+                timeVal = timeVal || '';
+                classes = classes || {};
+                var html = '<tr class="cw-time-row" data-row-id="' + idx + '">';
+                html += '<td style="text-align: center;"><input type="text" class="cw-row-time" name="cw_schedule_slots[' + idx + '][time]" value="' + $('<div>').text(timeVal).html() + '" placeholder="06:30"></td>';
 
+                $.each(defaultKeys, function(i, key){
+                    var val = classes[key] || '';
+                    html += '<td><input type="text" class="cw-row-class" name="cw_schedule_slots[' + idx + '][classes][' + key + ']" value="' + $('<div>').text(val).html() + '" placeholder="&mdash;"></td>';
+                });
+
+                html += '<td><div class="cw-action-btns">' +
+                    '<button type="button" class="cw-btn-dup" title="<?php echo esc_js( __( 'Duplicate this row', 'codyweb-child' ) ); ?>">&#x2398;</button>' +
+                    '<button type="button" class="cw-btn-del" title="<?php echo esc_js( __( 'Delete this time row', 'codyweb-child' ) ); ?>">&times;</button>' +
+                    '</div></td>';
+                html += '</tr>';
+                return html;
+            }
+
+            // Add Time Slot
+            function addRow(focus) {
+                var idx = Date.now();
+                var rowHtml = buildRowHtml(idx, '', {});
                 var $newRow = $(rowHtml).hide();
-                $container.append($newRow);
+                $('#cw-schedule-tbody').append($newRow);
                 $newRow.fadeIn(150);
-                $newRow.find('.cw-slot-time-input').focus();
+                if (focus) {
+                    $newRow.find('.cw-row-time').focus();
+                }
+            }
+
+            $('#cw-add-row-btn, #cw-add-row-top-btn').on('click', function(e){
+                e.preventDefault();
+                addRow(true);
             });
 
-            // Remove slot
-            $(document).on('click', '.cw-remove-slot-btn', function(e){
+            // Duplicate Row
+            $(document).on('click', '.cw-btn-dup', function(e){
                 e.preventDefault();
-                var $row = $(this).closest('.cw-slot-row');
-                $row.fadeOut(150, function(){
-                    $row.remove();
+                var $sourceRow = $(this).closest('tr');
+                var timeVal = $sourceRow.find('.cw-row-time').val();
+                var classes = {};
+
+                $.each(defaultKeys, function(i, key){
+                    classes[key] = $sourceRow.find('input[name*="[classes][' + key + ']"]').val();
                 });
+
+                var idx = Date.now();
+                var rowHtml = buildRowHtml(idx, timeVal, classes);
+                var $newRow = $(rowHtml).hide();
+                $sourceRow.after($newRow);
+                $newRow.fadeIn(150);
+                $newRow.find('.cw-row-time').focus();
+            });
+
+            // Delete Row
+            $(document).on('click', '.cw-btn-del', function(e){
+                e.preventDefault();
+                var $tr = $(this).closest('tr');
+                if ($('#cw-schedule-tbody tr').length > 1) {
+                    $tr.fadeOut(150, function(){
+                        $tr.remove();
+                    });
+                } else {
+                    $tr.find('input').val('');
+                }
+            });
+
+            // Sort Chronologically
+            function sortRows() {
+                var $rows = $('#cw-schedule-tbody tr.cw-time-row').get();
+                $rows.sort(function(a, b){
+                    var timeA = $(a).find('.cw-row-time').val().trim();
+                    var timeB = $(b).find('.cw-row-time').val().trim();
+                    return timeA.localeCompare(timeB, undefined, { numeric: true, sensitivity: 'base' });
+                });
+                $.each($rows, function(index, row){
+                    $('#cw-schedule-tbody').append(row);
+                });
+            }
+
+            $('#cw-sort-rows-btn, #cw-sort-rows-top-btn').on('click', function(e){
+                e.preventDefault();
+                sortRows();
             });
         });
     })(jQuery);
