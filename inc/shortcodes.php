@@ -27,7 +27,7 @@ function cw_upcoming_events_shortcode( $atts ) {
             'columns'     => '3',
             'orderby'     => 'date',
             'order'       => 'ASC',
-            'button_text' => 'Read More',
+            'button_text' => 'Näytä enemmän',
             'title'       => 'Current: passes and courses',
         ),
         $atts,
@@ -393,7 +393,3 @@ function cw_about_section_shortcode( $atts ) {
 add_shortcode( 'about_section', 'cw_about_section_shortcode' );
 add_shortcode( 'cw_about', 'cw_about_section_shortcode' );
 add_shortcode( 'community_section', 'cw_about_section_shortcode' );
-
-
-
-

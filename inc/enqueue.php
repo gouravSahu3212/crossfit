@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Enqueue Parent & Child Theme Styles
+ * Enqueue Parent & Child Theme Styles and Scripts
  */
 function codyweb_child_enqueue_styles() {
     // Enqueue parent theme stylesheet
@@ -36,7 +36,7 @@ function codyweb_child_enqueue_styles() {
         filemtime(get_stylesheet_directory() . '/assets/css/footer.css')
     );
 
-    // Homepage CSS & JS — on Home Page template and single Recommendation pages
+    // Homepage CSS — on Home Page template and single Recommendation pages
     if ( is_page_template( 'templates/template-home.php' ) || is_singular( 'cw_recommendation' ) ) {
         wp_enqueue_style(
             'theme-home',
@@ -44,16 +44,9 @@ function codyweb_child_enqueue_styles() {
             array('codyweb-child-style'),
             filemtime(get_stylesheet_directory() . '/assets/css/home.css')
         );
-        wp_enqueue_script(
-            'theme-home-js',
-            get_stylesheet_directory_uri() . '/assets/js/home.js',
-            array(),
-            filemtime(get_stylesheet_directory() . '/assets/js/home.js'),
-            true
-        );
     }
 
-    // Inner Pages CSS & JS (Hyrox, CrossFit, Events, Pricing, Contact)
+    // Inner Pages CSS (Hyrox, CrossFit, Events, Pricing, Contact, Pages)
     $inner_templates = array(
         'templates/template-hyrox.php',
         'templates/template-crossfit.php',
@@ -62,20 +55,22 @@ function codyweb_child_enqueue_styles() {
         'templates/template-contact.php',
     );
 
-    if ( is_page_template( $inner_templates ) || is_singular( 'cw_recommendation' ) || is_singular( 'page' ) ) {
+    if ( is_page_template( $inner_templates ) || is_singular( 'cw_recommendation' ) || ( is_singular( 'page' ) && ! is_page_template( 'templates/template-home.php' ) ) ) {
         wp_enqueue_style(
             'theme-pages',
             get_stylesheet_directory_uri() . '/assets/css/pages.css',
             array('codyweb-child-style'),
             filemtime(get_stylesheet_directory() . '/assets/css/pages.css')
         );
-        wp_enqueue_script(
-            'theme-pages-js',
-            get_stylesheet_directory_uri() . '/assets/js/home.js',
-            array(),
-            filemtime(get_stylesheet_directory() . '/assets/js/home.js'),
-            true
-        );
     }
+
+    // Global Theme JavaScript (FAQ Accordions, Read More, Mobile Nav) — Enqueued once
+    wp_enqueue_script(
+        'theme-home-js',
+        get_stylesheet_directory_uri() . '/assets/js/home.js',
+        array(),
+        filemtime(get_stylesheet_directory() . '/assets/js/home.js'),
+        true
+    );
 }
 add_action( 'wp_enqueue_scripts', 'codyweb_child_enqueue_styles' );

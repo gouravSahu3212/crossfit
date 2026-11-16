@@ -70,8 +70,9 @@ get_header();
     
     <!-- ==================== 7. CONTENT / SEO SECTION ==================== -->
     <?php
+    global $post;
     $content_raw = get_the_content();
-    if ( ! empty( $content_raw ) ) :
+    if ( ! empty( $content_raw ) || ! empty( $post->post_content ) ) :
         $full_content = apply_filters( 'the_content', $content_raw );
 
         // Separate first paragraph/block from remaining content
@@ -79,9 +80,16 @@ get_header();
         $rest_p   = '';
         $has_more = false;
 
-        // 1. Support standard WordPress <!--more--> quicktag
-        if ( preg_match( '/<!--more(.*?)?-->/i', $full_content ) ) {
-            $parts    = preg_split( '/<!--more(.*?)?-->/i', $full_content, 2 );
+        // 1. Support standard WordPress <!--more--> quicktag from raw post content
+        if ( ! empty( $post->post_content ) && ( strpos( $post->post_content, '<!--more' ) !== false || has_block( 'more', $post->post_content ) ) ) {
+            $extended = get_extended( $post->post_content );
+            $first_p  = apply_filters( 'the_content', trim( $extended['main'] ) );
+            $rest_p   = apply_filters( 'the_content', trim( $extended['extended'] ) );
+            $has_more = ! empty( trim( strip_tags( $rest_p, '<img><iframe><video><audio>' ) ) );
+        }
+        // 2. Support if get_the_content() already replaced <!--more--> with <span id="more-...">
+        elseif ( preg_match( '/<span id="more-\d+"><\/span>/i', $full_content ) ) { 
+            $parts    = preg_split( '/<span id="more-\d+"><\/span>/i', $full_content, 2 );
             $first_p  = trim( $parts[0] );
             $rest_p   = trim( $parts[1] );
             $has_more = ! empty( trim( strip_tags( $rest_p, '<img><iframe><video><audio>' ) ) );
@@ -153,8 +161,8 @@ get_header();
                             <?php echo $rest_p; ?>
                         </div>
                         <div class="cw-content-actions" style="margin-top: 28px;">
-                            <button type="button" class="btn-gold cw-read-more-btn">Read More</button>
-                            <button type="button" class="btn-gold cw-read-less-btn">Read Less</button>
+                            <button type="button" class="btn-gold cw-read-more-btn">Näytä enemmän</button>
+                            <button type="button" class="btn-gold cw-read-less-btn">Näytä vähemmän</button>
                         </div>
                     <?php endif; ?>
                 </div>

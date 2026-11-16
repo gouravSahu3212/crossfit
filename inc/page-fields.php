@@ -489,14 +489,14 @@ function cw_get_page_hero( $post_id = null ) {
                 'image'       => $theme_uri . '/assets/images/hero-hyrox.jpg',
                 'heading'     => 'Start HYROX',
                 'description' => '',
-                'btn_text'    => 'Read more',
+                'btn_text'    => 'Näytä enemmän',
                 'btn_url'     => '/hyrox',
             ),
             array(
                 'image'       => $theme_uri . '/assets/images/hero-crossfit.jpg',
                 'heading'     => 'Start CrossFit',
                 'description' => '',
-                'btn_text'    => 'Read more',
+                'btn_text'    => 'Näytä enemmän',
                 'btn_url'     => '/crossfit',
             ),
         );
