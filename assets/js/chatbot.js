@@ -11,8 +11,8 @@
 
     var API_BASE = (window.cwChatbot && window.cwChatbot.apiBase) || '/wp-json/cw-chatbot/v1/';
 
-    /* Localization / Strings */
-    var i18n = (window.cwChatbot && window.cwChatbot.i18n) || {
+    /* Localization / Strings (Finnish by default) */
+    var defaultStrings = {
         bubble_text:       'LÖYDÄ VALMENNUKSESI',
         bubble_aria:       'Löydä valmennuksesi',
         wrap_aria:         'Valmennuksen valinta-apuribotti',
@@ -33,6 +33,20 @@
         fallback_message:  'Ota meihin yhteyttä, niin autamme löytämään sinulle parhaan valmennuksen!',
         fallback_cta:      'OTA YHTEYTTÄ',
     };
+
+    var i18n = {};
+    for (var k in defaultStrings) {
+        if (Object.prototype.hasOwnProperty.call(defaultStrings, k)) {
+            i18n[k] = defaultStrings[k];
+        }
+    }
+    if (window.cwChatbot && window.cwChatbot.i18n) {
+        for (var lk in window.cwChatbot.i18n) {
+            if (Object.prototype.hasOwnProperty.call(window.cwChatbot.i18n, lk)) {
+                i18n[lk] = window.cwChatbot.i18n[lk];
+            }
+        }
+    }
 
     /* State */
     var state = {

@@ -10,17 +10,18 @@
  * JavaScript (assets/chatbot.js) handles all widget behaviour.
  */
 function cw_chatbot_render_bubble() {
-    $strings = function_exists( 'cw_chatbot_get_strings' ) ? cw_chatbot_get_strings() : array(
-        'wrap_aria'       => 'Training Finder Chatbot',
-        'bubble_aria'     => 'Find Your Training',
-        'bubble_text'     => 'FIND YOUR TRAINING',
-        'panel_aria'      => 'Training Finder',
-        'panel_title'     => 'FIND YOUR TRAINING',
-        'panel_subtitle'  => 'Quick training guide',
-        'close_aria'      => 'Close Training Finder',
-        'scroll_aria'     => 'Scroll to bottom',
-        'see_all_options' => 'SEE TRAINING OPTIONS',
-        'restart_title'   => 'Restart quiz',
+    $lang    = function_exists( 'cw_chatbot_get_language' ) ? cw_chatbot_get_language() : 'fi';
+    $strings = function_exists( 'cw_chatbot_get_strings' ) ? cw_chatbot_get_strings( $lang ) : array(
+        'wrap_aria'       => 'Valmennuksen valinta-apuribotti',
+        'bubble_aria'     => 'Löydä valmennuksesi',
+        'bubble_text'     => 'LÖYDÄ VALMENNUKSESI',
+        'panel_aria'      => 'Valmennuksen valinta-apuri',
+        'panel_title'     => 'LÖYDÄ VALMENNUKSESI',
+        'panel_subtitle'  => 'Nopea valmennusopas',
+        'close_aria'      => 'Sulje valmennusapuri',
+        'scroll_aria'     => 'Vieritä alas',
+        'see_all_options' => 'KATSO VALMENNUSVAIHTOEHDOT',
+        'restart_title'   => 'Aloita alusta',
     );
     ?>
     <div id="cw-chatbot-wrap" role="complementary" aria-label="<?php echo esc_attr( $strings['wrap_aria'] ); ?>">

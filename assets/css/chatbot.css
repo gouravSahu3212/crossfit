@@ -50,6 +50,8 @@
     transition: background 0.22s, color 0.22s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s;
     outline: none;
     -webkit-tap-highlight-color: transparent;
+    max-width: calc(100vw - 48px);
+    box-sizing: border-box;
 }
 #cw-chatbot-bubble .cw-bubble-icon { flex-shrink: 0; }
 #cw-chatbot-bubble:hover {
@@ -171,11 +173,14 @@
 #cw-chatbot-messages {
     flex: 1;
     overflow-y: scroll;
+    overflow-x: hidden;
     padding: 22px 20px 14px;
     display: flex;
     flex-direction: column;
     gap: 14px;
     scroll-behavior: smooth;
+    box-sizing: border-box;
+    width: 100%;
 }
 #cw-chatbot-messages::-webkit-scrollbar { width: 5px; }
 #cw-chatbot-messages::-webkit-scrollbar-track { background: transparent; }
@@ -211,7 +216,7 @@
 .cw-scroll-btn:hover { background: #2a2a2a; }
 
 /* ----------------------------------------------------------------
-   Bot question text — plain left-aligned
+   Bot question text — plain left-aligned, auto-wrapping
 ---------------------------------------------------------------- */
 .cw-q-text {
     font-family: var(--cw-font);
@@ -219,7 +224,11 @@
     font-weight: 500;
     color: var(--cw-text);
     line-height: 1.55;
-    max-width: 82%;
+    max-width: 92%;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
     opacity: 0;
     transform: translateY(7px);
     transition: opacity 0.24s ease, transform 0.24s ease;
@@ -233,6 +242,11 @@
     font-weight: 400;
     color: var(--cw-text);
     line-height: 1.6;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
     opacity: 0;
     transform: translateY(7px);
     transition: opacity 0.24s ease, transform 0.24s ease;
@@ -240,13 +254,16 @@
 .cw-intro-text.visible { opacity: 1; transform: translateY(0); }
 
 /* ----------------------------------------------------------------
-   Answer options — stacked on the right, removed after selection
+   Answer options — stacked on the right, wrap when long
 ---------------------------------------------------------------- */
 .cw-opts-wrap {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 7px;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
     opacity: 0;
     transform: translateY(7px);
     transition: opacity 0.24s ease 0.08s, transform 0.24s ease 0.08s;
@@ -254,7 +271,7 @@
 .cw-opts-wrap.visible { opacity: 1; transform: translateY(0); }
 
 .cw-opt {
-    padding: 11px 20px;
+    padding: 11px 18px;
     background: var(--cw-ans-bg);
     border: 1px solid var(--cw-ans-border);
     border-radius: 6px;
@@ -264,7 +281,12 @@
     font-weight: 500;
     cursor: pointer;
     transition: background 0.16s, border-color 0.16s, transform 0.16s;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
+    line-height: 1.4;
     outline: none;
     -webkit-tap-highlight-color: transparent;
     text-align: right;
@@ -281,7 +303,7 @@
 ---------------------------------------------------------------- */
 .cw-selected-ans {
     align-self: flex-end;
-    padding: 11px 20px;
+    padding: 11px 18px;
     background: var(--cw-ans-bg);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 6px;
@@ -292,9 +314,13 @@
     opacity: 0;
     transform: translateY(7px);
     transition: opacity 0.24s ease, transform 0.24s ease;
-    max-width: 72%;
+    max-width: 85%;
     text-align: right;
+    white-space: normal;
     word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    line-height: 1.4;
 }
 .cw-selected-ans.visible { opacity: 1; transform: translateY(0); }
 

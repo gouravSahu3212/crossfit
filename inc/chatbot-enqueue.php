@@ -69,20 +69,27 @@ add_action( 'admin_enqueue_scripts', 'cw_chatbot_enqueue_admin_assets' );
  */
 function cw_chatbot_enqueue_frontend_assets() {
     $child_uri = get_stylesheet_directory_uri();
-    $version   = wp_get_theme()->get( 'Version' );
+    $child_dir = get_stylesheet_directory();
+    $theme_ver = wp_get_theme()->get( 'Version' );
+
+    $css_file = $child_dir . '/assets/css/chatbot.css';
+    $js_file  = $child_dir . '/assets/js/chatbot.js';
+
+    $css_ver = file_exists( $css_file ) ? (string) filemtime( $css_file ) : $theme_ver;
+    $js_ver  = file_exists( $js_file )  ? (string) filemtime( $js_file )  : $theme_ver;
 
     wp_enqueue_style(
         'cw-chatbot-frontend',
         $child_uri . '/assets/css/chatbot.css',
         array(),
-        $version
+        $css_ver
     );
 
     wp_enqueue_script(
         'cw-chatbot-frontend',
         $child_uri . '/assets/js/chatbot.js',
         array(),
-        $version,
+        $js_ver,
         true
     );
 
