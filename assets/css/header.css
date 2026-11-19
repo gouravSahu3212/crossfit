@@ -84,6 +84,31 @@ nav.main-navigation ul li {
     padding: 0 10px;
 }
 
+.menu-item-has-children {
+    position: relative;
+}
+
+.menu-item-has-children ul {
+    position: absolute;
+    left: 0; 
+    padding: 0;
+    flex-direction: column;
+    z-index: 2;
+    background-color: #111111;
+    opacity: 0;
+    gap:0 !important;
+    
+}
+.current_page_item.menu-item-has-children ul a {
+    color: #fff;
+}
+.menu-item-has-children ul a:hover, .menu-item-has-children ul .current-menu-item a  {
+    color: var(--gold);
+}
+.menu-item-has-children:hover ul{
+    opacity: 1;
+}
+
 @media only screen and (min-width:999px){
 .close-menu img, .mobile-humburger img {
     display: none;
