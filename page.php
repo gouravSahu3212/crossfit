@@ -210,9 +210,11 @@ get_header(); ?>
                 <?php endif; ?>
 
                 <!-- ==================== 8. FAQ ==================== -->
-                <div class="page-width">
-                    <?php echo cw_render_page_faq(); ?>
-                </div>
+                <?php if ( $faq_html = cw_render_page_faq() ) : ?>
+                    <div class="page-width">
+                        <?php echo $faq_html; ?>
+                    </div>
+                <?php endif; ?>
             </article>
         <?php endwhile; ?>
     </div>

@@ -171,7 +171,12 @@ function cw_render_page_hero_meta_box( $post ) {
     wp_nonce_field( 'cw_page_hero_save_meta', 'cw_page_hero_nonce' );
 
     $show       = get_post_meta( $post->ID, '_cw_hero_show', true );
-    $show       = ( '' === $show ) ? 'yes' : $show; // Default to 'yes'
+    $is_home    = ( get_option( 'page_on_front' ) == $post->ID ) || 'templates/template-home.php' === get_page_template_slug( $post->ID ) || 'home' === get_post_field( 'post_name', $post->ID );
+    if ( '' === $show ) {
+        $show = $is_home ? 'yes' : 'no';
+    } else {
+        $show = ( 'yes' === $show ) ? 'yes' : 'no';
+    }
     $card_count = intval( get_post_meta( $post->ID, '_cw_hero_card_count', true ) );
     if ( $card_count < 1 || $card_count > 4 ) {
         $card_count = 2; // Default to 2 cards
@@ -518,7 +523,7 @@ function cw_save_page_hero_meta( $post_id ) {
     }
 
     // 1. Show (yes/no)
-    $show = ( isset( $_POST['cw_hero_show'] ) && 'no' === $_POST['cw_hero_show'] ) ? 'no' : 'yes';
+    $show = ( isset( $_POST['cw_hero_show'] ) && 'yes' === $_POST['cw_hero_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_hero_show', $show );
 
     // 2. Number of cards
@@ -559,7 +564,15 @@ function cw_get_page_hero( $post_id = null ) {
     }
 
     $raw_show  = get_post_meta( $post_id, '_cw_hero_show', true );
-    $show      = ( 'no' !== $raw_show ); // Default to true if not explicitly 'no'
+    $template  = get_page_template_slug( $post_id );
+    $slug      = get_post_field( 'post_name', $post_id );
+    $is_home   = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
+    if ( '' === $raw_show ) {
+        $show = $is_home;
+    } else {
+        $show = ( 'yes' === $raw_show );
+    }
     $count     = intval( get_post_meta( $post_id, '_cw_hero_card_count', true ) );
     $cards     = get_post_meta( $post_id, '_cw_hero_cards', true );
 
@@ -606,7 +619,12 @@ function cw_render_page_rich_text_meta_box( $post ) {
     wp_nonce_field( 'cw_page_rich_text_save_meta', 'cw_page_rich_text_nonce' );
 
     $show        = get_post_meta( $post->ID, '_cw_rich_text_show', true );
-    $show        = ( '' === $show ) ? 'yes' : $show;
+    $is_home     = ( get_option( 'page_on_front' ) == $post->ID ) || 'templates/template-home.php' === get_page_template_slug( $post->ID ) || 'home' === get_post_field( 'post_name', $post->ID );
+    if ( '' === $show ) {
+        $show = $is_home ? 'yes' : 'no';
+    } else {
+        $show = ( 'yes' === $show ) ? 'yes' : 'no';
+    }
     $heading     = get_post_meta( $post->ID, '_cw_rich_text_heading', true );
     $description = get_post_meta( $post->ID, '_cw_rich_text_description', true );
     $btn_text    = get_post_meta( $post->ID, '_cw_rich_text_btn_text', true );
@@ -715,7 +733,7 @@ function cw_save_page_rich_text_meta( $post_id ) {
         return;
     }
 
-    $show = ( isset( $_POST['cw_rich_text_show'] ) && 'no' === $_POST['cw_rich_text_show'] ) ? 'no' : 'yes';
+    $show = ( isset( $_POST['cw_rich_text_show'] ) && 'yes' === $_POST['cw_rich_text_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_rich_text_show', $show );
 
     if ( isset( $_POST['cw_rich_text_heading'] ) ) {
@@ -746,7 +764,15 @@ function cw_get_page_rich_text( $post_id = null ) {
     }
 
     $raw_show    = get_post_meta( $post_id, '_cw_rich_text_show', true );
-    $show        = ( 'no' !== $raw_show );
+    $template    = get_page_template_slug( $post_id );
+    $slug        = get_post_field( 'post_name', $post_id );
+    $is_home     = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
+    if ( '' === $raw_show ) {
+        $show = $is_home;
+    } else {
+        $show = ( 'yes' === $raw_show );
+    }
     $heading     = get_post_meta( $post_id, '_cw_rich_text_heading', true );
     $description = get_post_meta( $post_id, '_cw_rich_text_description', true );
     $btn_text    = get_post_meta( $post_id, '_cw_rich_text_btn_text', true );
@@ -1033,7 +1059,7 @@ function cw_save_page_faq_meta( $post_id ) {
         return;
     }
 
-    $show = ( isset( $_POST['cw_faq_show'] ) && 'no' === $_POST['cw_faq_show'] ) ? 'no' : 'yes';
+    $show = ( isset( $_POST['cw_faq_show'] ) && 'yes' === $_POST['cw_faq_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_faq_show', $show );
 
     if ( isset( $_POST['cw_faq_label'] ) ) {
@@ -1221,13 +1247,25 @@ function cw_get_page_faq( $post_id = null ) {
     $title    = get_post_meta( $post_id, '_cw_faq_title', true );
     $items    = get_post_meta( $post_id, '_cw_faq_items', true );
 
+    $template = get_page_template_slug( $post_id );
+    $slug     = get_post_field( 'post_name', $post_id );
+    $is_home  = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
     // If never saved yet, return defaults
     if ( '' === $raw_show && '' === $title && '' === $label && ( false === $items || '' === $items ) ) {
-        return cw_get_default_faq_data_for_post( $post_id );
+        $default_faq = cw_get_default_faq_data_for_post( $post_id );
+        $default_faq['show'] = $is_home;
+        return $default_faq;
+    }
+
+    if ( '' === $raw_show ) {
+        $show = $is_home;
+    } else {
+        $show = ( 'yes' === $raw_show );
     }
 
     return array(
-        'show'  => ( 'no' !== $raw_show ),
+        'show'  => $show,
         'label' => $label,
         'title' => $title,
         'items' => is_array( $items ) ? $items : array(),
@@ -1436,7 +1474,7 @@ function cw_save_page_about_meta( $post_id ) {
         return;
     }
 
-    $show = ( isset( $_POST['cw_about_show'] ) && 'no' === $_POST['cw_about_show'] ) ? 'no' : 'yes';
+    $show = ( isset( $_POST['cw_about_show'] ) && 'yes' === $_POST['cw_about_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_about_show', $show );
 
     if ( isset( $_POST['cw_about_label'] ) ) {
@@ -1529,8 +1567,14 @@ function cw_get_page_about( $post_id = null ) {
         }
     }
 
+    if ( '' === $raw_show ) {
+        $show = $is_home;
+    } else {
+        $show = ( 'yes' === $raw_show );
+    }
+
     return array(
-        'show'        => ( 'no' !== $raw_show ),
+        'show'        => $show,
         'label'       => $label,
         'title'       => $title,
         'description' => $description,
@@ -1833,7 +1877,7 @@ function cw_render_page_sections_visibility_meta_box( $post ) {
                 $('.cw-passes-title-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
             });
             $('input[name="cw_schedule_show"]').on('change', function(){
-                $('.cw-schedule-title-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
+                $('.cw-schedule-label-row, .cw-schedule-title-row, .cw-schedule-subtitle-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
             });
             $('input[name="cw_pricing_show"]').on('change', function(){
                 $('.cw-pricing-title-row').css('opacity', $(this).val() === 'no' ? '0.45' : '1');
@@ -1867,14 +1911,14 @@ function cw_save_page_sections_meta( $post_id ) {
     }
 
     // 1. Current Passes & Courses
-    $passes_show = ( isset( $_POST['cw_passes_show'] ) && 'no' === $_POST['cw_passes_show'] ) ? 'no' : 'yes';
+    $passes_show = ( isset( $_POST['cw_passes_show'] ) && 'yes' === $_POST['cw_passes_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_passes_show', $passes_show );
     if ( isset( $_POST['cw_passes_title'] ) ) {
         update_post_meta( $post_id, '_cw_passes_title', sanitize_text_field( wp_unslash( $_POST['cw_passes_title'] ) ) );
     }
 
     // 2. Weekly Schedule
-    $schedule_show = ( isset( $_POST['cw_schedule_show'] ) && 'no' === $_POST['cw_schedule_show'] ) ? 'no' : 'yes';
+    $schedule_show = ( isset( $_POST['cw_schedule_show'] ) && 'yes' === $_POST['cw_schedule_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_schedule_show', $schedule_show );
     if ( isset( $_POST['cw_schedule_label'] ) ) {
         update_post_meta( $post_id, '_cw_schedule_label', sanitize_text_field( wp_unslash( $_POST['cw_schedule_label'] ) ) );
@@ -1887,7 +1931,7 @@ function cw_save_page_sections_meta( $post_id ) {
     }
 
     // 3. Pricing
-    $pricing_show = ( isset( $_POST['cw_pricing_show'] ) && 'no' === $_POST['cw_pricing_show'] ) ? 'no' : 'yes';
+    $pricing_show = ( isset( $_POST['cw_pricing_show'] ) && 'yes' === $_POST['cw_pricing_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_pricing_show', $pricing_show );
     if ( isset( $_POST['cw_pricing_title'] ) ) {
         update_post_meta( $post_id, '_cw_pricing_title', sanitize_text_field( wp_unslash( $_POST['cw_pricing_title'] ) ) );
@@ -1908,14 +1952,14 @@ function cw_get_page_sections_visibility( $post_id = null ) {
     }
     if ( ! $post_id ) {
         return array(
-            'passes'         => true,
-            'schedule'       => true,
-            'pricing'        => true,
-            'passes_title'   => '',
-            'schedule_label' => '',
-            'schedule_title' => '',
+            'passes'            => false,
+            'schedule'          => false,
+            'pricing'           => false,
+            'passes_title'      => '',
+            'schedule_label'    => '',
+            'schedule_title'    => '',
             'schedule_subtitle' => '',
-            'pricing_title'  => '',
+            'pricing_title'     => '',
         );
     }
 
@@ -1923,15 +1967,37 @@ function cw_get_page_sections_visibility( $post_id = null ) {
     $raw_schedule = get_post_meta( $post_id, '_cw_schedule_show', true );
     $raw_pricing  = get_post_meta( $post_id, '_cw_pricing_show', true );
 
+    $template = get_page_template_slug( $post_id );
+    $slug     = get_post_field( 'post_name', $post_id );
+    $is_home  = ( get_option( 'page_on_front' ) == $post_id ) || 'templates/template-home.php' === $template || 'home' === $slug || is_front_page();
+
+    if ( '' === $raw_passes ) {
+        $passes = $is_home;
+    } else {
+        $passes = ( 'yes' === $raw_passes );
+    }
+
+    if ( '' === $raw_schedule ) {
+        $schedule = $is_home;
+    } else {
+        $schedule = ( 'yes' === $raw_schedule );
+    }
+
+    if ( '' === $raw_pricing ) {
+        $pricing = $is_home;
+    } else {
+        $pricing = ( 'yes' === $raw_pricing );
+    }
+
     return array(
-        'passes'         => ( 'no' !== $raw_passes ),
-        'schedule'       => ( 'no' !== $raw_schedule ),
-        'pricing'        => ( 'no' !== $raw_pricing ),
-        'passes_title'   => (string) get_post_meta( $post_id, '_cw_passes_title', true ),
-        'schedule_label' => (string) get_post_meta( $post_id, '_cw_schedule_label', true ),
-        'schedule_title' => (string) get_post_meta( $post_id, '_cw_schedule_title', true ),
+        'passes'            => $passes,
+        'schedule'          => $schedule,
+        'pricing'           => $pricing,
+        'passes_title'      => (string) get_post_meta( $post_id, '_cw_passes_title', true ),
+        'schedule_label'    => (string) get_post_meta( $post_id, '_cw_schedule_label', true ),
+        'schedule_title'    => (string) get_post_meta( $post_id, '_cw_schedule_title', true ),
         'schedule_subtitle' => (string) get_post_meta( $post_id, '_cw_schedule_subtitle', true ),
-        'pricing_title'  => (string) get_post_meta( $post_id, '_cw_pricing_subtitle', true ),
+        'pricing_title'     => (string) get_post_meta( $post_id, '_cw_pricing_subtitle', true ),
     );
 }
 

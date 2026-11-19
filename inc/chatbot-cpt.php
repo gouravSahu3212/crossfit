@@ -161,7 +161,7 @@ function cw_render_recommendation_meta_box( $post ) {
     wp_nonce_field( 'cw_recommendation_save_meta', 'cw_recommendation_nonce' );
 
     $header_show = get_post_meta( $post->ID, '_cw_rec_header_show', true );
-    $header_show = ( '' === $header_show ) ? 'yes' : $header_show;
+    $header_show = ( 'yes' === $header_show ) ? 'yes' : 'no';
     $header_bg   = get_post_meta( $post->ID, '_cw_header_bg', true );
     $icon        = get_post_meta( $post->ID, '_cw_rec_icon', true );
     $label       = get_post_meta( $post->ID, '_cw_rec_label', true );
@@ -297,7 +297,7 @@ function cw_save_recommendation_meta( $post_id ) {
         return;
     }
 
-    $header_show = ( isset( $_POST['cw_rec_header_show'] ) && 'no' === $_POST['cw_rec_header_show'] ) ? 'no' : 'yes';
+    $header_show = ( isset( $_POST['cw_rec_header_show'] ) && 'yes' === $_POST['cw_rec_header_show'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cw_rec_header_show', $header_show );
 
     if ( isset( $_POST['cw_header_bg'] ) ) {
@@ -340,8 +340,8 @@ function cw_show_recommendation_header( $post_id = null ) {
         $post_id = get_the_ID();
     }
     if ( ! $post_id ) {
-        return true;
+        return false;
     }
     $show = get_post_meta( $post_id, '_cw_rec_header_show', true );
-    return ( 'no' !== $show );
+    return ( 'yes' === $show );
 }

@@ -60,8 +60,9 @@ p,a,span{
     text-transform: uppercase;
     color: var(--text);
     line-height: 1.05;
-    margin: 0 0 10px;
-    text-align:center;
+    margin: 20px 0 20px 0;
+    padding: 10px 0 20px 0;
+    text-align: center;
 }
 .hp-section-sub {
     font-family: var(--font-body);
