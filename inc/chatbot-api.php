@@ -55,6 +55,19 @@ function cw_chatbot_register_routes() {
         'callback'            => 'cw_api_get_config',
         'permission_callback' => '__return_true',
     ) );
+
+    register_rest_route( $ns, '/settings', array(
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => 'cw_api_get_settings',
+            'permission_callback' => '__return_true',
+        ),
+        array(
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => 'cw_api_save_settings',
+            'permission_callback' => 'cw_api_admin_permission',
+        ),
+    ) );
 }
 add_action( 'rest_api_init', 'cw_chatbot_register_routes' );
 
@@ -209,10 +222,50 @@ function cw_api_get_config() {
     $questions_resp       = cw_api_get_questions();
     $recommendations_resp = cw_api_get_recommendations();
 
+    $lang    = function_exists( 'cw_chatbot_get_language' ) ? cw_chatbot_get_language() : 'fi';
+    $strings = function_exists( 'cw_chatbot_get_strings' ) ? cw_chatbot_get_strings( $lang ) : array();
+
     return rest_ensure_response( array(
+        'language'        => $lang,
+        'i18n'            => $strings,
         'questions'       => $questions_resp->get_data(),
         'recommendations' => $recommendations_resp->get_data(),
         'rules'           => $rules_data['rules'] ?? array(),
         'fallback'        => $rules_data['fallback'] ?? array(),
     ) );
+}
+
+/**
+ * GET /settings — Returns current chatbot settings and localized strings.
+ */
+function cw_api_get_settings() {
+    $lang    = function_exists( 'cw_chatbot_get_language' ) ? cw_chatbot_get_language() : 'fi';
+    $strings = function_exists( 'cw_chatbot_get_strings' ) ? cw_chatbot_get_strings( $lang ) : array();
+
+    return rest_ensure_response( array(
+        'language' => $lang,
+        'i18n'     => $strings,
+    ) );
+}
+
+/**
+ * POST /settings — Updates chatbot settings.
+ *
+ * @param WP_REST_Request $request
+ */
+function cw_api_save_settings( WP_REST_Request $request ) {
+    $body = $request->get_json_params();
+    $lang = isset( $body['language'] ) ? sanitize_key( $body['language'] ) : 'fi';
+
+    if ( in_array( $lang, array( 'fi', 'en' ), true ) ) {
+        update_option( 'cw_chatbot_language', $lang );
+        $strings = function_exists( 'cw_chatbot_get_strings' ) ? cw_chatbot_get_strings( $lang ) : array();
+        return rest_ensure_response( array(
+            'success'  => true,
+            'language' => $lang,
+            'i18n'     => $strings,
+        ) );
+    }
+
+    return new WP_Error( 'invalid_data', 'Language must be "fi" or "en".', array( 'status' => 400 ) );
 }

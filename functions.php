@@ -36,6 +36,7 @@ add_action( 'widgets_init', 'codyweb_child_register_widgets' );
 // =========================================================
 // Training Recommendation Chatbot
 // =========================================================
+require_once get_stylesheet_directory() . '/inc/chatbot-settings.php';
 require_once get_stylesheet_directory() . '/inc/chatbot-cpt.php';
 require_once get_stylesheet_directory() . '/inc/chatbot-enqueue.php';
 require_once get_stylesheet_directory() . '/inc/chatbot-api.php';

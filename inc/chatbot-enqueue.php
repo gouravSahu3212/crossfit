@@ -86,8 +86,13 @@ function cw_chatbot_enqueue_frontend_assets() {
         true
     );
 
+    $lang    = function_exists( 'cw_chatbot_get_language' ) ? cw_chatbot_get_language() : 'fi';
+    $strings = function_exists( 'cw_chatbot_get_strings' ) ? cw_chatbot_get_strings( $lang ) : array();
+
     wp_localize_script( 'cw-chatbot-frontend', 'cwChatbot', array(
         'apiBase' => rest_url( 'cw-chatbot/v1/' ),
+        'lang'    => $lang,
+        'i18n'    => $strings,
     ) );
 }
 add_action( 'wp_enqueue_scripts', 'cw_chatbot_enqueue_frontend_assets' );

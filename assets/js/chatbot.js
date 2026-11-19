@@ -11,6 +11,29 @@
 
     var API_BASE = (window.cwChatbot && window.cwChatbot.apiBase) || '/wp-json/cw-chatbot/v1/';
 
+    /* Localization / Strings */
+    var i18n = (window.cwChatbot && window.cwChatbot.i18n) || {
+        bubble_text:       'LÖYDÄ VALMENNUKSESI',
+        bubble_aria:       'Löydä valmennuksesi',
+        wrap_aria:         'Valmennuksen valinta-apuribotti',
+        panel_aria:        'Valmennuksen valinta-apuri',
+        panel_title:       'LÖYDÄ VALMENNUKSESI',
+        panel_subtitle:    'Nopea valmennusopas',
+        close_aria:        'Sulje valmennusapuri',
+        scroll_aria:       'Vieritä alas',
+        intro_template:    'Vastaa {count} lyhyeen kysymykseen, niin suosittelemme sinulle sopivinta valmennusta.',
+        no_questions:      'Kysymyksiä ei ole vielä määritetty.',
+        error_loading:     'Pahoittelut, apurin latauksessa tapahtui virhe. Ole hyvä ja päivitä sivu.',
+        recommend_eyebrow: 'SUOSITTELEMME',
+        see_rec_prefix:    'KATSO ',
+        see_all_options:   'KATSO VALMENNUSVAIHTOEHDOT',
+        restart_title:     'Aloita alusta',
+        fallback_eyebrow:  'OTA YHTEYTTÄ',
+        fallback_title:    'Etkö ole vielä varma?',
+        fallback_message:  'Ota meihin yhteyttä, niin autamme löytämään sinulle parhaan valmennuksen!',
+        fallback_cta:      'OTA YHTEYTTÄ',
+    };
+
     /* State */
     var state = {
         isOpen:   false,
@@ -84,14 +107,21 @@
                 return res.json();
             })
             .then(function (data) {
-                state.config   = data;
+                state.config = data;
+                if (data && data.i18n) {
+                    for (var key in data.i18n) {
+                        if (Object.prototype.hasOwnProperty.call(data.i18n, key)) {
+                            i18n[key] = data.i18n[key];
+                        }
+                    }
+                }
                 state.isLoaded = true;
                 hideLoading();
                 startQuiz();
             })
             .catch(function () {
                 hideLoading();
-                addIntro('Sorry, something went wrong loading the chatbot. Please try refreshing the page.');
+                addIntro(i18n.error_loading);
             });
     }
 
@@ -107,8 +137,8 @@
         var questions = (state.config && state.config.questions) || [];
         var count = questions.length;
         var introText = count
-            ? 'Answer ' + count + ' quick questions and I\u2019ll point you to the most suitable training option.'
-            : 'No questions have been configured yet.';
+            ? i18n.intro_template.replace('{count}', count)
+            : i18n.no_questions;
 
         addIntro(introText);
 
@@ -205,7 +235,7 @@
         var div = document.createElement('div');
         div.className = 'cw-result';
         div.innerHTML =
-            '<div class="cw-result-eyebrow">WE RECOMMEND</div>' +
+            '<div class="cw-result-eyebrow">' + escHtml(i18n.recommend_eyebrow) + '</div>' +
             '<div class="cw-result-name">' + escHtml(rec.title) + '</div>' +
             (rec.description ? '<div class="cw-result-desc">' + escHtml(rec.description) + '</div>' : '');
         $messages.appendChild(div);
@@ -213,7 +243,7 @@
         scrollBottom();
 
         /* Update footer CTA */
-        var label = 'SEE ' + rec.title.toUpperCase();
+        var label = i18n.see_rec_prefix + rec.title.toUpperCase();
         $ctaBtn.textContent = label;
         if (rec.url) {
             $ctaBtn.href = rec.url;
@@ -228,19 +258,19 @@
     }
 
     function showFallback(fb) {
-        var message = fb.message || 'Get in touch with us to find the best training option for you!';
+        var message = fb.message || i18n.fallback_message;
         var div = document.createElement('div');
         div.className = 'cw-result';
         div.innerHTML =
-            '<div class="cw-result-eyebrow">LET\u2019S TALK</div>' +
-            '<div class="cw-result-name">Not sure yet?</div>' +
+            '<div class="cw-result-eyebrow">' + escHtml(i18n.fallback_eyebrow) + '</div>' +
+            '<div class="cw-result-name">' + escHtml(i18n.fallback_title) + '</div>' +
             '<div class="cw-result-desc">' + escHtml(message) + '</div>';
         $messages.appendChild(div);
         requestAnimationFrame(function () { div.classList.add('visible'); });
         scrollBottom();
 
         if (fb.url) {
-            $ctaBtn.textContent = 'CONTACT US';
+            $ctaBtn.textContent = i18n.fallback_cta;
             $ctaBtn.href = fb.url;
             $ctaBtn.setAttribute('target', '_blank');
             $ctaBtn.setAttribute('rel', 'noopener noreferrer');
@@ -295,7 +325,7 @@
     }
 
     function resetCta() {
-        $ctaBtn.textContent = 'SEE TRAINING OPTIONS';
+        $ctaBtn.textContent = i18n.see_all_options;
         $ctaBtn.href = '#';
         $ctaBtn.removeAttribute('target');
         $ctaBtn.removeAttribute('rel');
