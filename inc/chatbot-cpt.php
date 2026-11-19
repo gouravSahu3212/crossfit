@@ -145,7 +145,7 @@ function cw_add_recommendation_meta_boxes() {
         'cw_recommendation_details',
         'Recommendation Header',
         'cw_render_recommendation_meta_box',
-        'cw_recommendation',
+        array( 'cw_recommendation', 'page' ),
         'normal',
         'high'
     );
@@ -163,6 +163,7 @@ function cw_render_recommendation_meta_box( $post ) {
     $header_show = get_post_meta( $post->ID, '_cw_rec_header_show', true );
     $header_show = ( '' === $header_show ) ? 'yes' : $header_show;
     $header_bg   = get_post_meta( $post->ID, '_cw_header_bg', true );
+    $icon        = get_post_meta( $post->ID, '_cw_rec_icon', true );
     $description = get_post_meta( $post->ID, '_cw_rec_description', true );
     $price       = get_post_meta( $post->ID, '_cw_rec_price', true );
     $tag         = get_post_meta( $post->ID, '_cw_rec_tag', true );
@@ -192,7 +193,7 @@ function cw_render_recommendation_meta_box( $post ) {
                             <span><?php esc_html_e( 'No (Hide)', 'codyweb-child' ); ?></span>
                         </label>
                     </div>
-                    <p class="description"><?php esc_html_e( 'Choose whether to display the top banner/header section on the single recommendation page.', 'codyweb-child' ); ?></p>
+                    <p class="description"><?php esc_html_e( 'Choose whether to display the top banner/header section on the page.', 'codyweb-child' ); ?></p>
                 </td>
             </tr>
             <tr>
@@ -216,28 +217,37 @@ function cw_render_recommendation_meta_box( $post ) {
                 </td>
             </tr>
             <tr>
-                <th><label for="cw_rec_description">Description</label></th>
+                <th><label for="cw_rec_icon"><?php esc_html_e( 'Icon / Emoji', 'codyweb-child' ); ?></label></th>
                 <td>
-                    <textarea id="cw_rec_description" name="cw_rec_description" rows="4"><?php echo esc_textarea( $description ); ?></textarea>
-                    <p class="description">Shown in the chatbot result card and event cards.</p>
+                    <input type="text" id="cw_rec_icon" name="cw_rec_icon"
+                           value="<?php echo esc_attr( $icon ); ?>"
+                           placeholder="e.g. 🏋️ or ⏱️" style="max-width:140px;" />
+                    <p class="description"><?php esc_html_e( 'Optional emoji or icon character shown above the badge and title.', 'codyweb-child' ); ?></p>
                 </td>
             </tr>
             <tr>
-                <th><label for="cw_rec_price">Price</label></th>
+                <th><label for="cw_rec_description"><?php esc_html_e( 'Description', 'codyweb-child' ); ?></label></th>
+                <td>
+                    <textarea id="cw_rec_description" name="cw_rec_description" rows="4"><?php echo esc_textarea( $description ); ?></textarea>
+                    <p class="description"><?php esc_html_e( 'Shown in the chatbot result card and event cards.', 'codyweb-child' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="cw_rec_price"><?php esc_html_e( 'Price', 'codyweb-child' ); ?></label></th>
                 <td>
                     <input type="text" id="cw_rec_price" name="cw_rec_price"
                            value="<?php echo esc_attr( $price ); ?>"
                            placeholder="e.g. 132,00 &euro; or 99,00 &euro; or Free" />
-                    <p class="description">Price shown on the card and single page (e.g. "132,00 &euro;" or "Free").</p>
+                    <p class="description"><?php esc_html_e( 'Price shown on the card and single page (e.g. "132,00 &euro;" or "Free").', 'codyweb-child' ); ?></p>
                 </td>
             </tr>
             <tr>
-                <th><label for="cw_rec_tag">Badge / Tag</label></th>
+                <th><label for="cw_rec_tag"><?php esc_html_e( 'Badge / Tag', 'codyweb-child' ); ?></label></th>
                 <td>
                     <input type="text" id="cw_rec_tag" name="cw_rec_tag"
                            value="<?php echo esc_attr( $tag ); ?>"
                            placeholder="e.g. Course &bull; 4 Weeks or Specialized &bull; 8 Weeks" />
-                    <p class="description">Optional category/duration badge shown above the title (e.g. "Course &bull; 4 Weeks").</p>
+                    <p class="description"><?php esc_html_e( 'Optional category/duration badge shown above the title (e.g. "Course &bull; 4 Weeks").', 'codyweb-child' ); ?></p>
                 </td>
             </tr>
             <!-- <tr>
@@ -284,6 +294,10 @@ function cw_save_recommendation_meta( $post_id ) {
         update_post_meta( $post_id, '_cw_header_bg', esc_url_raw( wp_unslash( $_POST['cw_header_bg'] ) ) );
     }
 
+    if ( isset( $_POST['cw_rec_icon'] ) ) {
+        update_post_meta( $post_id, '_cw_rec_icon', sanitize_text_field( wp_unslash( $_POST['cw_rec_icon'] ) ) );
+    }
+
     if ( isset( $_POST['cw_rec_description'] ) ) {
         update_post_meta( $post_id, '_cw_rec_description', sanitize_textarea_field( wp_unslash( $_POST['cw_rec_description'] ) ) );
     }
@@ -298,6 +312,7 @@ function cw_save_recommendation_meta( $post_id ) {
     // }
 }
 add_action( 'save_post_cw_recommendation', 'cw_save_recommendation_meta' );
+add_action( 'save_post_page', 'cw_save_recommendation_meta' );
 
 
 /**

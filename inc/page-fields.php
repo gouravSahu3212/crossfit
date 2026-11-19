@@ -39,16 +39,6 @@ function cw_get_header_bg_url( $post_id = null ) {
  * Register custom meta boxes on pages.
  */
 function cw_register_page_meta_boxes() {
-    // 0. Page Header Settings
-    add_meta_box(
-        'cw_page_header_section',
-        __( 'Header Settings', 'codyweb-child' ),
-        'cw_render_page_header_meta_box',
-        array( 'page', 'post' ),
-        'normal',
-        'high'
-    );
-
     // 1. Hero Section
     add_meta_box(
         'cw_page_hero_section',
@@ -113,73 +103,6 @@ function cw_page_hero_admin_assets( $hook ) {
     }
 }
 add_action( 'admin_enqueue_scripts', 'cw_page_hero_admin_assets' );
-
-/**
- * Render the Page Header Settings meta box.
- *
- * @param WP_Post $post Current post object.
- */
-function cw_render_page_header_meta_box( $post ) {
-    wp_nonce_field( 'cw_page_header_save_meta', 'cw_page_header_nonce' );
-    $header_bg = get_post_meta( $post->ID, '_cw_header_bg', true );
-    ?>
-    <div class="cw-hero-meta-wrap">
-        <div class="cw-meta-row" style="border-bottom: none;">
-            <div class="cw-meta-label">
-                <label for="cw_page_header_bg"><?php esc_html_e( 'Header Background', 'codyweb-child' ); ?></label>
-            </div>
-            <div class="cw-meta-field">
-                <div class="cw-header-bg-field-wrap">
-                    <input type="hidden" name="cw_header_bg" id="cw_page_header_bg" value="<?php echo esc_url( $header_bg ); ?>" class="cw-header-bg-input">
-                    <div class="cw-header-bg-preview-wrap" style="<?php echo empty( $header_bg ) ? 'display:none;' : 'display:block;'; ?> margin-bottom:10px;">
-                        <img src="<?php echo esc_url( $header_bg ); ?>" class="cw-header-bg-preview" alt="Header background preview" style="max-width:380px; max-height:140px; width:100%; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1; display:block;" />
-                    </div>
-                    <div style="display:flex; gap:10px; align-items:center;">
-                        <button type="button" class="button cw-upload-header-bg-btn">
-                            <?php echo ! empty( $header_bg ) ? esc_html__( 'Change Header Image', 'codyweb-child' ) : esc_html__( 'Select Header Image', 'codyweb-child' ); ?>
-                        </button>
-                        <button type="button" class="button cw-remove-header-bg-btn" style="<?php echo empty( $header_bg ) ? 'display:none;' : 'inline-block;'; ?> color:#dc2626;">
-                            <?php esc_html_e( 'Remove Image', 'codyweb-child' ); ?>
-                        </button>
-                    </div>
-                    <p class="description" style="color:#64748b; font-size:13px; margin-top:6px;">
-                        <?php esc_html_e( 'Select an image for the top header banner on this page. If empty, no header banner image is displayed.', 'codyweb-child' ); ?>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php
-}
-
-/**
- * Save Page Header Settings meta data.
- *
- * @param int $post_id Post ID.
- */
-function cw_save_page_header_meta( $post_id ) {
-    if ( ! isset( $_POST['cw_page_header_nonce'] ) ) {
-        return;
-    }
-    if ( ! wp_verify_nonce( $_POST['cw_page_header_nonce'], 'cw_page_header_save_meta' ) ) {
-        return;
-    }
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-        return;
-    }
-    if ( ! current_user_can( 'edit_post', $post_id ) ) {
-        return;
-    }
-    if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
-        return;
-    }
-
-    if ( isset( $_POST['cw_header_bg'] ) ) {
-        update_post_meta( $post_id, '_cw_header_bg', esc_url_raw( wp_unslash( $_POST['cw_header_bg'] ) ) );
-    }
-}
-add_action( 'save_post_page', 'cw_save_page_header_meta' );
-add_action( 'save_post_post', 'cw_save_page_header_meta' );
 
 /**
  * Output JavaScript for header background image uploader in post edit screens.
