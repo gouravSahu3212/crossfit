@@ -164,6 +164,7 @@ function cw_render_recommendation_meta_box( $post ) {
     $header_show = ( '' === $header_show ) ? 'yes' : $header_show;
     $header_bg   = get_post_meta( $post->ID, '_cw_header_bg', true );
     $icon        = get_post_meta( $post->ID, '_cw_rec_icon', true );
+    $label       = get_post_meta( $post->ID, '_cw_rec_label', true );
     $description = get_post_meta( $post->ID, '_cw_rec_description', true );
     $price       = get_post_meta( $post->ID, '_cw_rec_price', true );
     $tag         = get_post_meta( $post->ID, '_cw_rec_tag', true );
@@ -223,6 +224,15 @@ function cw_render_recommendation_meta_box( $post ) {
                            value="<?php echo esc_attr( $icon ); ?>"
                            placeholder="e.g. 🏋️ or ⏱️" style="max-width:140px;" />
                     <p class="description"><?php esc_html_e( 'Optional emoji or icon character shown above the badge and title.', 'codyweb-child' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="cw_rec_label"><?php esc_html_e( 'Header Label', 'codyweb-child' ); ?></label></th>
+                <td>
+                    <input type="text" id="cw_rec_label" name="cw_rec_label"
+                           value="<?php echo esc_attr( $label ); ?>"
+                           placeholder="<?php esc_attr_e( 'e.g. Recommended Training or Special Program', 'codyweb-child' ); ?>" />
+                    <p class="description"><?php esc_html_e( 'Optional eyebrow label shown above the header title.', 'codyweb-child' ); ?></p>
                 </td>
             </tr>
             <tr>
@@ -296,6 +306,10 @@ function cw_save_recommendation_meta( $post_id ) {
 
     if ( isset( $_POST['cw_rec_icon'] ) ) {
         update_post_meta( $post_id, '_cw_rec_icon', sanitize_text_field( wp_unslash( $_POST['cw_rec_icon'] ) ) );
+    }
+
+    if ( isset( $_POST['cw_rec_label'] ) ) {
+        update_post_meta( $post_id, '_cw_rec_label', sanitize_text_field( wp_unslash( $_POST['cw_rec_label'] ) ) );
     }
 
     if ( isset( $_POST['cw_rec_description'] ) ) {

@@ -13,6 +13,7 @@ get_header(); ?>
         while ( have_posts() ) :
             the_post();
             $icon        = get_post_meta( get_the_ID(), '_cw_rec_icon', true );
+            $label       = get_post_meta( get_the_ID(), '_cw_rec_label', true );
             $description = get_post_meta( get_the_ID(), '_cw_rec_description', true );
             $price       = get_post_meta( get_the_ID(), '_cw_rec_price', true );
             $tag         = get_post_meta( get_the_ID(), '_cw_rec_tag', true );
@@ -27,10 +28,11 @@ get_header(); ?>
                             <?php if ( $icon ) : ?>
                                 <div style="font-size: 42px; margin-bottom: 12px; line-height: 1;"><?php echo esc_html( $icon ); ?></div>
                             <?php endif; ?>
+                            <?php if ( $label ) : ?>
+                                <p class="page-hero-label"><?php echo esc_html( $label ); ?></p>
+                            <?php endif; ?>
                             <?php if ( $tag ) : ?>
                                 <span class="event-card-tag" style="margin-bottom: 12px;"><?php echo esc_html( $tag ); ?></span>
-                            <?php else : ?>
-                                <p class="page-hero-label"><?php esc_html_e( 'Recommended Training', 'codyweb-child' ); ?></p>
                             <?php endif; ?>
                             <h1 class="page-hero-title"><?php the_title(); ?></h1>
                             <?php if ( $price ) : ?>

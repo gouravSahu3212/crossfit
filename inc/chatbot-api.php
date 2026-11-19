@@ -133,6 +133,7 @@ function cw_api_get_recommendations() {
             'description' => get_post_meta( $post->ID, '_cw_rec_description', true ),
             'price'       => get_post_meta( $post->ID, '_cw_rec_price', true ),
             'tag'         => get_post_meta( $post->ID, '_cw_rec_tag', true ),
+            'label'       => get_post_meta( $post->ID, '_cw_rec_label', true ),
             // 'url'         => get_post_meta( $post->ID, '_cw_rec_url', true ),
             'url'         => get_permalink($post->ID),
             'icon'        => get_post_meta( $post->ID, '_cw_rec_icon', true ),
