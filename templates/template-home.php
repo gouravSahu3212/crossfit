@@ -150,7 +150,7 @@ get_header();
             }
         }
     ?>
-        <section class="hp-quote hp-content-section" id="recommendation-content">
+        <section class=" hp-content-section  paddomg-top-bottom" id="recommendation-content">
             <div class="page-width">
                 <div class="hp-quote-body cw-read-more-container">
                     <div class="cw-content-excerpt">

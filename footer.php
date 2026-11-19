@@ -10,8 +10,8 @@
         <div class="footer-grid">
 
             <div class="footer-col footer-brand">
-                <h3 class="footer-logo">CROSSFIT KOUVOLA</h3>
-                <p class="footer-tagline">Coached functional training in Kouvola since 2013. CrossFit, HYROX and everything in between.</p>
+                <h3 class="footer-logo">Kouvola Training Center</h3>
+                <p class="footer-tagline">Ohjattua toiminnallista harjoittelua Kouvolassa vuodesta 2013. CrossFitiä, HYROXia ja kaikkea siltä väliltä.</p>
             </div>
 
             <div class="footer-col">
@@ -28,10 +28,10 @@
             </div>
 
             <div class="footer-col">
-                <h4 class="footer-heading">Contact</h4>
+                <h4 class="footer-heading">Yhteystiedot</h4>
                 <ul class="footer-links footer-contact">
-                    <li>Salpausselänkatu 42, 45100 Kouvola</li>
-                    <li><a href="mailto:info@crossfitkouvola.com">info@crossfitkouvola.com</a></li>
+                    <li>Utinkatu 47, 45200 Kouvola</li>
+                    <li><a href="mailto:info@crossfitkouvola.com">info@kouvolatrainingcenter.fi</a></li>
                     <li><a href="tel:+358400000000">+358 40 000 0000</a></li>
                 </ul>
             </div>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; <?php echo date( 'Y' ); ?> CrossFit Kouvola &mdash; All rights reserved.</p>
+            <p>&copy; <?php echo date( 'Y' ); ?> Kouvola Training Center &mdash; Kaikki oikeudet pidätetään.</p>
         </div>
     </div>
 </footer>

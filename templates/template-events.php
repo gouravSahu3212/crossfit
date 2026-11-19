@@ -14,12 +14,12 @@ get_header();
     <!-- Page Banner / Hero -->
     <header class="page-hero">
         <div class="page-width">
-            <p class="page-hero-label">Community &amp; Courses</p>
-            <h1 class="page-hero-title">Events &amp; Courses</h1>
-            <p class="page-hero-desc">Courses, competitions and community days at the box. Something is always happening at CrossFit Kouvola, open to members and non-members alike.</p>
+            <p class="page-hero-label">Yhteisöllisyys kaiken perusta</p>
+            <h1 class="page-hero-title">Tapahtumat ja kurssit</h1>
+            <p class="page-hero-desc">Kursseja, kilpailuja ja yhteisöllisiä tapahtumia treenisalillamme. Kouvola Training Centerillä tapahtuu aina jotain – ja mukaan ovat tervetulleita niin jäsenet kuin muutkin liikunnasta kiinnostuneet!</p>
             <div class="page-hero-actions">
-                <a href="#upcoming" class="btn-gold">View Upcoming Events</a>
-                <a href="/yhteystiedot" class="btn-outline">Inquire About An Event</a>
+                <a href="#upcoming" class="btn-gold">Katso tulevia tapahtumia</a>
+                <a href="/yhteystiedot" class="btn-outline">Tapahtumatiedustelut</a>
             </div>
         </div>
     </header>
@@ -29,19 +29,14 @@ get_header();
         <!-- Intro Note -->
         <section class="page-section">
             <div class="callout-box">
-                <h3>Open Community Atmosphere</h3>
-                <p>Most of our community events, beginner courses, and friendly competitions are open to everyone, whether you train with us daily or are visiting Kouvola for the weekend.</p>
+                <h3>Yhteisöllinen tunnelma</h3>
+                <p>Suurin osa yhteisöllisistä tapahtumistamme, alkeiskursseistamme ja rentohenkisistä kilpailuistamme on avoinna kaikille. Olet lämpimästi tervetullut mukaan, olitpa sitten salimme vakituinen treenaaja tai Kouvolassa viikonloppua viettävä vierailija!</p>
             </div>
         </section>
 
         <!-- Upcoming Events Grid -->
         <?php if ( cw_show_passes_section() ) : ?>
         <section id="upcoming" class="page-section">
-            <div class="page-section-header">
-                <p class="page-section-label">What's Next</p>
-                <h2 class="page-section-title">Upcoming Courses &amp; Days</h2>
-            </div>
-
             <?php
             $passes_title = get_post_meta( get_the_ID(), '_cw_passes_title', true );
             $passes_sc    = ! empty( $passes_title ) ? '[upcoming_events title="' . esc_attr( $passes_title ) . '"]' : '[upcoming_events]';
@@ -60,9 +55,9 @@ get_header();
 
         <!-- CTA Strip -->
         <div class="page-cta-banner">
-            <h2>Want to host an event with us?</h2>
-            <p>We organize private training events, bachelor parties, and corporate recreation days.</p>
-            <a href="/yhteystiedot" class="btn-gold">Contact Us</a>
+            <h2>Haluatko järjestää tapahtuman kanssamme?</h2>
+            <p>Järjestämme mm. yksityisiä treenitapahtumia sekä yritysten virkistys- ja TYHY-päiviä.</p>
+            <a href="/yhteystiedot" class="btn-gold">Ota yhteyttä</a>
         </div>
 
     </div>

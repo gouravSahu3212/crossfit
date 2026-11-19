@@ -140,7 +140,7 @@ p,a,span{
 
 /* Section Common */
 .page-section {
-    margin-bottom: 70px;
+    margin-bottom: 24px;
 }
 .page-section-header {
     margin-bottom: 36px;
@@ -715,10 +715,10 @@ p,a,span{
    Weekly Schedule (Shortcode Styles - Timetable Matrix)
    ================================================================ */
 .hp-schedule {
-    padding: 80px 0;
+    padding: 24px 0;
     background: var(--bg-card);
     border-radius: var(--radius);
-    margin: 40px 0;
+    margin: 24px 0;
 }
 .hp-schedule-header {
     margin-bottom: 48px;

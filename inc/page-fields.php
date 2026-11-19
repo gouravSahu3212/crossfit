@@ -1531,7 +1531,9 @@ function cw_render_page_sections_visibility_meta_box( $post ) {
     $show_pricing  = $settings['pricing'] ? 'yes' : 'no';
 
     $passes_title   = $settings['passes_title'];
+    $schedule_label = $settings['schedule_label'];
     $schedule_title = $settings['schedule_title'];
+    $schedule_subtitle = $settings['schedule_subtitle'];
     $pricing_title  = $settings['pricing_title'];
     ?>
     <style>
@@ -1653,6 +1655,20 @@ function cw_render_page_sections_visibility_meta_box( $post ) {
                 </div>
             </div>
 
+            <div class="cw-meta-row cw-schedule-label-row" style="border-bottom: none; <?php echo ( 'no' === $show_schedule ) ? 'opacity: 0.45;' : ''; ?>">
+                <div class="cw-meta-label">
+                    <label for="cw_schedule_label"><?php esc_html_e( 'Section Top Label (Optional)', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <input type="text"
+                           id="cw_schedule_label"
+                           name="cw_schedule_label"
+                           value="<?php echo esc_attr( $schedule_label ); ?>"
+                           placeholder="<?php esc_attr_e( 'Timetable (default)', 'codyweb-child' ); ?>">
+                    <p class="cw-help-text"><?php esc_html_e( 'Leave blank to use the default label.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+
             <div class="cw-meta-row cw-schedule-title-row" style="border-bottom: none; <?php echo ( 'no' === $show_schedule ) ? 'opacity: 0.45;' : ''; ?>">
                 <div class="cw-meta-label">
                     <label for="cw_schedule_title"><?php esc_html_e( 'Section Heading (Optional)', 'codyweb-child' ); ?></label>
@@ -1664,6 +1680,20 @@ function cw_render_page_sections_visibility_meta_box( $post ) {
                            value="<?php echo esc_attr( $schedule_title ); ?>"
                            placeholder="<?php esc_attr_e( 'Weekly Schedule (default)', 'codyweb-child' ); ?>">
                     <p class="cw-help-text"><?php esc_html_e( 'Leave blank to use the default title.', 'codyweb-child' ); ?></p>
+                </div>
+            </div>
+
+            <div class="cw-meta-row cw-schedule-subtitle-row" style="border-bottom: none; <?php echo ( 'no' === $show_schedule ) ? 'opacity: 0.45;' : ''; ?>">
+                <div class="cw-meta-label">
+                    <label for="cw_schedule_subtitle"><?php esc_html_e( 'Section Subheading (Optional)', 'codyweb-child' ); ?></label>
+                </div>
+                <div class="cw-meta-field">
+                    <input type="text"
+                           id="cw_schedule_subtitle"
+                           name="cw_schedule_subtitle"
+                           value="<?php echo esc_attr( $schedule_subtitle ); ?>"
+                           placeholder="<?php esc_attr_e( 'All classes for the week. Book your spot in WODconnect. (default)', 'codyweb-child' ); ?>">
+                    <p class="cw-help-text"><?php esc_html_e( 'Leave blank to use the default subtitle.', 'codyweb-child' ); ?></p>
                 </div>
             </div>
         </div>
@@ -1764,8 +1794,14 @@ function cw_save_page_sections_meta( $post_id ) {
     // 2. Weekly Schedule
     $schedule_show = ( isset( $_POST['cw_schedule_show'] ) && 'no' === $_POST['cw_schedule_show'] ) ? 'no' : 'yes';
     update_post_meta( $post_id, '_cw_schedule_show', $schedule_show );
+    if ( isset( $_POST['cw_schedule_label'] ) ) {
+        update_post_meta( $post_id, '_cw_schedule_label', sanitize_text_field( wp_unslash( $_POST['cw_schedule_label'] ) ) );
+    }
     if ( isset( $_POST['cw_schedule_title'] ) ) {
         update_post_meta( $post_id, '_cw_schedule_title', sanitize_text_field( wp_unslash( $_POST['cw_schedule_title'] ) ) );
+    }
+    if ( isset( $_POST['cw_schedule_subtitle'] ) ) {
+        update_post_meta( $post_id, '_cw_schedule_subtitle', sanitize_text_field( wp_unslash( $_POST['cw_schedule_subtitle'] ) ) );
     }
 
     // 3. Pricing
@@ -1794,7 +1830,9 @@ function cw_get_page_sections_visibility( $post_id = null ) {
             'schedule'       => true,
             'pricing'        => true,
             'passes_title'   => '',
+            'schedule_label' => '',
             'schedule_title' => '',
+            'schedule_subtitle' => '',
             'pricing_title'  => '',
         );
     }
@@ -1808,8 +1846,10 @@ function cw_get_page_sections_visibility( $post_id = null ) {
         'schedule'       => ( 'no' !== $raw_schedule ),
         'pricing'        => ( 'no' !== $raw_pricing ),
         'passes_title'   => (string) get_post_meta( $post_id, '_cw_passes_title', true ),
+        'schedule_label' => (string) get_post_meta( $post_id, '_cw_schedule_label', true ),
         'schedule_title' => (string) get_post_meta( $post_id, '_cw_schedule_title', true ),
-        'pricing_title'  => (string) get_post_meta( $post_id, '_cw_pricing_title', true ),
+        'schedule_subtitle' => (string) get_post_meta( $post_id, '_cw_schedule_subtitle', true ),
+        'pricing_title'  => (string) get_post_meta( $post_id, '_cw_pricing_subtitle', true ),
     );
 }
 
@@ -1878,7 +1918,13 @@ function cw_render_page_schedule( $post_id = null ) {
         return '';
     }
     $title = get_post_meta( $post_id, '_cw_schedule_title', true );
-    $sc    = ! empty( $title ) ? '[weekly_schedule title="' . esc_attr( $title ) . '"]' : '[weekly_schedule]';
+    $subtitle  = get_post_meta( $post_id, '_cw_schedule_subtitle', true );
+    $label = get_post_meta( $post_id, '_cw_schedule_label', true );
+    $sc    = '[weekly_schedule';
+    if( ! empty( $title ) ) $sc .= ' title="' . esc_attr( $title ) . '"';
+    if( ! empty( $subtitle ) ) $sc .= ' subtitle="' . esc_attr($subtitle) . '"';
+    if( ! empty( $label ) ) $sc .= ' label="' . esc_attr($label) . '"';
+    $sc .= ']';
     return do_shortcode( $sc );
 }
 

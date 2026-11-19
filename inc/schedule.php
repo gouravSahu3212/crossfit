@@ -606,7 +606,7 @@ function cw_render_schedule_admin_page() {
 
             <div class="cw-sched-footer">
                 <div class="cw-shortcode-hint">
-                    <?php esc_html_e( 'Shortcode:', 'codyweb-child' ); ?> <code>[weekly_schedule]</code> &bull; <code>[weekly_schedule title="Weekly Schedule"]</code>
+                    <?php esc_html_e( 'Shortcode:', 'codyweb-child' ); ?> <code>[weekly_schedule]</code> &bull; <code>[weekly_schedule title="Weekly Schedule" subtitle="All classes for the week. Book your spot in WODconnect." label="Timetable"]</code>
                 </div>
                 <button type="submit" class="button button-primary button-large" style="padding: 4px 28px; font-weight: 700;">
                     <?php esc_html_e( 'Save Schedule', 'codyweb-child' ); ?>

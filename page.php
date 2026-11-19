@@ -14,9 +14,9 @@ get_header(); ?>
             the_post();
             ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'recommendation-article' ); ?>>
-                <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
-                </header>
-
+                <?php if( has_post_thumbnail() ) : ?>
+                    <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)"></header>
+                <?php endif; ?>
                 <!-- ==================== 1. HERO SECTION ==================== -->
                 <?php
                 $hero = cw_get_page_hero( get_the_ID() );
@@ -24,7 +24,7 @@ get_header(); ?>
                     $col_count = count( $hero['cards'] );
                 ?>
                     <section class="hp-hero hp-hero--cols-<?php echo esc_attr( $col_count ); ?>" style="--hero-cols: <?php echo esc_attr( $col_count ); ?>;">
-                       <div class="page-width">
+                       <!-- <div class="page-width"> -->
                             <?php foreach ( $hero['cards'] as $index => $card ) :
                             $bg_img = ! empty( $card['image'] ) ? $card['image'] : '';
                             $panel_class = ( 0 === $index ) ? 'hp-hero-panel--hyrox' : ( ( 1 === $index ) ? 'hp-hero-panel--crossfit' : '' );
@@ -41,7 +41,7 @@ get_header(); ?>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
-                       </div>
+                       <!-- </div> -->
                     </section>
                 <?php endif; ?>
 
@@ -174,8 +174,8 @@ get_header(); ?>
                                         <?php echo $rest_p; ?>
                                     </div>
                                     <div class="cw-content-actions" style="margin-top: 28px;">
-                                        <button type="button" class="btn-gold cw-read-more-btn">Read More</button>
-                                        <button type="button" class="btn-gold cw-read-less-btn">Read Less</button>
+                                        <button type="button" class="btn-gold cw-read-more-btn">Näytä enemmän</button>
+                                        <button type="button" class="btn-gold cw-read-less-btn">Näytä vähemmän</button>
                                     </div>
                                 <?php endif; ?>
                             </div>

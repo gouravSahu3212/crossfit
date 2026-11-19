@@ -14,9 +14,9 @@ get_header();
     <!-- Page Banner / Hero -->
     <header class="page-hero">
         <div class="page-width">
-            <p class="page-hero-label">Get In Touch</p>
-            <h1 class="page-hero-title">Contact &amp; Location</h1>
-            <p class="page-hero-desc">Drop in, call or send us a message. We are here to answer your questions and welcome you to the gym.</p>
+            <p class="page-hero-label">Ota yhteyttä</p>
+            <h1 class="page-hero-title">Yhteystiedot ja sijainti</h1>
+            <p class="page-hero-desc">Tule käymään tai ota meihin yhteyttä sähköpostitse. Vastaamme mielellämme kysymyksiisi ja toivotamme sinut tervetulleeksi treenaamaan!</p>
         </div>
     </header>
 
@@ -29,41 +29,41 @@ get_header();
                 <!-- Left Column: Details & Opening Hours -->
                 <div>
                     <div class="contact-card">
-                        <div class="contact-card-label">Street Address</div>
+                        <div class="contact-card-label">Katuosoite</div>
                         <p class="contact-card-val">
-                            Salpaussel&auml;nkatu 42<br>
-                            45100 Kouvola, Finland
+                            Utinkatu 47<br>
+                            45100 Kouvola
                         </p>
                     </div>
 
                     <div class="contact-card">
-                        <div class="contact-card-label">Email &amp; Phone</div>
+                        <div class="contact-card-label">Sähköposti</div>
                         <p class="contact-card-val">
-                            Email: <a href="mailto:info@crossfitkouvola.com">info@crossfitkouvola.com</a><br>
+                            Email: <a href="mailto:info@crossfitkouvola.com">info@kouvolatrainingcenter.fi</a><br>
                             Phone: <a href="tel:+358400000000">+358 40 000 0000</a>
                         </p>
                     </div>
 
                     <div class="contact-card">
-                        <div class="contact-card-label">Opening &amp; Training Hours</div>
+                        <div class="contact-card-label">Aukioloajat</div>
                         <p class="contact-card-val">
                             <strong>Monday &ndash; Friday:</strong> 06:00 &ndash; 20:30<br>
                             <strong>Saturday &ndash; Sunday:</strong> 10:00 &ndash; 13:00<br>
-                            <span style="font-size: 13px; color: var(--text-muted); display: block; margin-top: 6px;">Coached classes run per the daily WODconnect schedule.</span>
+                            <span style="font-size: 13px; color: var(--text-muted); display: block; margin-top: 6px;">Ohjatut tunnit järjestetään WODconnectin päivittäisen tuntikalenterin mukaisesti.</span>
                         </p>
                     </div>
 
                     <div class="callout-box" style="margin-top: 20px;">
-                        <h3>Arrival &amp; Parking</h3>
-                        <p>Free parking is available directly outside the gym building. Locker rooms, private shower stalls, and cubbies for workout gear are ready for your visit.</p>
+                        <h3>Saapuminen ja pysäköinti</h3>
+                        <p>Kuntosalin edustalla on maksuton pysäköintialue. Käytössäsi ovat myös pukuhuoneet, yksityiset suihkutilat sekä säilytyslokerot treenivarusteillesi.</p>
                     </div>
                 </div>
 
                 <!-- Right Column: Contact Message Form -->
                 <div>
                     <div class="contact-form-box">
-                        <h3>Send Us A Message</h3>
-                        <p>Interested in trying a free class, joining an On-Ramp course, or have a question? Leave a note below.</p>
+                        <h3>Lähetä meille viesti</h3>
+                        <p>Haluaisitko tulla tutustumaan, osallistua On-Ramp-alkeiskurssille tai kysyä lisää palveluistamme? Jätä meille viesti alla olevalla lomakkeella!</p>
                             <?php echo do_shortcode('[contact-form-7 id="45f9435" title="Contact form 1"]'); ?>                    
                         </div>
                 </div>
@@ -78,9 +78,9 @@ get_header();
 
         <!-- Map / Directions Banner -->
         <div class="page-cta-banner">
-            <h2>Find Us In Kouvola</h2>
-            <p>Salpaussel&auml;nkatu 42, 45100 Kouvola &mdash; easily accessible by car, bike or public transit.</p>
-            <a href="https://maps.google.com/?q=Salpausselankatu+42+45100+Kouvola" target="_blank" rel="noreferrer" class="btn-outline">Open In Google Maps</a>
+            <h2>Löydät meidät Kouvolasta</h2>
+            <p>Utinkatu 47, 45200 Kouvola &mdash; Helposti saavutettavissa autolla, pyörällä tai julkisilla kulkuvälineillä.</p>
+            <a href="https://maps.google.com/?q=Utinkatu+47+45200+Kouvola" target="_blank" rel="noreferrer" class="btn-outline">Avaa Google Mapsissa</a>
         </div>
 
     </div>

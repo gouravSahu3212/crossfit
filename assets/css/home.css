@@ -19,7 +19,7 @@
     --font-head:   'D-DIN Condensed Regular';
     --font-body:   'D-DIN Condensed Regular';
     --max-w:       1200px;
-    --section-py:  64px;
+    --section-py:  24px;
     --radius:      4px;
 }
 
@@ -189,7 +189,7 @@ p,a,span{
 .hp-quote {
     padding: var(--section-py) 24px;
     /* text-align: center; */
-    background: var(--bg);
+    background: #111111;
 }
 .hp-quote-text {
     font-family: var(--font-head);
@@ -227,6 +227,8 @@ p,a,span{
 .hp-quote-body a:hover {
     color: #fff;
 }
+.hp-quote-body h1,
+.hp-quote-body h2,
 .hp-quote-body h3,
 .hp-quote-body h4 {
     color: var(--text);
@@ -772,7 +774,7 @@ thead .hp-col-time {
 ================================================================ */
 .hp-about {
     padding: var(--section-py) 0;
-    background: var(--bg-card);
+    background: #111111;
 }
 .hp-about-inner {
     max-width: 720px;
@@ -795,7 +797,7 @@ thead .hp-col-time {
 ================================================================ */
 .hp-faq {
     padding: var(--section-py) 0;
-    background: var(--bg);
+    background: var(--bg-card);
 }
 .hp-faq-header {
     text-align: left;
@@ -869,6 +871,15 @@ h4.footer-heading {
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 8px;
+}
+.sec-background-clr {
+    background-color: var(--bg-card) !important;
+}
+.paddomg-top-bottom{
+        padding: var(--section-py) 0;
+}
+.pre-background-clr {
+    background-color: var(--bg) !important;
 }
 
 /* ================================================================
