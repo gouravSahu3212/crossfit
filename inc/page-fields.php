@@ -12,9 +12,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get the header background image URL for a post/page/recommendation.
+ *
+ * @param int|null $post_id Post ID.
+ * @return string Image URL or empty string.
+ */
+function cw_get_header_bg_url( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+    if ( ! $post_id ) {
+        return '';
+    }
+    $bg = get_post_meta( $post_id, '_cw_header_bg', true );
+    if ( ! empty( $bg ) ) {
+        return $bg;
+    }
+    $rec_bg = get_post_meta( $post_id, '_cw_rec_header_bg', true );
+    if ( ! empty( $rec_bg ) ) {
+        return $rec_bg;
+    }
+    return '';
+}
+
+/**
  * Register custom meta boxes on pages.
  */
 function cw_register_page_meta_boxes() {
+    // 0. Page Header Settings
+    add_meta_box(
+        'cw_page_header_section',
+        __( 'Header Settings', 'codyweb-child' ),
+        'cw_render_page_header_meta_box',
+        array( 'page', 'post' ),
+        'normal',
+        'high'
+    );
+
     // 1. Hero Section
     add_meta_box(
         'cw_page_hero_section',
@@ -74,11 +108,136 @@ add_action( 'add_meta_boxes', 'cw_register_page_meta_boxes' );
  */
 function cw_page_hero_admin_assets( $hook ) {
     global $post;
-    if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && isset( $post ) && in_array( $post->post_type, array( 'page', 'cw_recommendation' ), true ) ) {
+    if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && isset( $post ) && in_array( $post->post_type, array( 'page', 'cw_recommendation', 'post' ), true ) ) {
         wp_enqueue_media();
     }
 }
 add_action( 'admin_enqueue_scripts', 'cw_page_hero_admin_assets' );
+
+/**
+ * Render the Page Header Settings meta box.
+ *
+ * @param WP_Post $post Current post object.
+ */
+function cw_render_page_header_meta_box( $post ) {
+    wp_nonce_field( 'cw_page_header_save_meta', 'cw_page_header_nonce' );
+    $header_bg = get_post_meta( $post->ID, '_cw_header_bg', true );
+    ?>
+    <div class="cw-hero-meta-wrap">
+        <div class="cw-meta-row" style="border-bottom: none;">
+            <div class="cw-meta-label">
+                <label for="cw_page_header_bg"><?php esc_html_e( 'Header Background', 'codyweb-child' ); ?></label>
+            </div>
+            <div class="cw-meta-field">
+                <div class="cw-header-bg-field-wrap">
+                    <input type="hidden" name="cw_header_bg" id="cw_page_header_bg" value="<?php echo esc_url( $header_bg ); ?>" class="cw-header-bg-input">
+                    <div class="cw-header-bg-preview-wrap" style="<?php echo empty( $header_bg ) ? 'display:none;' : 'display:block;'; ?> margin-bottom:10px;">
+                        <img src="<?php echo esc_url( $header_bg ); ?>" class="cw-header-bg-preview" alt="Header background preview" style="max-width:380px; max-height:140px; width:100%; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1; display:block;" />
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button type="button" class="button cw-upload-header-bg-btn">
+                            <?php echo ! empty( $header_bg ) ? esc_html__( 'Change Header Image', 'codyweb-child' ) : esc_html__( 'Select Header Image', 'codyweb-child' ); ?>
+                        </button>
+                        <button type="button" class="button cw-remove-header-bg-btn" style="<?php echo empty( $header_bg ) ? 'display:none;' : 'inline-block;'; ?> color:#dc2626;">
+                            <?php esc_html_e( 'Remove Image', 'codyweb-child' ); ?>
+                        </button>
+                    </div>
+                    <p class="description" style="color:#64748b; font-size:13px; margin-top:6px;">
+                        <?php esc_html_e( 'Select an image for the top header banner on this page. If empty, no header banner image is displayed.', 'codyweb-child' ); ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+/**
+ * Save Page Header Settings meta data.
+ *
+ * @param int $post_id Post ID.
+ */
+function cw_save_page_header_meta( $post_id ) {
+    if ( ! isset( $_POST['cw_page_header_nonce'] ) ) {
+        return;
+    }
+    if ( ! wp_verify_nonce( $_POST['cw_page_header_nonce'], 'cw_page_header_save_meta' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+    if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+        return;
+    }
+
+    if ( isset( $_POST['cw_header_bg'] ) ) {
+        update_post_meta( $post_id, '_cw_header_bg', esc_url_raw( wp_unslash( $_POST['cw_header_bg'] ) ) );
+    }
+}
+add_action( 'save_post_page', 'cw_save_page_header_meta' );
+add_action( 'save_post_post', 'cw_save_page_header_meta' );
+
+/**
+ * Output JavaScript for header background image uploader in post edit screens.
+ */
+function cw_header_bg_admin_inline_script() {
+    $screen = get_current_screen();
+    if ( ! $screen || ! in_array( $screen->post_type, array( 'page', 'cw_recommendation', 'post' ), true ) ) {
+        return;
+    }
+    ?>
+    <script>
+    (function($){
+        $(document).ready(function(){
+            $(document).on('click', '.cw-upload-header-bg-btn', function(e){
+                e.preventDefault();
+                var $btn = $(this);
+                var $container = $btn.closest('td, .cw-meta-field, .cw-header-bg-field-wrap');
+                var $input = $container.find('.cw-header-bg-input');
+                var $previewWrap = $container.find('.cw-header-bg-preview-wrap');
+                var $previewImg = $container.find('.cw-header-bg-preview');
+                var $removeBtn = $container.find('.cw-remove-header-bg-btn');
+
+                var frame = wp.media({
+                    title: '<?php echo esc_js( __( 'Select or Upload Header Background Image', 'codyweb-child' ) ); ?>',
+                    button: { text: '<?php echo esc_js( __( 'Use this image', 'codyweb-child' ) ); ?>' },
+                    multiple: false
+                });
+
+                frame.on('select', function(){
+                    var attachment = frame.state().get('selection').first().toJSON();
+                    var url = attachment.sizes && attachment.sizes.full ? attachment.sizes.full.url : ( attachment.sizes && attachment.sizes.large ? attachment.sizes.large.url : attachment.url );
+                    $input.val(url);
+                    $previewImg.attr('src', url);
+                    $previewWrap.show();
+                    $btn.text('<?php echo esc_js( __( 'Change Header Image', 'codyweb-child' ) ); ?>');
+                    $removeBtn.show();
+                });
+
+                frame.open();
+            });
+
+            $(document).on('click', '.cw-remove-header-bg-btn', function(e){
+                e.preventDefault();
+                var $btn = $(this);
+                var $container = $btn.closest('td, .cw-meta-field, .cw-header-bg-field-wrap');
+                $container.find('.cw-header-bg-input').val('');
+                $container.find('.cw-header-bg-preview-wrap').hide();
+                $container.find('.cw-header-bg-preview').attr('src', '');
+                $container.find('.cw-upload-header-bg-btn').text('<?php echo esc_js( __( 'Select Header Image', 'codyweb-child' ) ); ?>');
+                $btn.hide();
+            });
+        });
+    })(jQuery);
+    </script>
+    <?php
+}
+add_action( 'admin_footer-post.php', 'cw_header_bg_admin_inline_script' );
+add_action( 'admin_footer-post-new.php', 'cw_header_bg_admin_inline_script' );
 
 /**
  * Render the Hero Section meta box.

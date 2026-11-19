@@ -14,8 +14,14 @@ get_header(); ?>
             the_post();
             ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'recommendation-article' ); ?>>
-                <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)">
-                </header>
+                <?php
+                $header_bg = function_exists( 'cw_get_header_bg_url' ) ? cw_get_header_bg_url( get_the_ID() ) : get_post_meta( get_the_ID(), '_cw_header_bg', true );
+                if ( ! empty( $header_bg ) ) :
+                ?>
+                    <header class="page-hero" style="background-image:url(<?php echo esc_url( $header_bg ); ?>)"></header>
+                <?php elseif ( has_post_thumbnail() ) : ?>
+                    <header class="page-hero" style="background-image:url(<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ); ?>)"></header>
+                <?php endif; ?>
 
                 <!-- ==================== 1. HERO SECTION ==================== -->
                 <?php

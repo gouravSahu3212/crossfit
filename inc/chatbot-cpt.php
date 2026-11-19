@@ -162,6 +162,7 @@ function cw_render_recommendation_meta_box( $post ) {
 
     $header_show = get_post_meta( $post->ID, '_cw_rec_header_show', true );
     $header_show = ( '' === $header_show ) ? 'yes' : $header_show;
+    $header_bg   = get_post_meta( $post->ID, '_cw_header_bg', true );
     $description = get_post_meta( $post->ID, '_cw_rec_description', true );
     $price       = get_post_meta( $post->ID, '_cw_rec_price', true );
     $tag         = get_post_meta( $post->ID, '_cw_rec_tag', true );
@@ -192,6 +193,26 @@ function cw_render_recommendation_meta_box( $post ) {
                         </label>
                     </div>
                     <p class="description"><?php esc_html_e( 'Choose whether to display the top banner/header section on the single recommendation page.', 'codyweb-child' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th><label><?php esc_html_e( 'Header Background', 'codyweb-child' ); ?></label></th>
+                <td>
+                    <div class="cw-header-bg-field-wrap">
+                        <input type="hidden" name="cw_header_bg" id="cw_rec_header_bg" value="<?php echo esc_url( $header_bg ); ?>" class="cw-header-bg-input">
+                        <div class="cw-header-bg-preview-wrap" style="<?php echo empty( $header_bg ) ? 'display:none;' : 'display:block;'; ?> margin-bottom:10px;">
+                            <img src="<?php echo esc_url( $header_bg ); ?>" class="cw-header-bg-preview" alt="Header background preview" style="max-width:380px; max-height:140px; width:100%; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1; display:block;" />
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button type="button" class="button cw-upload-header-bg-btn">
+                                <?php echo ! empty( $header_bg ) ? esc_html__( 'Change Header Image', 'codyweb-child' ) : esc_html__( 'Select Header Image', 'codyweb-child' ); ?>
+                            </button>
+                            <button type="button" class="button cw-remove-header-bg-btn" style="<?php echo empty( $header_bg ) ? 'display:none;' : 'inline-block;'; ?> color:#dc2626;">
+                                <?php esc_html_e( 'Remove Image', 'codyweb-child' ); ?>
+                            </button>
+                        </div>
+                        <p class="description"><?php esc_html_e( 'Select a background image for the top header banner. This separates the header banner from the featured image/thumbnail.', 'codyweb-child' ); ?></p>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -258,6 +279,10 @@ function cw_save_recommendation_meta( $post_id ) {
 
     $header_show = ( isset( $_POST['cw_rec_header_show'] ) && 'no' === $_POST['cw_rec_header_show'] ) ? 'no' : 'yes';
     update_post_meta( $post_id, '_cw_rec_header_show', $header_show );
+
+    if ( isset( $_POST['cw_header_bg'] ) ) {
+        update_post_meta( $post_id, '_cw_header_bg', esc_url_raw( wp_unslash( $_POST['cw_header_bg'] ) ) );
+    }
 
     if ( isset( $_POST['cw_rec_description'] ) ) {
         update_post_meta( $post_id, '_cw_rec_description', sanitize_textarea_field( wp_unslash( $_POST['cw_rec_description'] ) ) );
